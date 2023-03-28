@@ -13,6 +13,7 @@ const productSchema = mongoose.Schema({
   brand: { type: String, required: true },
   tags: { type: String },
   stock: { type: Number, required: true },
+  adminId: { type: String, required: true },
 });
 
 const productModel = mongoose.model("product", productSchema);
