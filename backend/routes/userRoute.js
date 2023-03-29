@@ -1,16 +1,12 @@
 const express = require("express");
+const { Register, Login } = require("../Controller/AuthController");
+const RegValidator = require("../middlewares/RegValidator");
 const { userModel } = require("../models/userModel");
 const userRoute = express.Router();
 
-userRoute.post("/register", async (req, res) => {
-  try {
-    let newUser = new userModel(req.body);
-    await newUser.save();
-    res.json(await userModel.find());
-  } catch (error) {
-    res.send({ msg: error.message });
-  }
-});
+userRoute.post("/register",RegValidator, Register);
+
+userRoute.post("/login",Login)
 
 module.exports = {
   userRoute,
