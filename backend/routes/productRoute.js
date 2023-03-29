@@ -6,7 +6,7 @@ productRoute.post("/",async(req,res)=>{
     try {
         let newProduct=new productModel(req.body)
         await newProduct.save()
-        res.json(await productModel.find())
+        res.json(req.body)
     } catch (error) {
         res.send({msg:error.message})
     }
