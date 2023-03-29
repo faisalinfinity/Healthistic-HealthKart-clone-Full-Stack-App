@@ -1,16 +1,13 @@
 const express=require("express")
+const { AddProduct, GetProduct, DeleteProduct } = require("../Controller/ProductController")
 const { productModel } = require("../models/productModel")
 const productRoute=express.Router()
 
-productRoute.post("/",async(req,res)=>{
-    try {
-        let newProduct=new productModel(req.body)
-        await newProduct.save()
-        res.json(req.body)
-    } catch (error) {
-        res.send({msg:error.message})
-    }
-})
+productRoute.post("/",AddProduct)
+
+productRoute.get("/",GetProduct)
+
+productRoute.delete("/",DeleteProduct)
 
 module.exports={
     productRoute
