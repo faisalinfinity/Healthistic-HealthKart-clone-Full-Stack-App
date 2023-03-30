@@ -14,18 +14,24 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/AuthReducer/action";
 
 export default function LoginPage() {
+  const { isLoggedIn } = useSelector((store) => {
+    return {
+      isLoggedIn: store.authReducer.isLoggedIn,
+    };
+  });
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [details, setDetails] = useState({});
 
   const handleLogin = () => {
-    const cred = { email, password };
-    setDetails(cred);
-    setEmail("");
-    setPassword("");
+    const details = { email, password };
+    dispatch(login(details));
   };
+  console.log(isLoggedIn);
   return (
     <Flex
       minH={"100vh"}

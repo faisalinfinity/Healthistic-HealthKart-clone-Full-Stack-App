@@ -43,13 +43,17 @@ const CartCard = ({
             <Text>MRP:</Text>
             <Text textDecoration={"line-through"}>{originalPrice}</Text>
           </Flex>
+          <Flex>
+            <Text>Quantity:</Text>
+            <Text>{quantity}</Text>
+          </Flex>
         </CardBody>
 
-        <CardFooter>
-          <Button variant="solid" colorScheme="blue">
+        {/* <CardFooter> */}
+        {/* <Button variant="solid" colorScheme="blue">
             {quantity}
-          </Button>
-        </CardFooter>
+          </Button> */}
+        {/* </CardFooter> */}
       </VStack>
     </Card>
   );
