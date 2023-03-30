@@ -1,7 +1,7 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
- 
+
 import {
   Card,
   CardHeader,
@@ -122,47 +122,53 @@ const CarouselOne = () => {
   ];
 
   return (
-    
-    <div style={{  width: "98vw", margin: "auto" , marginTop:"10px" }}>
-      <Flex w={"80%"}  margin={"auto"} p={3}  justifyContent={"space-between"} >
-
-      <Heading size = "lg" >Price Slash Alert</Heading>
-      <Text color={"#42B8B7"} >View All</Text>    
-        </Flex>
-      <div style={{  width: "80%", margin: "auto" }} >
-      <Carousel responsive={responsive}>
-        {cardItemArr.map((item, index) => (
-          <Card maxW="sm" key={index}  mr={1} ml={1}   >
-            <Image src={item.image} borderRadius="lg" />
-            <Stack boxShadow='dark-lg' p='6' rounded='md' bg='white'>
-            <Flex gap = {4} textAlign={"center"} >
-                    <Box bg={"#00B5B7"} color={"white"} pl={3} pr ={3} >{item.rating} <span style={{fontSize:"20px"}} >*</span></Box>
-                    <Text fontSize={12} >{item.review} reviews</Text>
+    <div style={{ width: "98vw", margin: "auto", marginTop: "10px" }}>
+      <Flex w={"80%"} margin={"auto"} p={3} justifyContent={"space-between"}>
+        <Heading size="lg">Price Slash Alert</Heading>
+        <Text color={"#42B8B7"}>View All</Text>
+      </Flex>
+      <div style={{ width: "80%", margin: "auto" }}>
+        <Carousel responsive={responsive}>
+          {cardItemArr.map((item, index) => (
+            <Card maxW="sm" key={index} mr={1} ml={1}>
+              <Image src={item.image} borderRadius="lg" />
+              <Stack boxShadow="dark-lg" p="6" rounded="md" bg="white" mb="1.5">
+                <Flex gap={4} textAlign={"center"}>
+                  <Box bg={"#00B5B7"} color={"white"} pl={3} pr={3}>
+                    {item.rating} <span style={{ fontSize: "20px" }}>*</span>
+                  </Box>
+                  <Text fontSize={12}>{item.review} reviews</Text>
                 </Flex>
-              <Heading size="sm">
-                {item.title},{item.sizes},{item.flavour}
-              </Heading>
-              <Flex gap={2} alignItems={"center"} >
-                <Heading fontSize="2xl">₹450 </Heading>{" "}
-                <Text color="gray" textDecoration={"line-through"}>
-                  ₹{item.originalPrice}
-                </Text>
-                <Text color="green.600" fontSize="14" >
-                {Math.floor(((item.originalPrice-item.price)/item.originalPrice)*100)}% Off
-                </Text>
-                
-              </Flex>
+                <Heading size="sm">
+                  {item.title},{item.sizes},{item.flavour}
+                </Heading>
+                <Flex gap={2} alignItems={"center"}>
+                  <Heading fontSize="2xl">₹450 </Heading>{" "}
+                  <Text color="gray" textDecoration={"line-through"}>
+                    ₹{item.originalPrice}
+                  </Text>
+                  <Text color="green.600" fontSize="14">
+                    {Math.floor(
+                      ((item.originalPrice - item.price) / item.originalPrice) *
+                        100
+                    )}
+                    % Off
+                  </Text>
+                </Flex>
 
-              <Button _hover= {{bg:"orange" , color:"white"}} colorScheme="orange" variant="outline">
-                Add to cart
-              </Button>
-            </Stack>
-          </Card>
-        ))}
-      </Carousel>
+                <Button
+                  _hover={{ bg: "orange", color: "white" }}
+                  colorScheme="orange"
+                  variant="outline"
+                >
+                  Add to cart
+                </Button>
+              </Stack>
+            </Card>
+          ))}
+        </Carousel>
       </div>
     </div>
-  
   );
 };
 

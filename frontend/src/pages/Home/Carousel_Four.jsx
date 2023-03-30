@@ -135,7 +135,7 @@ const CarouselFour = () => {
         {cardItemArr.map((item, index) => (
           <Card maxW="sm" key={index}  mr={1} ml={1}   >
             <Image src={item.image} borderRadius="lg" />
-            <Stack boxShadow='dark-lg' p='6' rounded='md' bg='white'>
+            <Stack boxShadow='dark-lg' p='6' rounded='md' bg='white' mb="1.5">
                 <Flex gap = {4} textAlign={"center"} >
                     <Box bg={"#00B5B7"} color={"white"} pl={3} pr ={3} >{item.rating} <span style={{fontSize:"20px"}} >*</span></Box>
                     <Text fontSize={12} >{item.review} reviews</Text>

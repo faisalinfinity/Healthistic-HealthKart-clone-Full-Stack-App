@@ -12,12 +12,12 @@ function App() {
   return (
     <>
 
-      <SingleProductPage />
+      
 
       <Navbar />
      <HomePage/> 
       <Footer /> 
-     
+     {/* <AddProduct/> */}
     </>
    
   );

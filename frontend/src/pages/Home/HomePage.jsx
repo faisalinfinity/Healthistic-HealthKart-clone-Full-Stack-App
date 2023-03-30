@@ -1,5 +1,7 @@
-import { Box } from '@chakra-ui/react'
+
+import { Box } from '@chakra-ui/layout'
 import React from 'react'
+import Accoourdion from './Accoourdion'
 import Carousel from "./Carousal"
 import Carousel_1 from './Carousel_1'
 import CarouselFive from './Carousel_Five'
@@ -8,21 +10,18 @@ import CarouselFour from './Carousel_Four'
 import CarouselOne from './Carousel_One'
 import CarouselThree from './Carousel_Three'
 import CarouselTwo from './Carousel_Two'
-import MobDiv from './MobDiv'
  
  
  
  
  
-const ajHome = {
-    
-}
+ 
  
 
 
 const HomePage = () => {
   return (
-     <Box style={ajHome}  >
+     <Box style={{background :"#F4F4F4"}}  >
  < Carousel/>
   <CarouselOne/>
    <CarouselTwo/>
@@ -30,7 +29,7 @@ const HomePage = () => {
    <CarouselFour/>
    <Carousel_1/>
    <CarouselFive/>
-   {/* <MobDiv/> */}
+   <Accoourdion/>
     
      </Box>
   )
