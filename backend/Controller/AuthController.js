@@ -38,16 +38,25 @@ const Login = async (req, res) => {
 };
 
 const Register = async (req, res) => {
-  const { password } = req.body;
-  bcrypt.hash(password, saltRounds, async function (err, hash) {
-    if (err) {
-      return res.status(400).send(err.message);
-    }
-    let newUser = new userModel({ ...req.body, password: hash });
-    await newUser.save();
-  });
-
-  res.status(200).send("New User has been registered");
+  const { password,email } = req.body;
+  try {
+     let data=await userModel.find({email})
+     if(data.length){
+      return res.status(400).send("User Already Registered")
+     }
+    bcrypt.hash(password, saltRounds, async function (err, hash) {
+      if (err) {
+        return res.status(400).send(err.message);
+      }
+      let newUser = new userModel({ ...req.body, password: hash });
+      await newUser.save();
+    });
+  
+    res.status(200).send("New User has been registered");
+  } catch (error) {
+    res.send(error.message)
+  }
+  
 };
 
 module.exports = {
