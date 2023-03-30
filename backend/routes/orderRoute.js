@@ -1,8 +1,21 @@
-const express=require("express")
+const express = require("express");
+const {
+  AddOrder,
+  CancelOrder,
+  GetSingleOrder,
+  GetOrder,
+} = require("../Controller/OrderController");
+const AuthorizationMiddleware = require("../middlewares/Authorization.middleware");
 
-const orderRoute=express.Router()
+const orderRoute = express.Router();
 
+orderRoute.use(AuthorizationMiddleware);
 
-module.exports={
-    orderRoute
-}
+orderRoute.post("/", AddOrder);
+orderRoute.patch("/:id", CancelOrder);
+orderRoute.get("/:id", GetSingleOrder);
+orderRoute.get("/", GetOrder);
+
+module.exports = {
+  orderRoute,
+};
