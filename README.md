@@ -417,3 +417,22 @@ role:{type:String,required:true},<br> (Automatic)
                             tags:{type: String},
                             stock:{type: Number, required: true},
                             totalDiscountPrice:{type:Number,required:true}
+
+
+
+  #API
+
+for register: Make a Post request to {Base_URL}/register   
+   with  {name:,
+    email:,
+    password:,
+    gender:,
+    role:user/admin,
+    profile:}  as body
+
+for Login :   Make a Post request to {Base_URL}/Login 
+ with {email,password} as body   
+
+
+
+ for getting product  : Make a Post request to {Base_URL}/product?category={Food,Nutrients,Ayurveda,Vitmains}             

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const userModel = require("../Model/UserModel");
+const { userModel } = require("../models/userModel");
+
 const AuthorizationMiddleware = async (req, res, next) => {
   var token
   if(req.headers.authorization){
@@ -8,8 +9,6 @@ const AuthorizationMiddleware = async (req, res, next) => {
     res.send("Please pass token in headers")
   }
   
-  console.log(token)
-
   try {
     var decoded = jwt.verify(token, "faisal");
   } catch (error) { 

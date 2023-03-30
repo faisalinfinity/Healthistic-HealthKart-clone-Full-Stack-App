@@ -70,10 +70,29 @@ const GetProduct = async (req, res) => {
   }
 };
 
-const DeleteProduct = async (req, res) => {};
+const GetSingleProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    let data = await productModel.findOne({ _id: id });
+    res.json(data);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+const DeleteProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await productModel.findByIdAndDelete({ _id: id });
+    res.send("Deleted Successfully");
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
 
 module.exports = {
   AddProduct,
   GetProduct,
+  GetSingleProduct,
   DeleteProduct,
 };

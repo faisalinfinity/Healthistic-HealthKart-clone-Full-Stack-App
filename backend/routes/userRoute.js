@@ -5,7 +5,6 @@ const { userModel } = require("../models/userModel");
 const userRoute = express.Router();
 
 userRoute.post("/register",RegValidator, Register);
-
 userRoute.post("/login",Login)
 
 module.exports = {
