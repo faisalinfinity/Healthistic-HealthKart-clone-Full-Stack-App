@@ -13,12 +13,30 @@ import {
   Text,
   useColorModeValue,
   Link,
+  Select,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import axios from "axios";
 
 export default function Signup() {
+  const initData = {
+    name: "",
+    email: "",
+    password: "",
+    gender: "",
+    role: "",
+    profile: "",
+  };
+  const [userData, setUserData] = useState(initData);
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleSignIn = () => {
+    axios
+      .post(`http://localhost:8080/users/register`, userData)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Flex
@@ -45,26 +63,64 @@ export default function Signup() {
           <Stack spacing={4}>
             <HStack>
               <Box>
-                <FormControl id="firstName" isRequired>
-                  <FormLabel>First Name</FormLabel>
-                  <Input type="text" />
+                <FormControl id="name" isRequired>
+                  <FormLabel>Name</FormLabel>
+                  <Input
+                    onChange={(e) =>
+                      setUserData({ ...userData, name: e.target.value })
+                    }
+                    type="text"
+                  />
                 </FormControl>
               </Box>
               <Box>
-                <FormControl id="lastName">
+                <FormControl id="profilePic">
                   <FormLabel>Profile Picture</FormLabel>
-                  <Input type="text" />
+                  <Input
+                    onChange={(e) =>
+                      setUserData({ ...userData, profile: e.target.value })
+                    }
+                    type="text"
+                  />
                 </FormControl>
               </Box>
             </HStack>
+            <Select
+              onChange={(e) =>
+                setUserData({ ...userData, role: e.target.value })
+              }
+              placeholder="Select role"
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </Select>
+            <Select
+              onChange={(e) =>
+                setUserData({ ...userData, gender: e.target.value })
+              }
+              placeholder="Select gender"
+            >
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </Select>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input
+                onChange={(e) =>
+                  setUserData({ ...userData, email: e.target.value })
+                }
+                type="email"
+              />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? "text" : "password"} />
+                <Input
+                  onChange={(e) =>
+                    setUserData({ ...userData, password: e.target.value })
+                  }
+                  type={showPassword ? "text" : "password"}
+                />
                 <InputRightElement h={"full"}>
                   <Button
                     variant={"ghost"}
@@ -86,6 +142,7 @@ export default function Signup() {
                 _hover={{
                   bg: "blue.500",
                 }}
+                onClick={handleSignIn}
               >
                 Sign up
               </Button>

@@ -76,18 +76,19 @@ export default function AddProduct() {
         p={4}
         gap={2}
         gridTemplateColumns={{
-          lg: "repeat(3,1fr)",
+          lg: "repeat(1,1fr)",
           sm: "repeat(3,1fr)",
           base: "repeat(1,1fr)",
         }}
       >
-        <Input
+        <Input 
           placeholder="Image Links separated by comma (,) required"
           name="image"
           onChange={handleInput}
           border={"1px solid orange"}
           color="orange"
         ></Input>
+      
         <Input
           placeholder="Product Title required"
           name="title"
@@ -234,6 +235,7 @@ export default function AddProduct() {
             });
           } else {
             PostProductData({ ...product });
+             
           }
         }}
       >
