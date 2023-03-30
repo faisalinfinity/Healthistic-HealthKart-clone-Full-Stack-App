@@ -11,7 +11,7 @@ app.use(cors());
 
 app.use("/product", productRoute);
 app.use("/users", userRoute);
-app.use("/cart", cartRoute);
+app.use("/users/cart", cartRoute);
 
 app.listen(process.env.PORT, async () => {
   try {

@@ -422,7 +422,7 @@ role:{type:String,required:true},<br> (Automatic)
 
   #API
 
-for register: Make a Post request to {Base_URL}/register   
+for register: Make a Post request to {Base_URL}/users/register   
    with  {name:,
     email:,
     password:,
@@ -430,9 +430,70 @@ for register: Make a Post request to {Base_URL}/register
     role:user/admin,
     profile:}  as body
 
-for Login :   Make a Post request to {Base_URL}/Login 
+for Login :   Make a Post request to {Base_URL}/users/Login 
  with {email,password} as body   
 
 
 
- for getting product  : Make a Post request to {Base_URL}/product?category={Food,Nutrients,Ayurveda,Vitmains}             
+ for getting product  : Make a Post request to {Base_URL}/product?category={Food,Nutrients,Ayurveda,Vitmains}   
+
+ for filtering & Sorting:Make a get Request to {Base_URL}/product?category=Food&filter=flavour:Chocolate&sort=price:1 
+
+
+ for Pagination : Make a get Request to {Base_URL}/product?category=Food&page=1&limit=5
+
+ #Cart
+
+          GET /        {Base_URL}/users/cart
+        pass in    Headers {
+            Authorization : token(hshfd873hjh345g45vv355h)
+           }
+
+          DELETE One product from cart   {Base_URL}/users/cart/:id
+        pass in    Headers {
+            Authorization : token(hshfd873hjh345g45vv355h)
+           }
+   
+          
+          GET One product from cart   {Base_URL}/users/cart/:id
+        pass in    Headers {
+            Authorization : token(hshfd873hjh345g45vv355h)
+           }
+
+
+            DELETE ALL CART product from cart   {Base_URL}/users/cart/delete/all
+        pass in    Headers {
+            Authorization : token(hshfd873hjh345g45vv355h)
+           }
+
+          UPDATE/PATCH One product of cart   {Base_URL}/users/cart/:id
+            PAYLOAD : {
+                quantity
+            }
+        pass in    Headers {
+            Authorization : token(hshfd873hjh345g45vv355h)
+           }
+
+
+            ADD to CART /POST  {Base_URL}/users/cart/
+          Payload  {
+     image
+     title
+    description
+     price
+     originalPrice
+     sizes,
+     category,
+     rating,
+     review,
+     flavour,
+     brand,
+     tags,
+     stock,
+     adminId
+     pid,
+     quantity
+    }
+        pass in    Headers {
+            Authorization : token(hshfd873hjh345g45vv355h)
+           }
