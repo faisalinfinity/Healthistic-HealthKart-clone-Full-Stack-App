@@ -20,9 +20,10 @@ import { BASE_URL } from "../../constants/constants";
 import Loading from "../components/Loading";
 import Paginantion from "../components/Pagination";
 import ProductItem from "../components/ProductItem";
+import OrderItem from "../components/OrderItem";
 
 
-export default function EditProduct(){
+export default function ManageOrders(){
 
     const [cat,setCat] = useState("Vitamins")
     const {token} = useSelector((state)=>state.authReducer)
@@ -43,7 +44,7 @@ export default function EditProduct(){
             setLoading(true)
             let res = await axios({
                 method:"get",
-                url:BASE_URL+`/admin/product?category=${cat}&page=${page}&limit=7`,
+                url:BASE_URL+`/admin/order?page=${page}&limit=7`,
                 headers:{
                     Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAyMzg3ODN9.zyLneanO_RUOdLOeUF3Z7nc62EfjcKd6G1Ypx265pbo`
                 }
@@ -94,17 +95,17 @@ export default function EditProduct(){
     <TableCaption>Filter products category wise</TableCaption>
     <Thead>
       <Tr>
-        <Th>Image</Th>
+        <Th>User</Th>
         <Th>title</Th>
         <Th isNumeric>Price</Th>
-        <Th isNumeric>Original Price</Th>
-        <Th isNumeric>Stock left</Th>
+        <Th isNumeric>Quantity</Th>
+        <Th isNumeric>Date</Th>
         <Th isNumeric>Action</Th>
       </Tr>
     </Thead>
     <Tbody>
       
-      {product?.map((el)=><ProductItem key={el._id} setRefresh={setRefresh} {...el} />)}
+      {product?.map((el)=><OrderItem key={el._id} setRefresh={setRefresh} {...el} />)}
       
     </Tbody>
     

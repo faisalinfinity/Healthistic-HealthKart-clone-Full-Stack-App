@@ -9,15 +9,25 @@ adminProductRoute.get("/", async (req, res) => {
   const searchQuery = req.query?.q;
   const sortCriteria = req.query?.sort;
   const filterCriteria = req.query?.filter;
+  const {category}=req.query
 
   const page = +req.query.page || 1;
   const limit = +req.query.limit;
   const skip = (page - 1) * limit;
 
   try {
-    let data = productModel.find({
-      adminId:userId
-    });
+let data
+    if(category){
+       data = productModel.find({
+        adminId:userId,
+        category:category
+      });
+    }else{
+      data = productModel.find({
+        adminId:userId
+      });
+    }
+    
 
 
 
@@ -67,9 +77,9 @@ adminProductRoute.get("/", async (req, res) => {
 });
 
 adminProductRoute.patch("/:id",async(req,res)=>{
-    const {id}=req.body
+    const {id}=req.params
   try {
-    await productModel.findByIdAndUpdate({_id:id},req,body)
+    await productModel.findByIdAndUpdate({_id:id},req.body)
     res.send("Product Updated")
   } catch (error) {
     res.status(400).send(error.message)
@@ -77,7 +87,7 @@ adminProductRoute.patch("/:id",async(req,res)=>{
 })
 
 adminProductRoute.delete("/:id",async (req,res)=>{
-  const {id}=req.body
+  const {id}=req.params
   try {
     await productModel.findByIdAndDelete({_id:id})
     res.send("Product Deleted")

@@ -23,6 +23,8 @@ import SideNav from "../components/SideNav";
 import Dashboard from "./Dashboard";
 import MobileSideNav from "../components/MobileSideNav";
 import AddProduct from "../components/AddProducts";
+import EditProduct from "./EditProducts";
+import ManageOrders from "./ManageOrder";
 
 export default function AdminPage(){
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -128,14 +130,14 @@ export default function AdminPage(){
                             return <AddProduct />
                         }
 
-                        // case 3:{
+                        case 3:{
 
-                        //     return <EditProduct />
-                        // }
+                            return <EditProduct />
+                        }
 
-                        // case 4:{
-                        //     return <ManageOrders />
-                        // }
+                        case 4:{
+                            return <ManageOrders />
+                        }
 
             
 
