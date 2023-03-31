@@ -28,6 +28,7 @@ const Login = async (req, res) => {
             email:user[0].email,
            gender:user[0].gender, 
            profile:user[0]?.profile,
+           role:user[0]?.role,
            token: jwt.sign({ userId: user[0]._id }, "faisal")
         }
         ,
