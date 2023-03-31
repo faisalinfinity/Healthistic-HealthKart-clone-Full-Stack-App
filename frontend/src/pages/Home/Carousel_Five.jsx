@@ -1,15 +1,8 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
- 
-import {
-  Card,
-  
-  Image,
- 
-  Heading,
-   
-} from "@chakra-ui/react";
+
+import { Card, Image, Heading } from "@chakra-ui/react";
 const CarouselFive = () => {
   const responsive = {
     superLargeDesktop: {
@@ -39,29 +32,24 @@ const CarouselFive = () => {
     "https://img1.hkrtcdn.com/25529/bnr_2552840_o.png",
     "https://img7.hkrtcdn.com/22043/normal_2204266_o.png",
     "https://img1.hkrtcdn.com/22043/normal_2204270_o.png",
-    "https://img1.hkrtcdn.com/22099/bnr_2209880_o.png"
-  ]
-   
-  return (
-    
-    <div style={{   width: "98vw", margin: "auto" , marginTop:"10px" }}>
-      <div style={{width:"80%" , margin:"auto" , padding :"10px" }}    >
+    "https://img1.hkrtcdn.com/22099/bnr_2209880_o.png",
+  ];
 
-      <Heading size = "lg" >Brand Range</Heading>
-         
-        </div>
-      <div style={{  width: "80%", margin: "auto" }} >
-      <Carousel responsive={responsive}>
-        {cardItemArr.map((item, index) => (
-          <Card maxW="sm" key={index}  mr={1} ml={1}   >
-            <Image h={"100px"}  w= {"120px"} src={item} borderRadius="lg" />
-            
-          </Card>
-        ))}
-      </Carousel>
+  return (
+    <div style={{ width: "98vw", margin: "auto", marginTop: "10px" }}>
+      <div style={{ width: "80%", margin: "auto", padding: "10px" }}>
+        <Heading size="lg">Brand Range</Heading>
+      </div>
+      <div style={{ width: "80%", margin: "auto" }}>
+        <Carousel responsive={responsive}>
+          {cardItemArr.map((item, index) => (
+            <Card maxW="sm" key={index} mr={1} ml={1}>
+              <Image h={"100px"} w={"120px"} src={item} borderRadius="lg" />
+            </Card>
+          ))}
+        </Carousel>
       </div>
     </div>
-  
   );
 };
 
