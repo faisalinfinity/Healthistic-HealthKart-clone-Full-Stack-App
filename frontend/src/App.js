@@ -6,9 +6,11 @@ import MainRoute from "./routes/MainRoute";
 function App() {
   return (
     <>
+
       <Navbar />
       <MainRoute />
       <Footer />
+
     </>
   );
 }
