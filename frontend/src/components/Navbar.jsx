@@ -20,6 +20,7 @@ import { BsFillChatDotsFill } from "react-icons/bs";
 import { TbBrandAdonisJs } from "react-icons/tb";
 import { Search2Icon } from "@chakra-ui/icons";
 import SideDrawer from "./SideDrawer";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -59,7 +60,9 @@ const Navbar = () => {
             <Button variant={"ghost"}>Login</Button>
           </Box>
           <Box cursor={"pointer"}>
-            <AiOutlineShoppingCart size={"2rem"} />
+            <Link to="/cart">
+              <AiOutlineShoppingCart size={"2rem"} />
+            </Link>
           </Box>
         </Box>
       </Box>
