@@ -17,10 +17,8 @@ const AuthorizationMiddleware = async (req, res, next) => {
 
   if (decoded) {
     let user = await userModel.find({_id: decoded.userId });
-     console.log(decoded)
     if (user.length) {
       req.body.userId=decoded.userId
-      console.log(req)
       next();
     } else {
       res.status(404).send("You are not Authorized to Access this!");
