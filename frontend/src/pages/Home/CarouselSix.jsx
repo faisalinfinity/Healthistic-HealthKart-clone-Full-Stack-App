@@ -3,7 +3,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import { Card, Image, Heading } from "@chakra-ui/react";
-const CarouselThree = () => {
+const CarouselSix = () => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -25,16 +25,16 @@ const CarouselThree = () => {
     },
   };
   const cardItemArr = [
-    "https://img5.hkrtcdn.com/24515/bnr_2451444_o.png",
-    "https://img7.hkrtcdn.com/24515/bnr_2451446_o.png",
-    "https://img9.hkrtcdn.com/24515/bnr_2451448_o.png",
-    "https://img1.hkrtcdn.com/24515/bnr_2451450_o.png",
+    "https://img5.hkrtcdn.com/26593/bnr_2659274_o.jpg",
+    "https://img9.hkrtcdn.com/22801/bnr_2280038_o.jpg",
+    "https://img9.hkrtcdn.com/26434/bnr_2643348_o.jpg",
+    "https://img1.hkrtcdn.com/26434/bnr_2643350_o.jpg",
   ];
 
   return (
     <div style={{ width: "98vw", margin: "auto", marginTop: "10px" }}>
       <div style={{ width: "80%", margin: "auto", padding: "10px" }}>
-        <Heading size="lg">Bodybuilding Goals</Heading>
+      
       </div>
       <div style={{ width: "80%", margin: "auto" }}>
         <Carousel responsive={responsive}>
@@ -49,4 +49,4 @@ const CarouselThree = () => {
   );
 };
 
-export default CarouselThree;
+export default CarouselSix;

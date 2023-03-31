@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/AuthReducer/action";
+import { Navigate } from "react-router-dom";
 
 export default function LoginPage() {
   const { isLoggedIn } = useSelector((store) => {
@@ -23,6 +24,7 @@ export default function LoginPage() {
       isLoggedIn: store.authReducer.isLoggedIn,
     };
   });
+
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,13 +33,16 @@ export default function LoginPage() {
     const details = { email, password };
     dispatch(login(details));
   };
-  console.log(isLoggedIn);
+  if (isLoggedIn) {
+    return <Navigate to="/" />;
+  }
   return (
     <Flex
       minH={"100vh"}
       align={"center"}
       justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
+      // bg={useColorModeValue("gray.50", "gray.800")}
+      bg="gray.50"
     >
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
@@ -45,7 +50,8 @@ export default function LoginPage() {
         </Stack>
         <Box
           rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
+          // bg={useColorModeValue("white", "gray.700")}
+          bg="gray.50"
           boxShadow={"lg"}
           p={8}
         >
