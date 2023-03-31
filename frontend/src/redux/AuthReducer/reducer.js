@@ -1,13 +1,9 @@
-import {
-  LOGIN_FAILED,
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGOUT,
-} from "./actionTypes";
+import { LOGIN_FAILED, LOGIN_REQUEST, LOGIN_SUCCESS } from "./actionTypes";
 
-const initState = {
+const initState = JSON.parse(localStorage.getItem("UserDetails")) || {
   isLoggedIn: false,
   name: "",
+  role: "",
   email: "",
   token: "",
   gender: "",
@@ -34,8 +30,6 @@ const reducer = (state = initState, { type, payload }) => {
     case LOGIN_FAILED:
       return { ...state, isLoading: false, isError: true };
 
-    case LOGOUT:
-      return state;
     default:
       return state;
   }
