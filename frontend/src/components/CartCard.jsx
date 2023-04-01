@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardBody,
@@ -67,7 +66,7 @@ const CartCard = ({
       variant="outline"
       justifyContent={"space-between"}
     >
-      <Flex>
+      <Flex direction={{ base: "column", md: "row" }}>
         <Image
           objectFit="cover"
           maxW={{ base: "100%", sm: "200px" }}
@@ -88,21 +87,38 @@ const CartCard = ({
 
           <CardFooter>
             <Flex alignItems="center">
-              <Button onClick={handleReduce} size="xs">
+              <Button
+                _hover={{ bgColor: "rgb(5,161,163)" }}
+                bgColor={"rgb(15,181,183)"}
+                onClick={handleReduce}
+                size="xs"
+                color={"white"}
+              >
                 -
               </Button>
               <Text ml="5px" mr="5px">
                 {quantity}
               </Text>
-              <Button onClick={handleAdd} size="xs">
+              <Button
+                _hover={{ bgColor: "rgb(5,161,163)" }}
+                bgColor={"rgb(15,181,183)"}
+                onClick={handleAdd}
+                size="xs"
+                color={"white"}
+              >
                 +
               </Button>
             </Flex>
           </CardFooter>
         </VStack>
         <Spacer />
-        <Button onClick={handleDelete} size="sm">
-          <RiDeleteBin6Line />
+        <Button
+          _hover={{ bgColor: "rgb(5,161,163)" }}
+          bgColor={"rgb(15,181,183)"}
+          onClick={handleDelete}
+          size="sm"
+        >
+          <RiDeleteBin6Line color="white" />
         </Button>
       </Flex>
     </Card>
