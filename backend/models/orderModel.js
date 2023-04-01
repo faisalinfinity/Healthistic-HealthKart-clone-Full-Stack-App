@@ -18,7 +18,6 @@ const orderSchema = mongoose.Schema({
   userId: { type: String, required: true },
   pid: { type: String, required: true },
   quantity: { type: Number, required: true },
-
   delivery:{ type: String, required: true },
   status:{ type: String, required: true },//automatic
   address:{ type: String, required: true },

@@ -30,16 +30,46 @@ const SingleProductPage = () => {
     }
   }, [id]);
 
-  const {
-    _id,
-    title,
-    brand,
-    category,
+  const handleAddtoCart=({image,
+     title,
     description,
     price,
-    sizesdescription,
+    originalPrice,
+    sizes,
+    category,
+    rating,
+    review,
     flavour,
-  } = item;
+    brand,
+    tags,
+    stock,
+    adminId,
+    _id,
+    userId,
+    quantity})=>{
+
+      console.log(_id)
+   
+    dispatch(addToCart({  image,
+      title,
+     description,
+      price,
+      originalPrice,
+      sizes,
+      category,
+      rating,
+      review,
+      flavour,
+      brand,
+      tags,
+      stock,
+      adminId,
+      pid:_id,
+      userId,
+      quantity:1}))
+    
+  }
+  
 
   if (item.title)
     return (
@@ -117,7 +147,7 @@ const SingleProductPage = () => {
                   bg={"orange.50"}
                   color={"#ff8913"}
                   border={"1px solid orange"}
-                  onClick={() => dispatch(addToCart(item))}
+                  onClick={() =>handleAddtoCart(item)}
                 >
                   Add to Cart
                 </Button>

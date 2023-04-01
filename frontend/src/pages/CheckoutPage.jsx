@@ -8,7 +8,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import React from "react";
-
+import { Link } from "react-router-dom";
 const CheckoutPage = () => {
   return (
     <Box>
@@ -37,7 +37,7 @@ const CheckoutPage = () => {
             <Input placeholder="Enter Landmark" required={true} />
             <Input placeholder="Enter Pincode" required={true} />
           </Flex>
-          <Button>Save & Deliver</Button>
+          <Button as={Link}  to="/payment">Proceed to Pay</Button>
         </Box>
         <Box
           boxShadow="rgba(149, 157, 165, 0.2) 0px 8px 24px"

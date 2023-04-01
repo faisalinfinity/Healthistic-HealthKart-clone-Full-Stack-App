@@ -91,7 +91,7 @@ const Navbar = () => {
                   <MenuItem>My Orders</MenuItem>
                   <MenuItem>
                     <Button
-                      onClick={() => dispatch(logout())}
+                      onClick={() => dispatch(logout)}
                       variant={"ghost"}
                     >
                       <BiLogOut size={"1.5rem"} />

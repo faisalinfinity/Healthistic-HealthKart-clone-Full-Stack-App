@@ -118,6 +118,8 @@ const CartPage = () => {
           </Flex>
 
           <Button
+          as={Link}
+          to={"/checkout"}
             color={"white"}
             _hover={{ bgColor: "rgb(5,161,163)" }}
             bgColor={"rgb(15,181,183)"}

@@ -70,14 +70,13 @@ const CartCard = ({
         <Image
           objectFit="cover"
           maxW={{ base: "100%", sm: "200px" }}
-          src={image}
+          src={image[0]}
           alt={title}
         />
 
         <VStack>
           <CardBody>
             <Heading size="sm">{title}</Heading>
-            <Text py="2">{description}</Text>
             <Heading size="md">Rs.{price}</Heading>
             <Flex>
               <Text>MRP:</Text>

@@ -1,4 +1,9 @@
-import { LOGIN_FAILED, LOGIN_REQUEST, LOGIN_SUCCESS } from "./actionTypes";
+import {
+  LOGIN_FAILED,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
+} from "./actionTypes";
 
 const initState = JSON.parse(localStorage.getItem("UserDetails")) || {
   isLoggedIn: false,
@@ -30,6 +35,9 @@ const reducer = (state = initState, { type, payload }) => {
       };
     case LOGIN_FAILED:
       return { ...state, isLoading: false, isError: true };
+    case LOGOUT_SUCCESS: {
+      return initState;
+    }
 
     default:
       return state;

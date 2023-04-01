@@ -9,7 +9,8 @@ import PrivateRoute from "./PrivateRoute";
 import MultiProductPage from "../pages/MultiProductPage";
 import AccountInfo from "../pages/Home/AccountInfo";
 import AdminPage from "../admin/pages/AdminPage";
-
+import CheckoutPage from "../pages/CheckoutPage";
+import Payment from "../pages/Payment";
 const MainRoute = () => {
   return (
     <Routes>
@@ -18,6 +19,8 @@ const MainRoute = () => {
       <Route path="/register" element={<Signup />} />
       <Route path="/product/:id" element={<SingleProductPage />} />
       <Route path="/product/multi/:category" element={<MultiProductPage />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/payment" element={< Payment/>} />
       <Route
         path="/profile"
         element={

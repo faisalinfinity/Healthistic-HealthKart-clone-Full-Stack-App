@@ -14,11 +14,13 @@ import {
   useColorModeValue,
   Link,
   Select,
+  useToast
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { BASE_URL } from "../constants/constants";
+import {useNavigate} from "react-router-dom"
 
 export default function Signup() {
   const initData = {
@@ -31,11 +33,23 @@ export default function Signup() {
   };
   const [userData, setUserData] = useState(initData);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate=useNavigate()
+  const toast =useToast()
 
   const handleSignIn = () => {
     axios
       .post(BASE_URL + `/users/register`, userData)
-      .then((res) => console.log(res.data))
+      .then((res) => {
+        toast({
+          title: 'Account created.',
+          description: "We've created your account for you.",
+          status: 'success',
+          duration: 9000,
+          position:"top",
+          isClosable: true,
+        })
+        navigate("/login")
+        console.log(res.data)})
       .catch((err) => console.log(err));
   };
 

@@ -11,10 +11,9 @@ function App() {
   return (
     <>
 
-      {/* <Navbar />
+      <Navbar />
       <MainRoute />
-      <Footer /> */}
-<AccountInfo/>
+      <Footer />
     </>
   );
 }
