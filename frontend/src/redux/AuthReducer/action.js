@@ -1,5 +1,6 @@
 import axios from "axios";
 import { LOGIN_FAILED, LOGIN_REQUEST, LOGIN_SUCCESS } from "./actionTypes";
+import { BASE_URL } from "../../constants/constants";
 
 export const loginReqAction = () => {
   return { type: LOGIN_REQUEST };
@@ -14,14 +15,14 @@ export const loginFailAction = () => {
 export const login = (data) => (dispatch) => {
   dispatch(loginReqAction());
   axios
-    .post(`http://localhost:8080/users/login`, data)
+    .post(BASE_URL + `/users/login`, data)
     .then((res) => {
-      console.log(res.data);
+      console.log(res.data.user);
+      dispatch(loginSuccessAction(res.data.user));
       localStorage.setItem(
         "UserDetails",
-        JSON.stringify({ isLoggedIn: true, ...res.data })
+        JSON.stringify({ isLoggedIn: true, ...res.data.user })
       );
-      dispatch(loginSuccessAction(res.data));
     })
     .catch((err) => dispatch(loginFailAction()));
 };

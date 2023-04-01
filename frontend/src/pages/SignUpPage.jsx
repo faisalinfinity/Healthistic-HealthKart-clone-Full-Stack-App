@@ -18,6 +18,7 @@ import {
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
+import { BASE_URL } from "../constants/constants";
 
 export default function Signup() {
   const initData = {
@@ -33,14 +34,14 @@ export default function Signup() {
 
   const handleSignIn = () => {
     axios
-      .post(`http://localhost:8080/users/register`, userData)
+      .post(BASE_URL + `/users/register`, userData)
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
   };
 
   return (
     <Flex
-      minH={"100vh"}
+      minH={"80vh"}
       align={"center"}
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
@@ -137,11 +138,9 @@ export default function Signup() {
               <Button
                 loadingText="Submitting"
                 size="lg"
-                bg={"blue.400"}
+                _hover={{ bgColor: "rgb(5,161,163)" }}
+                bgColor={"rgb(15,181,183)"}
                 color={"white"}
-                _hover={{
-                  bg: "blue.500",
-                }}
                 onClick={handleSignIn}
               >
                 Sign up
@@ -149,7 +148,10 @@ export default function Signup() {
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>
-                Already a user? <Link color={"blue.400"}>Login</Link>
+                Already a user?{" "}
+                <Link href="/login" color="teal">
+                  Login
+                </Link>
               </Text>
             </Stack>
           </Stack>

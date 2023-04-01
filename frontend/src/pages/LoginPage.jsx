@@ -12,16 +12,16 @@ import {
   Button,
   Heading,
   Text,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/AuthReducer/action";
 import { Navigate } from "react-router-dom";
 
 export default function LoginPage() {
-  const { isLoggedIn } = useSelector((store) => {
+  const { isLoggedIn, role } = useSelector((store) => {
     return {
       isLoggedIn: store.authReducer.isLoggedIn,
+      role: store.authReducer.role,
     };
   });
 
@@ -34,11 +34,15 @@ export default function LoginPage() {
     dispatch(login(details));
   };
   if (isLoggedIn) {
-    return <Navigate to="/" />;
+    if (role === "admin" || role === "Admin" || role === "ADMIN") {
+      return <Navigate to="/admin" />;
+    } else {
+      return <Navigate to="/" />;
+    }
   }
   return (
     <Flex
-      minH={"100vh"}
+      minH={"50vh"}
       align={"center"}
       justify={"center"}
       // bg={useColorModeValue("gray.50", "gray.800")}
@@ -76,13 +80,19 @@ export default function LoginPage() {
                 <Checkbox>Remember me</Checkbox>
                 <Link color={"blue.400"}>Forgot password?</Link>
               </Stack>
+              <Stack pt={6}>
+                <Text align={"center"}>
+                  New User?{" "}
+                  <Link href="/register" color={"blue.400"}>
+                    Register Here
+                  </Link>
+                </Text>
+              </Stack>
               <Button
                 onClick={handleLogin}
-                bg={"blue.400"}
                 color={"white"}
-                _hover={{
-                  bg: "blue.500",
-                }}
+                _hover={{ bgColor: "rgb(5,161,163)" }}
+                bgColor={"rgb(15,181,183)"}
               >
                 Sign in
               </Button>

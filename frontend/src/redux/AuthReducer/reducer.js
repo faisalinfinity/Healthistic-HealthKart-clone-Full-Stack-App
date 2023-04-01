@@ -23,6 +23,7 @@ const reducer = (state = initState, { type, payload }) => {
         isLoggedIn: true,
         name: payload.name,
         email: payload.email,
+        role: payload.role,
         token: payload.token,
         gender: payload.gender,
         profile: payload.profile,
