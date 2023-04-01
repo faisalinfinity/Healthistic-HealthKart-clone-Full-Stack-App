@@ -1,7 +1,16 @@
-import { Badge, Box, Button, Grid, Input, Select, useToast } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  Grid,
+  Input,
+  Select,
+  useToast,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../constants/constants";
+import { useSelector } from "react-redux";
 
 let schema = {
   image: "",
@@ -17,12 +26,11 @@ let schema = {
   brand: "",
   tags: "",
   stock: "",
-  adminId: "6422eaba43494981477f5a79",
 };
 
 export default function AddProduct() {
   const [loading, setLoading] = useState(false);
-
+  const { token } = useSelector((state) => state.authReducer);
   const [product, setProduct] = useState(schema);
   const toast = useToast();
   const PostProductData = async (data) => {
@@ -31,6 +39,9 @@ export default function AddProduct() {
       method: "post",
       url: BASE_URL + "/product",
       data: data,
+      headers: {
+        Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAzNTY5NDh9.mI9_LPRWKJppxj72jv0Svx2pg8i3u9VSP4MX-HM0RjE"}`,
+      },
     });
 
     if (res.data) {
@@ -81,14 +92,14 @@ export default function AddProduct() {
           base: "repeat(1,1fr)",
         }}
       >
-        <Input 
+        <Input
           placeholder="Image Links separated by comma (,) required"
           name="image"
           onChange={handleInput}
           border={"1px solid orange"}
           color="orange"
         ></Input>
-      
+
         <Input
           placeholder="Product Title required"
           name="title"
@@ -124,12 +135,16 @@ export default function AddProduct() {
           border={"1px solid orange"}
           color="orange"
         ></Input>
-        <Select   name="category" onChange={handleInput}  placeholder="category required">
-  <option value='Vitamins'>Vitamins</option>
-  <option value='Ayurveda'>Ayurveda</option>
-  <option value='Nutrients'>Nutrients</option>
-  <option value='Food'>Food and Drinks</option>
-</Select>
+        <Select
+          name="category"
+          onChange={handleInput}
+          placeholder="category required"
+        >
+          <option value="Vitamins">Vitamins</option>
+          <option value="Ayurveda">Ayurveda</option>
+          <option value="Nutrients">Nutrients</option>
+          <option value="Food">Food and Drinks</option>
+        </Select>
         {/* <Input
          
          
@@ -235,7 +250,6 @@ export default function AddProduct() {
             });
           } else {
             PostProductData({ ...product });
-             
           }
         }}
       >

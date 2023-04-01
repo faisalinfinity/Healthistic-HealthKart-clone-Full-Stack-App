@@ -292,7 +292,7 @@ export default function ProductItem({
                             url: BASE_URL + `/admin/product/${_id}`,
                             data: myproduct,
                             headers: {
-                                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAyMzg3ODN9.zyLneanO_RUOdLOeUF3Z7nc62EfjcKd6G1Ypx265pbo`,
+                                Authorization: `Bearer ${token}`,
                               },
                           });
 
@@ -333,7 +333,7 @@ export default function ProductItem({
                   method: "delete",
                   url: BASE_URL + `/admin/product/${_id}`,
                   headers: {
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAyMzg3ODN9.zyLneanO_RUOdLOeUF3Z7nc62EfjcKd6G1Ypx265pbo`,
+                    Authorization: `Bearer ${token}`,
                   },
                 });
 

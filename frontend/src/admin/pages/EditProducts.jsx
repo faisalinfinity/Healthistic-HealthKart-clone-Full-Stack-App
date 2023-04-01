@@ -45,7 +45,7 @@ export default function EditProduct(){
                 method:"get",
                 url:BASE_URL+`/admin/product?category=${cat}&page=${page}&limit=7`,
                 headers:{
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAyMzg3ODN9.zyLneanO_RUOdLOeUF3Z7nc62EfjcKd6G1Ypx265pbo`
+                    Authorization: `Bearer ${token}`
                 }
             })
 
