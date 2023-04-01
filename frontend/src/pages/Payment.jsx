@@ -13,8 +13,10 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import PayCard from "../components/PayCard";
+import { useDispatch } from "react-redux";
 
 const Payment = () => {
+  // const dispatch = useDisptach();
   return (
     <Box>
       <Box
@@ -67,7 +69,7 @@ const Payment = () => {
                         Verify
                       </Button>
                     </Flex>
-                    <Button w={"19rem"}>Securely Pay</Button>
+                    <Button w={"19rem"} onClick>Securely Pay</Button>
                   </Box>
                 </TabPanel>
                 <TabPanel>
