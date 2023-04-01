@@ -90,19 +90,6 @@ import {
           >
             Manage Orders
           </Button>
-          <Button
-            variant={"outline"}
-            borderColor={"teal"}
-            bg={tab == 5 && "teal"}
-            color={tab == 5 ? "white" : "teal"}
-            w={"90%"}
-            onClick={() => {
-              setTab(5);
-              onClose()
-            }}
-          >
-            Manage Admins
-          </Button>
         </VStack>
       </VStack>
     );

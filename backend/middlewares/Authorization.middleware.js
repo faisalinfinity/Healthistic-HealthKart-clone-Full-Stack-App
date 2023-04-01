@@ -5,10 +5,11 @@ const AuthorizationMiddleware = async (req, res, next) => {
   var token
   if(req.headers.authorization){
     token = req?.headers?.authorization.split(" ")[1];
+    console.log(token)
   }else{
-    res.send("Please pass token in headers")
+    return res.send("Please pass token in headers")
   }
-  
+  if(token==undefined)return res.status(400).send("Invalid token")
   try {
     var decoded = jwt.verify(token, "faisal");
   } catch (error) { 
@@ -23,9 +24,7 @@ const AuthorizationMiddleware = async (req, res, next) => {
     } else {
       res.status(404).send("You are not Authorized to Access this!");
     }
-  } else {
-    res.status(404).send("You are not Authorized to Access this!");
-  }
+  } 
 };
 
 module.exports = AuthorizationMiddleware;

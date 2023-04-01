@@ -76,7 +76,8 @@ export default function OrderItem({
   flavour,
   userId,
   quantity,
-  date
+  date,
+  address
 }) {
   const { token } = useSelector((state) => state.authReducer);
   const toast = useToast();
@@ -128,7 +129,7 @@ export default function OrderItem({
       url: BASE_URL + `/admin/product/${_id}`,
       data: changes,
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAyMzg3ODN9.zyLneanO_RUOdLOeUF3Z7nc62EfjcKd6G1Ypx265pbo`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -157,22 +158,22 @@ export default function OrderItem({
 
   return (
     <Tr>
-           <Td isNumeric>{userId}</Td>
+      <Td>
+        <Image w={"40px"} src={image[0]}></Image>
+      </Td>
       <Td maxW={"100px"} overflow={"hidden"} isTruncated>
         {title}
       </Td>
  
-      <Td isNumeric>{price}</Td>
+      <Td isNumeric>{address}</Td>
       <Td isNumeric>{quantity}</Td>
-      <Td>{date}</Td>
+      <Td>{date?.split(" ")[0]} </Td>
       <Td>
-        <Menu colorScheme={"teal"} w={"100%"}>
-          <MenuButton w={"100%"} as={Button} rightIcon={<FaAngleDown />}>
-           Change  Status
+        <Menu colorScheme={"teal"} >
+          <MenuButton as={Button} rightIcon={<FaAngleDown />}>
+            Status
           </MenuButton>
           <MenuList>
-            <MenuItem></MenuItem>
-          
             <MenuItem
               isLoading={loading}
               variant="outline"
@@ -180,6 +181,9 @@ export default function OrderItem({
               onClick={() => UpdateOrder({ status: "Shipped" })}
             >
               Ship Order
+            </MenuItem>
+            <MenuItem onClick={() => UpdateOrder({ status: "delivered" })}>
+              Delivered
             </MenuItem>
             <MenuItem onClick={() => UpdateOrder({ status: "Cancelled" })}>
               Cancel Order

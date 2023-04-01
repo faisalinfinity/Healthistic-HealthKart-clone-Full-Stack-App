@@ -5,31 +5,27 @@ import { useSelector } from "react-redux";
 import { BASE_URL } from "../../constants/constants.js";
 import StatsBox from "../components/StatsBox.jsx";
 
-async function getData(query, endpoint, token) {
-  if (!query) {
-    query = "";
-  }
+async function getData(token) {
+
 
   let res = await axios({
-    url: BASE_URL + `/admin/order${query}`,
+    url: BASE_URL + `/admin/order`,
     method: "get",
     headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAyMzg3ODN9.zyLneanO_RUOdLOeUF3Z7nc62EfjcKd6G1Ypx265pbo`,
+      Authorization: `Bearer ${token}`,
     },
   });
   return res.data;
 }
 
-async function getProductData(query, endpoint, token) {
-  if (!query) {
-    query = "";
-  }
+async function getProductData(token, endpoint) {
+ 
 
   let res = await axios({
-    url: BASE_URL + `/admin/product${query}`,
+    url: BASE_URL + `/admin/product`,
     method: "get",
     headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAyMzg3ODN9.zyLneanO_RUOdLOeUF3Z7nc62EfjcKd6G1Ypx265pbo`,
+      Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAzNTY5NDh9.mI9_LPRWKJppxj72jv0Svx2pg8i3u9VSP4MX-HM0RjE"}`,
     },
   });
   return res.data;
@@ -46,13 +42,16 @@ export default function Dashboard({ user }) {
   const [ayurveda, setayurveda] = useState(0);
   const [food, setFood] = useState(0);
 
-
-
+  const {token} = useSelector((state)=>state.authReducer)
+  console.log("token",token)
   useEffect(() => {
-    getData().then((res) => {
-      setData(res.data);
-    });
-  }, []);
+    if(token){
+      getData(token).then((res) => {
+        setData(res.data);
+      });
+    }
+    
+  }, [token]);
 
   useEffect(() => {
     let filtered = data.filter((el) => el.status === "Order Placed");
@@ -75,10 +74,13 @@ export default function Dashboard({ user }) {
   //   }, []);
 
   useEffect(() => {
-    getProductData().then((res) => {
-      setproductData(res.data);
-    });
-  }, []);
+    if(true){
+      getProductData(token).then((res) => {
+        setproductData(res.data);
+      });
+    }
+   
+  }, [token]);
 
   useEffect(() => {
     var count = 0;
@@ -152,11 +154,11 @@ export default function Dashboard({ user }) {
         />
 
         <StatsBox
-          name={"Total Earnings $"}
+          name={"Total Earnings ₹"}
           br={6}
           size={300}
           color={"black"}
-          image={"https://www.svgrepo.com/show/500409/money.svg"}
+          image={"https://w7.pngwing.com/pngs/143/512/png-transparent-indian-rupee-sign-currency-symbol-symbol-miscellaneous-angle-text.png"}
           classname={"lush"}
           bcolor={"green"}
           count={totalEarning}

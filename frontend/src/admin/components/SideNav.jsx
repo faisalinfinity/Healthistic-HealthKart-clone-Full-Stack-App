@@ -1,4 +1,4 @@
-import { Badge, Button, Flex, Heading, VStack } from "@chakra-ui/react"
+import { Badge, Button, Center, Flex, Heading, VStack } from "@chakra-ui/react"
 
 export default function SideNav({setTab ,tab,name,role}){
     
@@ -6,10 +6,11 @@ export default function SideNav({setTab ,tab,name,role}){
 
     return <VStack  display={{base:"none",sm:"none",md:"none",lg:"block"}} borderTopRightRadius={20} padding={"8px 0px"} h={"100vh"} className="sidebar" w={"25%"}>
 
-    <Flex justifyContent={"end"} maxH={150} padding={2} border={"1px solid orange"} borderRadius={6} alignItems={"center"} margin={"auto"} w={"90%"}>
+    <Flex justifyContent={"center"} maxH={150} padding={2} border={"1px solid orange"} borderRadius={6} alignItems={"center"} margin={"auto"} w={"90%"}>
         <VStack>
-        <Heading fontSize={"md"}  color={"orange"}>{name}</Heading>
-        <Badge colorScheme={"green"} >{role}</Badge>
+            <Center> <Heading fontSize={"md"}  color={"orange"}>{name}</Heading>
+        <Badge colorScheme={"green"} >{role}</Badge></Center>
+       
         </VStack>
         {/* <CardAvatar name={name} role ={role}></CardAvatar> */}
     </Flex>
