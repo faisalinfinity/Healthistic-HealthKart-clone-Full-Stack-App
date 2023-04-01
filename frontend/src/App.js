@@ -5,15 +5,16 @@ import MainRoute from "./routes/MainRoute";
 import SingleProductPage from "./pages/SingleProductPage";
 
 import HomePage from  "./pages/Home/HomePage";
+import AccountInfo from "./pages/Home/AccountInfo";
 
 function App() {
   return (
     <>
 
-      <Navbar />
+      {/* <Navbar />
       <MainRoute />
-      <Footer />
-
+      <Footer /> */}
+<AccountInfo/>
     </>
   );
 }

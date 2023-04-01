@@ -17,7 +17,7 @@ const settings = {
   slidesToScroll: 1,
 };
 
-export default function Carousel_1() {
+export default function CarouselFirst() {
   // As we have used custom buttons, we need a reference variable to
   // change the state
   const [slider, setSlider] = React.useState(null);
