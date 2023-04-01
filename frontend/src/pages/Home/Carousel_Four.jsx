@@ -12,8 +12,10 @@ import {
   Flex,
   Box,
 } from "@chakra-ui/react";
+ 
+import { addToCart } from "../../redux/CartReducer/action";
 
-const CarouselFour = ({ayurveda}) => {
+const CarouselFour = ({ ayurveda }) => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -35,7 +37,27 @@ const CarouselFour = ({ayurveda}) => {
     },
   };
 
-  
+  const handleAddtoCart = async ({
+    image,
+    title,
+    description,
+    price,
+    originalPrice,
+    sizes,
+    category,
+    rating,
+    review,
+    flavour,
+    brand,
+    tags,
+    stock,
+    adminId,
+    pid,
+    quantity,
+  }) => {
+    console.log(price)
+    // addToCart();
+  };
 
   return (
     <div style={{ width: "98vw", margin: "auto", marginTop: "10px" }}>
@@ -46,10 +68,16 @@ const CarouselFour = ({ayurveda}) => {
         <Carousel responsive={responsive}>
           {ayurveda.map((item, index) => (
             <Card maxW="sm" key={index} mr={1} ml={1}>
-             <Flex alignItems={"center"} justifyContent={"center"} >
-             <Image w={"100px"} h={"150px"} display={"block"}  src={item.image[0]} borderRadius="lg" />
-             </Flex>
-              <Stack   p="6"  h = {210}  bg="white">
+              <Flex alignItems={"center"} justifyContent={"center"}>
+                <Image
+                  w={"100px"}
+                  h={"150px"}
+                  display={"block"}
+                  src={item.image[0]}
+                  borderRadius="lg"
+                />
+              </Flex>
+              <Stack p="6" h={210} bg="white">
                 <Flex gap={4} textAlign={"center"}>
                   <Box bg={"#00B5B7"} color={"white"} pl={3} pr={3}>
                     {item.rating} <span style={{ fontSize: "20px" }}>*</span>
@@ -72,19 +100,21 @@ const CarouselFour = ({ayurveda}) => {
                     % Off
                   </Text>
                 </Flex>
- 
               </Stack>
               <Button
+                onClick={() => handleAddtoCart(item)}
                 w={"95%"}
                 margin="auto"
                 mb="3"
-                 boxShadow='lg' p='6' bg='white'
-                  _hover={{ bg: "orange", color: "white" }}
-                  colorScheme="orange"
-                  variant="outline"
-                >
-                  Add to cart
-                </Button>
+                boxShadow="lg"
+                p="6"
+                bg="white"
+                _hover={{ bg: "orange", color: "white" }}
+                colorScheme="orange"
+                variant="outline"
+              >
+                Add to cart
+              </Button>
             </Card>
           ))}
         </Carousel>

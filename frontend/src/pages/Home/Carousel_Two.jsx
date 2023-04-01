@@ -12,6 +12,8 @@ import {
   Button,
   Box,
 } from "@chakra-ui/react";
+ 
+import { addToCart } from "../../redux/CartReducer/action";
 const CarouselTwo = ({vitamin}) => {
   const responsive = {
     superLargeDesktop: {
@@ -34,7 +36,25 @@ const CarouselTwo = ({vitamin}) => {
     },
   };
 
-   
+  const handleAddtoCart = async ({  image,
+    title,
+   description,
+    price,
+    originalPrice,
+    sizes,
+    category,
+    rating,
+    review,
+    flavour,
+    brand,
+    tags,
+    stock,
+    adminId,
+    pid,
+    quantity}) => {
+    // addToCart()
+  
+  };
 
   return (
     <div style={{ width: "98vw", margin: "auto", marginTop: "10px" }}>
@@ -74,6 +94,7 @@ const CarouselTwo = ({vitamin}) => {
                 </Flex>
               </Stack>
               <Button
+              onClick={()=>handleAddtoCart(item)}
                 w={"95%"}
                 margin="auto"
                 mb="3"
