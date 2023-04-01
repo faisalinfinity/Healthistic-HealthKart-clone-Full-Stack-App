@@ -6,6 +6,9 @@ import LoginPage from "../pages/LoginPage";
 import Signup from "../pages/SignUpPage";
 import SingleProductPage from "../pages/SingleProductPage";
 import PrivateRoute from "./PrivateRoute";
+import MultiProductPage from "../pages/MultiProductPage";
+import AccountInfo from "../pages/Home/AccountInfo";
+import AdminPage from "../admin/pages/AdminPage";
 
 const MainRoute = () => {
   return (
@@ -13,7 +16,25 @@ const MainRoute = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Signup />} />
-      <Route path="/productDetails" element={<SingleProductPage />} />
+      <Route path="/product/:id" element={<SingleProductPage />} />
+      <Route path="/product/multi/:category" element={<MultiProductPage />} />
+      <Route
+        path="/profile"
+        element={
+          <PrivateRoute>
+            <AccountInfo />
+          </PrivateRoute>
+        }
+      />
+      <Route path="*" element={<h1>Nothing Found</h1>} />
+      <Route
+        path="/admin"
+        element={
+          <PrivateRoute>
+            <AdminPage />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/cart"
         element={

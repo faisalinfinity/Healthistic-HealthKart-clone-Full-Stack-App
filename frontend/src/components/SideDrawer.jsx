@@ -12,17 +12,28 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Flex,
 } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { AiOutlineShoppingCart, AiTwotoneGift } from "react-icons/ai";
+import {
+  AiOutlineShoppingCart,
+  AiTwotoneGift,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { MdSell, MdLocationOn } from "react-icons/md";
 import { FaIdeal, FaNewspaper } from "react-icons/fa";
 import { BsFillChatDotsFill } from "react-icons/bs";
 import { TbBrandAdonisJs } from "react-icons/tb";
+import { BiLogOut, BiLogIn } from "react-icons/bi";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/AuthReducer/action";
 import React from "react";
 
 function SideDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isLoggedIn, name } = useSelector((store) => store.authReducer);
+  const dispatch = useDispatch();
   const btnRef = React.useRef();
 
   return (
@@ -43,7 +54,33 @@ function SideDrawer() {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <Button variant={"ghost"}>Login</Button>
+            {isLoggedIn ? (
+              <Menu>
+                <MenuButton as={Button} variant="ghost">
+                  <AiOutlineUser size={"2rem"} />
+                </MenuButton>
+                <MenuList>
+                  <MenuItem>Hi, {name}</MenuItem>
+                  <MenuItem onClick={onClose}>
+                    <Link to={"/orders"}>My Orders</Link>
+                  </MenuItem>
+                  <MenuItem onClick={onClose}>
+                    <Button
+                      onClick={() => dispatch(logout())}
+                      variant={"ghost"}
+                    >
+                      <BiLogOut size={"1.5rem"} />
+                      Logout
+                    </Button>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            ) : (
+              <Flex gap={".5rem"} onClick={onClose}>
+                <BiLogIn size={"1.5rem"} />
+                <Link to={"/register"}>Login</Link>
+              </Flex>
+            )}
           </DrawerHeader>
 
           <DrawerBody>
@@ -62,12 +99,29 @@ function SideDrawer() {
                     Categories
                   </MenuButton>
                   <MenuList>
-                    <MenuItem>Sports Nutrition</MenuItem>
-                    <MenuItem>Vitamins & Supplements</MenuItem>
-                    <MenuItem>Ayurveda & Herbs</MenuItem>
-                    <MenuItem>Health Food & Drinks</MenuItem>
-                    <MenuItem>Fitness</MenuItem>
-                    <MenuItem>Wellness</MenuItem>
+                    <MenuItem onClick={onClose}>
+                      {" "}
+                      <Link to={"/product/multi/nutrients"}>
+                        Sports Nutrition
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={onClose}>
+                      <Link to={"/product/multi/vitamins"}>
+                        Vitamins & Supplements
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={onClose}>
+                      <Link to={"/product/multi/ayurveda"}>
+                        Ayurveda & Herbs
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={onClose}>
+                      <Link to={"/product/multi/food"}>
+                        Health Food & Drinks
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={onClose}>Fitness</MenuItem>
+                    <MenuItem onClick={onClose}>Wellness</MenuItem>
                   </MenuList>
                 </Menu>
               </Box>
@@ -76,35 +130,73 @@ function SideDrawer() {
                 alignItems={"center"}
                 gap={".3em"}
                 cursor={"pointer"}
+                onClick={onClose}
               >
-                <AiOutlineShoppingCart />
+                <Link to={"/cart"}>
+                  <AiOutlineShoppingCart />
+                </Link>
                 Cart
               </Box>
-              <Box display={"flex"} alignItems={"center"} gap={".3em"}>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                onClick={onClose}
+                gap={".3em"}
+              >
                 <MdSell />
                 BestSellers
               </Box>
-              <Box display={"flex"} alignItems={"center"} gap={".3em"}>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                onClick={onClose}
+                gap={".3em"}
+              >
                 <TbBrandAdonisJs />
                 Brands
               </Box>
-              <Box display={"flex"} alignItems={"center"} gap={".3em"}>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                onClick={onClose}
+                gap={".3em"}
+              >
                 <FaIdeal />
                 Deals
               </Box>
-              <Box display={"flex"} alignItems={"center"} gap={".3em"}>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                onClick={onClose}
+                gap={".3em"}
+              >
                 <FaNewspaper />
                 Blogs
               </Box>
-              <Box display={"flex"} alignItems={"center"} gap={".3em"}>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                onClick={onClose}
+                gap={".3em"}
+              >
                 <AiTwotoneGift />
                 Gift Card
               </Box>
-              <Box display={"flex"} alignItems={"center"} gap={".3em"}>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                onClick={onClose}
+                gap={".3em"}
+              >
                 <BsFillChatDotsFill />
                 Customer Support
               </Box>
-              <Box display={"flex"} alignItems={"center"} gap={".3em"}>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                onClick={onClose}
+                gap={".3em"}
+              >
                 <MdLocationOn size={"1.3rem"} />
                 Store Locator
               </Box>

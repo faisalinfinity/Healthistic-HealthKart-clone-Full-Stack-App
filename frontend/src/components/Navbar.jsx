@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -11,18 +11,38 @@ import {
   InputGroup,
   InputLeftElement,
   MenuButton,
+  Flex,
 } from "@chakra-ui/react";
 import Logo from "../assets/healthifyLogo.png";
-import { AiOutlineShoppingCart, AiTwotoneGift } from "react-icons/ai";
+import {
+  AiOutlineShoppingCart,
+  AiTwotoneGift,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { MdSell, MdLocationOn } from "react-icons/md";
 import { FaIdeal, FaNewspaper } from "react-icons/fa";
 import { BsFillChatDotsFill } from "react-icons/bs";
 import { TbBrandAdonisJs } from "react-icons/tb";
+import { BiLogOut, BiLogIn } from "react-icons/bi";
 import { Search2Icon } from "@chakra-ui/icons";
 import SideDrawer from "./SideDrawer";
+import axios from "axios";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/AuthReducer/action";
 
 const Navbar = () => {
+  const [query, setQuery] = useState("");
+  const { isLoggedIn, name } = useSelector((store) => store.authReducer);
+  const dispatch = useDispatch();
+
+  const searchResults = () => {
+    axios
+      .get(`http://localhost:8080/product/`)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Box>
       <Box
@@ -36,7 +56,9 @@ const Navbar = () => {
         </Box>
 
         <Box w={{ base: "20%", md: "10%" }}>
-          <Image w={"80%"} src={Logo} />
+          <Link to={"/"}>
+            <Image w={"80%"} src={Logo} />
+          </Link>
         </Box>
         <Box>
           <InputGroup>
@@ -47,6 +69,8 @@ const Navbar = () => {
             <Input
               w={{ base: "13rem", sm: "29rem", md: "39rem" }}
               placeholder="Search for Products and Brands"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
           </InputGroup>
         </Box>
@@ -57,7 +81,31 @@ const Navbar = () => {
           w={"20%"}
         >
           <Box>
-            <Button variant={"ghost"}>Login</Button>
+            {isLoggedIn ? (
+              <Menu>
+                <MenuButton as={Button} variant="ghost">
+                  <AiOutlineUser size={"2rem"} />
+                </MenuButton>
+                <MenuList>
+                  <MenuItem>Hi, {name}</MenuItem>
+                  <MenuItem>My Orders</MenuItem>
+                  <MenuItem>
+                    <Button
+                      onClick={() => dispatch(logout())}
+                      variant={"ghost"}
+                    >
+                      <BiLogOut size={"1.5rem"} />
+                      Logout
+                    </Button>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            ) : (
+              <Flex gap={".5rem"}>
+                <BiLogIn size={"1.5rem"} />
+                <Link to={"/register"}>Login</Link>
+              </Flex>
+            )}
           </Box>
           <Box cursor={"pointer"}>
             <Link to="/cart">
@@ -80,10 +128,20 @@ const Navbar = () => {
               Shop By Category
             </MenuButton>
             <MenuList>
-              <MenuItem>Sports Nutrition</MenuItem>
-              <MenuItem>Vitamins & Supplements</MenuItem>
-              <MenuItem>Ayurveda & Herbs</MenuItem>
-              <MenuItem>Health Food & Drinks</MenuItem>
+              <MenuItem>
+                <Link to={"/product/multi/nutrients"}>Sports Nutrition</Link>
+              </MenuItem>
+              <MenuItem>
+                <Link to={"/product/multi/vitamins"}>
+                  Vitamins & Supplements
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link to={"/product/multi/ayurveda"}>Ayurveda & Herbs</Link>
+              </MenuItem>
+              <MenuItem>
+                <Link to={"/product/multi/food"}>Health Food & Drinks</Link>
+              </MenuItem>
               <MenuItem>Fitness</MenuItem>
               <MenuItem>Wellness</MenuItem>
             </MenuList>
