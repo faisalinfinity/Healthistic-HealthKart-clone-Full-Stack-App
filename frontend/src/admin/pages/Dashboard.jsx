@@ -25,7 +25,7 @@ async function getProductData(token, endpoint) {
     url: BASE_URL + `/admin/product`,
     method: "get",
     headers: {
-      Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAzNTY5NDh9.mI9_LPRWKJppxj72jv0Svx2pg8i3u9VSP4MX-HM0RjE"}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   return res.data;
@@ -74,7 +74,7 @@ export default function Dashboard({ user }) {
   //   }, []);
 
   useEffect(() => {
-    if(true){
+    if(token){
       getProductData(token).then((res) => {
         setproductData(res.data);
       });

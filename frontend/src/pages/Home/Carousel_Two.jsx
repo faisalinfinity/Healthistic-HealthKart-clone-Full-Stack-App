@@ -84,14 +84,28 @@ const handleAddtoCart = ({
         userId,
         quantity: 1,
       })
-    );
-    toast({
-      title: "item added.",
-      description: "Item added to your cart",
-      status: "success",
-      duration: 9000,
-      isClosable: true,
-    });
+    ).then((res)=>{
+     
+      if(res==="Item Already exist in the Cart"){
+        toast({
+          title: "Item Already exist in the Cart",
+          description: "",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
+      }else{
+        toast({
+          title: "item added.",
+          description: "Item added to your cart",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+
+      }
+    })
+   
   };
 
   return (

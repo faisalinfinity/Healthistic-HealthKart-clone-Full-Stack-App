@@ -11,7 +11,8 @@ import CarouselThree from "./Carousel_Three";
 import CarouselTwo from "./Carousel_Two";
 import axios from "axios"
 import CarouselSix from "./CarouselSix";
-// const Link = ["http://localhost:8080/product?category=Ayurveda" , "http://localhost:8080/product?category=Vitamins","http://localhost:8080/product?category=Nutrients" , "http://localhost:8080/product?category=Food"]
+import { BASE_URL } from "../../constants/constants";
+// const Link = ["${BASE_URL}/product?category=Ayurveda" , "${BASE_URL}/product?category=Vitamins","${BASE_URL}/product?category=Nutrients" , "${BASE_URL}/product?category=Food"]
  
  
  
@@ -23,10 +24,10 @@ const HomePage = () => {
   // const [food , setFood] = useState([])
  
   useEffect(()=>{
-     axios.get("http://localhost:8080/product?category=Ayurveda").then((res) => setAyurveda(res.data.data))
-     axios.get("http://localhost:8080/product?category=Vitamins").then((res) => setVitamin(res.data.data))
-     axios.get("http://localhost:8080/product?category=Nutrients").then((res) => setNutrients(res.data.data))
-    //  axios.get("http://localhost:8080/product?category=Food").then((res) => setFood(res.data.data))
+     axios.get(`${BASE_URL}/product?category=Ayurveda`).then((res) => setAyurveda(res.data.data))
+     axios.get(`${BASE_URL}/product?category=Vitamins`).then((res) => setVitamin(res.data.data))
+     axios.get(`${BASE_URL}/product?category=Nutrients`).then((res) => setNutrients(res.data.data))
+    //  axios.get("${BASE_URL}/product?category=Food").then((res) => setFood(res.data.data))
   },[])
  
   return (

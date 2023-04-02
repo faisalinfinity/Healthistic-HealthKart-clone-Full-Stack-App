@@ -2,8 +2,8 @@ const express=require("express")
 const AuthorizationMiddleware = require("../middlewares/Authorization.middleware")
 const { orderModel } = require("../models/orderModel")
 const adminOrderRoute=express.Router()
-adminOrderRoute.use(AuthorizationMiddleware)
-adminOrderRoute.get("/",async(req,res)=>{
+
+adminOrderRoute.get("/",AuthorizationMiddleware,async(req,res)=>{
     const { userId } = req.body;
     const page = +req.query.page || 1;
     const limit = +req.query.limit || 10;
@@ -60,7 +60,7 @@ adminOrderRoute.get("/",async(req,res)=>{
     }
 })
 
-adminOrderRoute.patch("/",async(req,res)=>{
+adminOrderRoute.patch("/:id",async(req,res)=>{
      const {id}=req.params
     try {
         await orderModel.findByIdAndUpdate({_id:id},req.body)

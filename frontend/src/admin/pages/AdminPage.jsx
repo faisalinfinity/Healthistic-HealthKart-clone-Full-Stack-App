@@ -86,7 +86,7 @@ export default function AdminPage() {
   // if(!user.status) return <Loading />
 
   return (
-    <Box mt={"20px"}>
+    <Box mt={"20px"} mb={"2rem"}>
       <Flex gap={4} position={"relative"} w={"100%"}>
         <Wrap
           zIndex={999}
