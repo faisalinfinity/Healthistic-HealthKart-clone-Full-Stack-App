@@ -92,6 +92,7 @@ const CartCard = ({
                 onClick={handleReduce}
                 size="xs"
                 color={"white"}
+                isDisabled={quantity === 1}
               >
                 -
               </Button>

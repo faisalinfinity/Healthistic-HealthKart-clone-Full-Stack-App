@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import CartCard from "../components/CartCard";
 import { getCartData } from "../redux/CartReducer/action";
+import Loading from "../admin/components/Loading";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const CartPage = () => {
   }, [change]);
 
   return isLoading ? (
-    <Heading>Loading...</Heading>
+    <Loading />
   ) : isError ? (
     <Heading>Something went wrong..</Heading>
   ) : items.length === 0 ? (
@@ -118,8 +119,8 @@ const CartPage = () => {
           </Flex>
 
           <Button
-          as={Link}
-          to={"/checkout"}
+            as={Link}
+            to={"/checkout"}
             color={"white"}
             _hover={{ bgColor: "rgb(5,161,163)" }}
             bgColor={"rgb(15,181,183)"}
