@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import Paginantion from "../admin/components/Pagination";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector} from "react-redux";
 import { addToCart } from "../redux/CartReducer/action";
 
 const MultiProductPage = () => {
@@ -21,14 +21,14 @@ const MultiProductPage = () => {
   const params = useParams();
   const toast = useToast();
   const { category } = params;
-
+   const {token}=useSelector((s)=>s.authReducer)
   useEffect(() => {
     axios
       .get(
         `http://localhost:8080/product?category=${category}&page=${page}&limit=${8}`,
         {
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDI0M2I0NmVhN2FhMDU3YTI3ODI4YWUiLCJpYXQiOjE2ODAxNjQ3MDd9.dnwiGLzmb7tv-c6bKcIlGRmRNQsSz61NGRjcw1tNML8`,
+            Authorization: `Bearer ${token}`,
           },
         }
       )

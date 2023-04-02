@@ -11,7 +11,7 @@ import {
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { addToCart } from "../redux/CartReducer/action";
 
 const SingleProductPage = () => {
@@ -22,13 +22,13 @@ const SingleProductPage = () => {
   const params = useParams();
   const toast = useToast();
   const { id } = params;
-
+  const {token}=useSelector((state)=>state.authReducer)
   useEffect(() => {
     if (id) {
       axios
         .get(`http://localhost:8080/product/${id}`, {
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDI0M2I0NmVhN2FhMDU3YTI3ODI4YWUiLCJpYXQiOjE2ODAxNjQ3MDd9.dnwiGLzmb7tv-c6bKcIlGRmRNQsSz61NGRjcw1tNML8`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
@@ -78,14 +78,28 @@ const SingleProductPage = () => {
         userId,
         quantity: 1,
       })
-    );
-    toast({
-      title: "item added.",
-      description: "Item added to your cart",
-      status: "success",
-      duration: 9000,
-      isClosable: true,
-    });
+    ).then((res)=>{
+     
+      if(res==="Item Already exist in the Cart"){
+        toast({
+          title: "Item Already exist in the Cart",
+          description: "",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
+      }else{
+        toast({
+          title: "item added.",
+          description: "Item added to your cart",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+
+      }
+    })
+   
   };
 
   if (item.title)
@@ -147,14 +161,7 @@ const SingleProductPage = () => {
             </Flex>
             <Box>Price: ₹{item.price}</Box>
             <Box display={{ md: "flex" }} gap={"1rem"}>
-              <Flex
-                alignItems={"center"}
-                border={"1px solid white"}
-                borderRadius={"md"}
-                gap={"1rem"}
-              >
-                <Button>-</Button>1<Button>+</Button>
-              </Flex>
+             
               <Box
                 mt={{ base: "2rem", md: "0" }}
                 display={{ base: "flex" }}

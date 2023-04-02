@@ -19,13 +19,15 @@ import { addToOrder } from "../redux/CheckoutReducer/action";
 import { getCartData } from "../redux/CartReducer/action";
 import { BASE_URL } from "../constants/constants";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   const { items } = useSelector((store) => store.cartReducer);
   const [payment, setPayment] = useState("UPI");
   const toast = useToast();
-
+  const {token} = useSelector((state)=>state.authReducer)
   let cartTotal = 0;
   for (let i = 0; i < items.length; i++) {
     cartTotal += items[i].price * items[i].quantity;
@@ -51,11 +53,16 @@ const Payment = () => {
       axios
         .delete(`${BASE_URL}/users/cart/delete/all`, {
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDI0M2I0NmVhN2FhMDU3YTI3ODI4YWUiLCJpYXQiOjE2ODAxNjQ3MDd9.dnwiGLzmb7tv-c6bKcIlGRmRNQsSz61NGRjcw1tNML8",
+            Authorization: `Bearer ${token}`,
           },
         })
-        .then((res) => dispatch(getCartData));
+        .then((res) =>{
+          dispatch(getCartData)
+
+          setTimeout(()=>{
+           navigate("/profile")
+          },2000)
+        });
     });
   };
 

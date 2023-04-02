@@ -58,13 +58,6 @@ export default function OrderItem({
   originalPrice,
   sizes,
   category,
-  style,
-  color,
-  material,
-  fit,
-  occasion,
-  sleeves,
-  neck,
   brand,
   gender,
   delivery,
@@ -77,7 +70,8 @@ export default function OrderItem({
   userId,
   quantity,
   date,
-  address
+  address,
+  status
 }) {
   const { token } = useSelector((state) => state.authReducer);
   const toast = useToast();
@@ -126,7 +120,7 @@ export default function OrderItem({
 
     let res = await axios({
       method: "patch",
-      url: BASE_URL + `/admin/product/${_id}`,
+      url: BASE_URL + `/admin/order/${_id}`,
       data: changes,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -171,7 +165,7 @@ export default function OrderItem({
       <Td>
         <Menu colorScheme={"teal"} >
           <MenuButton as={Button} rightIcon={<FaAngleDown />}>
-            Status
+            {status}
           </MenuButton>
           <MenuList>
             <MenuItem

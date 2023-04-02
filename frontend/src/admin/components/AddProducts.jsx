@@ -40,7 +40,7 @@ export default function AddProduct() {
       url: BASE_URL + "/product",
       data: data,
       headers: {
-        Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDIyZWFiYTQzNDk0OTgxNDc3ZjVhNzkiLCJpYXQiOjE2ODAzNTY5NDh9.mI9_LPRWKJppxj72jv0Svx2pg8i3u9VSP4MX-HM0RjE"}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -80,7 +80,7 @@ export default function AddProduct() {
   }, []);
   return (
     <Box padding={"8px 0px"}>
-      <Badge m={"8px"} colorScheme={"orange"}>
+      <Badge m={"8px"} colorScheme={"teal"}>
         Add Single Product
       </Badge>
       <Grid
@@ -96,7 +96,7 @@ export default function AddProduct() {
           placeholder="Image Links separated by comma (,) required"
           name="image"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
 
@@ -104,35 +104,35 @@ export default function AddProduct() {
           placeholder="Product Title required"
           name="title"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
         <Input
           placeholder="Product Description required"
           name="description"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
         <Input
           placeholder="Product Price required"
           name="price"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
         <Input
           placeholder="Product Original Price required"
           name="originalPrice"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
         <Input
           placeholder="sizes separated by comma (,) required"
           name="sizes"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
         <Select
@@ -149,55 +149,55 @@ export default function AddProduct() {
          
          
          
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input> */}
         <Input
           placeholder="rating"
           name="rating"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
         <Input
           placeholder="review "
           name="review"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
         <Input
           placeholder="flavour"
           name="flavour"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
         <Input
           placeholder="brand required"
           name="brand"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
         <Input
           placeholder="tags (optional)"
           name="tags"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
         <Input
           placeholder="stock (required)"
           name="stock"
           onChange={handleInput}
-          border={"1px solid orange"}
+          border={"1px solid teal"}
           color="orange"
         ></Input>
       </Grid>
 
       <Button
-        colorScheme={"orange"}
+        colorScheme={"teal"}
         isLoading={loading}
         onClick={() => {
           let {

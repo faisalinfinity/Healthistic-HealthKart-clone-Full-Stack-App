@@ -15,14 +15,17 @@ export const cartFailAction = () => {
 
 export const addToCart = (data) => (dispatch) => {
   dispatch(cartReqAction());
-  axios
+  return axios
     .post(BASE_URL + `/users/cart`, data, {
       headers: {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("UserDetails")).token}`,
       },
     })
     .then((res) => console.log(res.data))
-    .catch((err) => console.log(err));
+    .catch((err) =>{
+      let res=err.response.data
+      return res
+    });
 };
 
 export const getCartData = (dispatch) => {

@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import CartCard from "../components/CartCard";
 import { getCartData } from "../redux/CartReducer/action";
-
+import Loading from "../admin/components/Loading"
 const CartPage = () => {
   const dispatch = useDispatch();
   const [change, setChange] = useState(false);
@@ -41,7 +41,7 @@ const CartPage = () => {
   }, [change]);
 
   return isLoading ? (
-    <Heading>Loading...</Heading>
+    <Loading/>
   ) : isError ? (
     <Heading>Something went wrong..</Heading>
   ) : items.length === 0 ? (
@@ -76,11 +76,14 @@ const CartPage = () => {
         w={{ base: "95%", md: "85%", lg: "70%" }}
         m="auto"
       >
-        <Box w={{ base: "90%", md: "70%" }}>
-          <Heading>Shopping Cart</Heading>
+        <Box p="20px" w={{ base: "90%", md: "70%" }}>
+          <Heading >Shopping Cart</Heading>
+          <Box p="50px">
           {items.map((item) => (
             <CartCard handleChange={handleChange} key={item.pid} {...item} />
           ))}
+          </Box>
+         
         </Box>
         <Box
           mt="5%"

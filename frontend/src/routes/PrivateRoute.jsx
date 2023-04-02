@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+import LoginPage from "../pages/LoginPage";
 const PrivateRoute = ({ children }) => {
   const { isLoggedIn } = useSelector((store) => {
     return {
@@ -9,7 +9,7 @@ const PrivateRoute = ({ children }) => {
     };
   });
   if (!isLoggedIn) {
-    return <Navigate to="/login" />;
+    return <LoginPage/>;
   }
   return children;
 };
