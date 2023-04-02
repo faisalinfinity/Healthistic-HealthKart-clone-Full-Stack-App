@@ -104,7 +104,7 @@ const Navbar = () => {
             ) : (
               <Flex gap={".5rem"}>
                 <BiLogIn size={"1.5rem"} />
-                <Link to={"/register"}>Login</Link>
+                <Link to={"/login"}>Login</Link>
               </Flex>
             )}
           </Box>

@@ -51,7 +51,7 @@ const AccountInfo = () => {
     };
   };
 
-   const { name, email, token, gender, profile } = useSelector(
+   const { name, email, token, gender, profile , address } = useSelector(
     (state) => state.authReducer
   );
     // const [address , setAddress] = useState([])  // address 
@@ -237,7 +237,7 @@ const AccountInfo = () => {
                     <Text pt="2" fontSize="sm">
                       Order Status : {el.status}
                     </Text>
-                    {el.status === "Cancelled" && <Flex justify={{ sm : "center" , md : "right"}} > <Button mt = "2"  h={"30px"}  dispaly = "block" onClick = {()=>handleCancel(el._id)}  colorScheme="red"  >Cancel Order</Button> </Flex> } 
+                    {el.status !== "Cancelled" && <Flex justify={{ sm : "center" , md : "right"}} > <Button mt = "2"  h={"30px"}  dispaly = "block" onClick = {()=>handleCancel(el._id)}  colorScheme="red"  >Cancel Order</Button> </Flex> } 
                   </Box>
                   <Paginantion
                     key={page}
