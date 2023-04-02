@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Button, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
@@ -12,6 +20,7 @@ const SingleProductPage = () => {
   const [pic, setPic] = useState(0);
   const dispatch = useDispatch();
   const params = useParams();
+  const toast = useToast();
   const { id } = params;
 
   useEffect(() => {
@@ -30,8 +39,9 @@ const SingleProductPage = () => {
     }
   }, [id]);
 
-  const handleAddtoCart=({image,
-     title,
+  const handleAddtoCart = ({
+    image,
+    title,
     description,
     price,
     originalPrice,
@@ -46,30 +56,37 @@ const SingleProductPage = () => {
     adminId,
     _id,
     userId,
-    quantity})=>{
-
-      console.log(_id)
-   
-    dispatch(addToCart({  image,
-      title,
-     description,
-      price,
-      originalPrice,
-      sizes,
-      category,
-      rating,
-      review,
-      flavour,
-      brand,
-      tags,
-      stock,
-      adminId,
-      pid:_id,
-      userId,
-      quantity:1}))
-    
-  }
-  
+    quantity,
+  }) => {
+    dispatch(
+      addToCart({
+        image,
+        title,
+        description,
+        price,
+        originalPrice,
+        sizes,
+        category,
+        rating,
+        review,
+        flavour,
+        brand,
+        tags,
+        stock,
+        adminId,
+        pid: _id,
+        userId,
+        quantity: 1,
+      })
+    );
+    toast({
+      title: "item added.",
+      description: "Item added to your cart",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
+  };
 
   if (item.title)
     return (
@@ -147,7 +164,7 @@ const SingleProductPage = () => {
                   bg={"orange.50"}
                   color={"#ff8913"}
                   border={"1px solid orange"}
-                  onClick={() =>handleAddtoCart(item)}
+                  onClick={() => handleAddtoCart(item)}
                 >
                   Add to Cart
                 </Button>

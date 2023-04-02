@@ -21,7 +21,7 @@ export const addToCart = (data) => (dispatch) => {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("UserDetails")).token}`,
       },
     })
-    .then((res) =>console.log(res.data))
+    .then((res) => dispatch(cartSuccessAction(res.data)))
     .catch((err) => console.log(err));
 };
 
@@ -30,9 +30,8 @@ export const getCartData = (dispatch) => {
   axios
     .get(BASE_URL + `/users/cart`, {
       headers: {
-        Authorization: `Bearer ${
-          JSON.parse(localStorage.getItem("UserDetails")).token
-        }`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("UserDetails")).token
+          }`,
       },
     })
     .then((res) => dispatch(cartSuccessAction(res.data)))
@@ -43,9 +42,8 @@ export const deleteCartItem = (id) => (dispatch) => {
   return axios
     .delete(BASE_URL + `/users/cart/${id}`, {
       headers: {
-        Authorization: `Bearer ${
-          JSON.parse(localStorage.getItem("UserDetails")).token
-        }`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("UserDetails")).token
+          }`,
       },
     })
     .then((res) => console.log(res.data))
@@ -56,9 +54,8 @@ export const updateQuantity = (data) => (dispatch) => {
   return axios
     .patch(BASE_URL + `/users/cart/${data._id}`, data, {
       headers: {
-        Authorization: `Bearer ${
-          JSON.parse(localStorage.getItem("UserDetails")).token
-        }`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("UserDetails")).token
+          }`,
       },
     })
     .then((res) => console.log(res.data))

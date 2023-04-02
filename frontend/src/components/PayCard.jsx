@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Input, Select } from "@chakra-ui/react";
 import React from "react";
 
-const PayCard = () => {
+const PayCard = ({ handleClick }) => {
   return (
     <Box
       display={"flex"}
@@ -46,7 +46,9 @@ const PayCard = () => {
         </Select>
         <Input w={"7rem"} placeholder="CVV" />
       </Flex>
-        <Button w={"19rem"}>Securely Pay</Button>
+      <Button w={"19rem"} onClick={() => handleClick()}>
+        Securely Pay
+      </Button>
     </Box>
   );
 };

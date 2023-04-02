@@ -12,8 +12,9 @@ import {
   Button,
   Flex,
   Box,
+  useToast,
 } from "@chakra-ui/react";
- 
+
 import { addToCart } from "../../redux/CartReducer/action";
 import { useDispatch } from "react-redux";
 
@@ -38,10 +39,13 @@ const CarouselOne = ({ nutrients }) => {
       items: 1,
     },
   };
-  const dispatch = useDispatch()
-  const handleAddtoCart = async ({  image,
+  const dispatch = useDispatch();
+  const toast = useToast();
+
+  const handleAddtoCart = ({
+    image,
     title,
-   description,
+    description,
     price,
     originalPrice,
     sizes,
@@ -55,25 +59,36 @@ const CarouselOne = ({ nutrients }) => {
     adminId,
     _id,
     userId,
-    quantity}) => {
-  
-   dispatch(addToCart({  image,
-    title,
-   description,
-    price,
-    originalPrice,
-    sizes,
-    category,
-    rating,
-    review,
-    flavour,
-    brand,
-    tags,
-    stock,
-    adminId,
-    pid:_id,
-    userId,
-    quantity}))
+    quantity,
+  }) => {
+    dispatch(
+      addToCart({
+        image,
+        title,
+        description,
+        price,
+        originalPrice,
+        sizes,
+        category,
+        rating,
+        review,
+        flavour,
+        brand,
+        tags,
+        stock,
+        adminId,
+        pid: _id,
+        userId,
+        quantity: 1,
+      })
+    );
+    toast({
+      title: "item added.",
+      description: "Item added to your cart",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
   };
 
   return (

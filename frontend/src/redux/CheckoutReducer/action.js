@@ -24,12 +24,12 @@ const storageData = JSON.parse(localStorage.getItem("UserDetails"));
 
 const addToOrder = (data) => (dispatch) => {
     dispatch(orderLoading())
-    axios.post(`http://localhost:8080/users/order`, data, {
+    return axios.post(`http://localhost:8080/users/order`, data, {
         headers: {
-            Authorization: `Bearer ${storageData.user.token}`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDI0M2I0NmVhN2FhMDU3YTI3ODI4YWUiLCJpYXQiOjE2ODAxNjQ3MDd9.dnwiGLzmb7tv-c6bKcIlGRmRNQsSz61NGRjcw1tNML8`,
         }
-    }).then(res => dispatch(orderSuccess(res.data)))
-    .catch(err => dispatch(orderError()))
+    }).then(res => localStorage.removeItem("newItem"))
+        .catch(err => dispatch(orderError()))
 }
 
 const getOrder = () => (dispatch) => {
@@ -39,7 +39,7 @@ const getOrder = () => (dispatch) => {
             Authorization: `Bearer ${storageData.user.token}`,
         }
     }).then(res => dispatch(orderSuccess(res.data)))
-    .catch(err => dispatch(orderError()))
+        .catch(err => dispatch(orderError()))
 }
 
 export { orderError, orderLoading, orderSuccess, addToOrder, getOrder }
