@@ -24,9 +24,9 @@ const MainRoute = () => {
       <Route
         path="/profile"
         element={
-          <PrivateRoute>
+          
             <AccountInfo />
-          </PrivateRoute>
+          
         }
       />
       <Route path="*" element={<h1>Nothing Found</h1>} />

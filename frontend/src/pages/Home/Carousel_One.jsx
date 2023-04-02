@@ -102,15 +102,16 @@ const CarouselOne = ({ nutrients }) => {
           {nutrients.map((item) => (
             <Card maxW="sm" key={item._id} mr={1} ml={1}>
               <Flex alignItems={"center"} justifyContent={"center"}>
-                <Image
-                  link
-                  to={`product/productDetails/${item._id}`}
+                <Link to={`product/${item._id}`} ><Image
+                  
+                  
                   w={"100px"}
                   h={"150px"}
                   display={"block"}
                   src={item.image[0]}
                   borderRadius="lg"
-                />
+                /></Link>
+                
               </Flex>
               <Stack p="6" bg="white" h={"210"}>
                 <Flex gap={4} textAlign={"center"}>
