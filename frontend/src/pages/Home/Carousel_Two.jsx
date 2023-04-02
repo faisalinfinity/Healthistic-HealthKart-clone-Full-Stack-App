@@ -14,6 +14,8 @@ import {
 } from "@chakra-ui/react";
  
 import { addToCart } from "../../redux/CartReducer/action";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 const CarouselTwo = ({vitamin}) => {
   const responsive = {
     superLargeDesktop: {
@@ -36,6 +38,7 @@ const CarouselTwo = ({vitamin}) => {
     },
   };
 
+  const dispatch = useDispatch()
   const handleAddtoCart = async ({  image,
     title,
    description,
@@ -50,10 +53,27 @@ const CarouselTwo = ({vitamin}) => {
     tags,
     stock,
     adminId,
-    pid,
+    _id,
+    userId,
     quantity}) => {
-    // addToCart()
   
+   dispatch(addToCart({  image,
+    title,
+   description,
+    price,
+    originalPrice,
+    sizes,
+    category,
+    rating,
+    review,
+    flavour,
+    brand,
+    tags,
+    stock,
+    adminId,
+    pid:_id,
+    userId,
+    quantity}))
   };
 
   return (
@@ -67,7 +87,15 @@ const CarouselTwo = ({vitamin}) => {
           {vitamin.map((item, index) => (
             <Card maxW="sm" key={index} mr={1} ml={1}>
               <Flex alignItems={"center"} justifyContent={"center"} >
-             <Image w={"100px"} h={"150px"} display={"block"}  src={item.image[0]} borderRadius="lg" />
+              <Link to={`product/${item._id}`} ><Image
+                  
+                  
+                  w={"100px"}
+                  h={"150px"}
+                  display={"block"}
+                  src={item.image[0]}
+                  borderRadius="lg"
+                /></Link>
              </Flex>
               <Stack   p="6"  h={"210"} bg="white">
                 <Flex gap={4} textAlign={"center"}>

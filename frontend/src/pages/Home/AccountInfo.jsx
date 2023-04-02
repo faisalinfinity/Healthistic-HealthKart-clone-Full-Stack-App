@@ -11,17 +11,19 @@ import {
    
 } from "@chakra-ui/layout";
 import {HamburgerIcon} from '@chakra-ui/icons';
-import { useToast } from '@chakra-ui/react'
+import { Avatar, Image, useToast } from '@chakra-ui/react'
 import React, { useEffect, useRef, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { ImHome2 } from "react-icons/im";
 import axios from "axios";
-import {   useSelector } from "react-redux";
+import {   useDispatch, useSelector } from "react-redux";
 import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, IconButton, Input, useDisclosure } from "@chakra-ui/react";
 import InitialFocus from "./Modal";
 import Paginantion from "../../admin/components/Pagination";
 import MobileSideNav from "./HameBurger";
-// import { logout } from "../../redux/AuthReducer/action";
+import { logout } from "../../redux/AuthReducer/action";
+import { Link } from "react-router-dom";
+ 
 
 const AccountInfo = () => {
   const infoArr = [
@@ -31,7 +33,7 @@ const AccountInfo = () => {
     "Refer and Earn",
     
   ];
-  
+  const dispatch = useDispatch()
   const btnRef = useRef()
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -52,7 +54,7 @@ const AccountInfo = () => {
    const { name, email, token, gender, profile } = useSelector(
     (state) => state.authReducer
   );
-
+    // const [address , setAddress] = useState([])  // address 
   const OrderArr = async () => {
     let res = await axios({
       url: `http://localhost:8080/users/order?page=${page}&limit=${2}`,
@@ -66,10 +68,7 @@ const AccountInfo = () => {
     setPage(res.data.page);
     setTotalPage(res.data.totalPages);
   };
-   const handleLogOut = ()=>{
-    // dispatch(logout)
-    localStorage.removeItem("UserDetails");
-   }
+   
 
   const Icon = {
     color: "#00B5B7",
@@ -150,7 +149,7 @@ const AccountInfo = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Account Information</DrawerHeader>
+          <DrawerHeader>Profile</DrawerHeader>
 
           <DrawerBody>
             <MobileSideNav
@@ -187,7 +186,7 @@ const AccountInfo = () => {
               </Box>
             ))}
             <Flex justify={"center"}>
-              <Button bg="transparent" onClick={handleLogOut} display={"block"}>
+              <Button bg="transparent" onClick={() => dispatch(logout)} display={"block"}>
                 Logout
               </Button>
             </Flex>
@@ -195,7 +194,22 @@ const AccountInfo = () => {
           <GridItem>
             <Heading size="md">{infoArr[tab - 1]}</Heading>
 
-            {tab === 1 ? (
+            {tab === 1 ? order.length===0 ?  
+                
+                 
+                
+                  <Grid justifyContent={"center"} boxShadow='2xl' p='6' rounded='md' bg='white'    h= "25rem"   >
+                    <Image display={"block"} w = "15rem" src = "https://i.postimg.cc/9QTzdDpp/cart-Image.png" ></Image>
+                  <Heading textAlign={"center"} size="xs" textTransform="uppercase">
+                  There is no order yet !!
+                  </Heading>
+                  <Button as={Link} bg="#00B5B7" p="2"  color = "gray.200" border={"1px solid "} to = "/"  fontSize="md">
+                   Start Shopping
+                  </Button>
+                  
+                  </Grid>
+               
+                : (
               order.map((el) => (
                 <Stack
                   key={el._id}
@@ -236,17 +250,21 @@ const AccountInfo = () => {
               ))
             ) : tab === 2 ? (
               <Stack divider={<StackDivider />} spacing="4" mt="3">
-                <Box boxShadow="2xl" p="6" rounded="md" bg="white">
+                
+                <Flex boxShadow="2xl" p="6" rounded="md" bg="white">
+                <Avatar size='xl' name = {name} src= {profile} />
+                  <Box ml = "3" >
                   <Heading size="xs" textTransform="uppercase">
-                    {name}
+                    Name : {name}
                   </Heading>
                   <Text pt="2" fontSize="sm">
-                    {email}
+                   Email : {email}
                   </Text>
                   <Text pt="2" fontSize="sm">
-                    {gender}
+                   Gender : {gender}
                   </Text>
-                </Box>
+                  </Box>
+                </Flex>
               </Stack>
             ) : tab === 3 ? (
               <Stack divider={<StackDivider />} spacing="4" mt="3">
