@@ -45,10 +45,10 @@ export default function AdminPage() {
   //   }, []);
 
   const [tab, setTab] = useState(1);
-  const { isLoggedIn, token ,name} = useSelector((store) => store.authReducer);
+  const { isLoggedIn, token, name } = useSelector((store) => store.authReducer);
   const nav = useNavigate();
   const [user, setUser] = useState({ status: false });
-    console.log(token)
+
   const setTabNumber = (number) => {
     setTab(number);
   };

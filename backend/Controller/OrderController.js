@@ -71,8 +71,8 @@ const AddOrder = async (req, res) => {
   req.body.date = dateString;
 
   try {
-    let newOrder = new orderModel(req.body);
-    await newOrder.save();
+     
+    await orderModel.insertMany(req.body)
     res.send("Order added");
   } catch (error) {
     res.status(400).send(error.message);
