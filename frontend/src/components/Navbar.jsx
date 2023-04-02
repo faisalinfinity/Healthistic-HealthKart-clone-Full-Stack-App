@@ -88,7 +88,8 @@ const Navbar = () => {
                 </MenuButton>
                 <MenuList>
                   <MenuItem>Hi, {name}</MenuItem>
-                  <MenuItem>My Orders</MenuItem>
+                  <MenuItem>
+                  <Link to={"/profile"}>My Orders</Link></MenuItem>
                   <MenuItem>
                     <Button
                       onClick={() => dispatch(logout)}

@@ -55,7 +55,7 @@ const AccountInfo = () => {
 
   const OrderArr = async () => {
     let res = await axios({
-      url: `http://localhost:8080/users/order?page=${page}&limit=${2}`,
+      url: `http://localhost:8080/users/order?page=${page}&limit=${1}`,
       method: "get",
       headers: {
         Authorization: `Bearer ${token}`,

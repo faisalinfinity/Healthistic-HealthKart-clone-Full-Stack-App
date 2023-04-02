@@ -28,6 +28,6 @@ export const login = (data) => (dispatch) => {
 };
 
 export const logout = (dispatch) =>{
-  localStorage.setItem("UserDetails", JSON.stringify(null));
+  localStorage.removeItem("UserDetails");
   dispatch({type:LOGOUT_SUCCESS})
 };

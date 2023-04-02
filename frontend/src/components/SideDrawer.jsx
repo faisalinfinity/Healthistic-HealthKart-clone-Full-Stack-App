@@ -62,7 +62,7 @@ function SideDrawer() {
                 <MenuList>
                   <MenuItem>Hi, {name}</MenuItem>
                   <MenuItem onClick={onClose}>
-                    <Link to={"/orders"}>My Orders</Link>
+                    <Link to={"/profile"}>My Orders</Link>
                   </MenuItem>
                   <MenuItem onClick={onClose}>
                     <Button
@@ -132,10 +132,12 @@ function SideDrawer() {
                 cursor={"pointer"}
                 onClick={onClose}
               >
-                <Link to={"/cart"}>
-                  <AiOutlineShoppingCart />
-                </Link>
-                Cart
+                <Flex>
+                  <Link to={"/cart"}>
+                    <AiOutlineShoppingCart />
+                    Cart
+                  </Link>
+                </Flex>
               </Box>
               <Box
                 display={"flex"}

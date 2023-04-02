@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Image,
+  SimpleGrid,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import Paginantion from "../admin/components/Pagination";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/CartReducer/action";
 
 const MultiProductPage = () => {
   const [item, setItem] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  const dispatch = useDispatch();
   const params = useParams();
+  const toast = useToast();
   const { category } = params;
 
   useEffect(() => {
@@ -29,6 +40,57 @@ const MultiProductPage = () => {
       .catch((err) => console.log(err));
   }, [page, category]);
 
+  const handleAddtoCart = ({
+    image,
+    title,
+    description,
+    price,
+    originalPrice,
+    sizes,
+    category,
+    rating,
+    review,
+    flavour,
+    brand,
+    tags,
+    stock,
+    adminId,
+    _id,
+    userId,
+    quantity,
+  }) => {
+    console.log(_id);
+
+    dispatch(
+      addToCart({
+        image,
+        title,
+        description,
+        price,
+        originalPrice,
+        sizes,
+        category,
+        rating,
+        review,
+        flavour,
+        brand,
+        tags,
+        stock,
+        adminId,
+        pid: _id,
+        userId,
+        quantity: 1,
+      })
+    );
+    toast({
+      title: "item added.",
+      description: "Item added to your cart",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
+  };
+
   console.log(item);
 
   return (
@@ -39,38 +101,42 @@ const MultiProductPage = () => {
         mt={"2rem"}
         mb={"2rem"}
       >
-        <SimpleGrid columns={{ base: "1", sm: "2", md: "4" }} spacing={10}>
+        <SimpleGrid
+          columns={{ base: "1", sm: "2", md: "3", lg: "4" }}
+          spacing={10}
+        >
           {item &&
             item?.map((ele) => {
               return (
-                <Link to={`/product/${ele._id}`}>
-                  <Box
-                    display={"flex"}
-                    flexDirection={"column"}
-                    boxShadow="rgba(149, 157, 165, 0.2) 0px 8px 24px"
-                    gap={"1rem"}
-                    p={"1rem"}
-                    w={"15rem"}
-                    alignItems={"center"}
-                    borderRadius={".5rem"}
-                    textAlign={"center"}
-                  >
+                <Box
+                  display={"flex"}
+                  flexDirection={"column"}
+                  boxShadow="rgba(149, 157, 165, 0.2) 0px 8px 24px"
+                  gap={"1rem"}
+                  p={"1rem"}
+                  w={"15rem"}
+                  alignItems={"center"}
+                  borderRadius={".5rem"}
+                  textAlign={"center"}
+                >
+                  <Link to={`/product/${ele._id}`}>
                     <Image w={"50%"} src={ele.image[0]} />
-                    <Box>{ele.title}</Box>
-                    <Text fontWeight={"semibold"}>₹{ele.price}</Text>
-                    <Box>
-                      <Button
-                        bg={"orange.50"}
-                        color={"#ff8913"}
-                        w={"14rem"}
-                        border={"1px solid orange"}
-                        _hover={{ bg: "orange", color: "white" }}
-                      >
-                        Add to Cart
-                      </Button>
-                    </Box>
+                  </Link>
+                  <Box>{ele.title}</Box>
+                  <Text fontWeight={"semibold"}>₹{ele.price}</Text>
+                  <Box>
+                    <Button
+                      bg={"orange.50"}
+                      color={"#ff8913"}
+                      w={"14rem"}
+                      border={"1px solid orange"}
+                      _hover={{ bg: "orange", color: "white" }}
+                      onClick={() => handleAddtoCart(ele)}
+                    >
+                      Add to Cart
+                    </Button>
                   </Box>
-                </Link>
+                </Box>
               );
             })}
         </SimpleGrid>
