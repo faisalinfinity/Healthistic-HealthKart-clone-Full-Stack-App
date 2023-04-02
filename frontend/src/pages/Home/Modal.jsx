@@ -48,7 +48,7 @@ export default function InitialFocus() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body : add
+        body : {address : add}
       });
       toast({
         title: "Address Added",

@@ -21,7 +21,7 @@ export const addToCart = (data) => (dispatch) => {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("UserDetails")).token}`,
       },
     })
-    .then((res) => dispatch(cartSuccessAction(res.data)))
+    .then((res) => console.log(res.data))
     .catch((err) => console.log(err));
 };
 
