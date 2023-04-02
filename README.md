@@ -61,8 +61,8 @@ We're a young start-up of around 400 people that work for your needs in fitness 
 
 <table>
   <tr>
-    <td valign="top"><img src="https://res.cloudinary.com/ducgyycpy/image/upload/v1677483292/samples/mobile_15_nghpq1.png"/></td>
-    <td valign="top"><img src="https://res.cloudinary.com/ducgyycpy/image/upload/v1677483296/samples/mobile_14_m1rbpb.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457610/14-profile-mobile_ojqopu.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457611/13-profile-checkout_h11pta.png"/></td>
   </tr>
 </table>
 
