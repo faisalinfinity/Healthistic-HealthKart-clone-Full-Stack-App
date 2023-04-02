@@ -58,17 +58,7 @@ const GetOrder = async (req, res) => {
 };
 
 const AddOrder = async (req, res) => {
-  const date = new Date();
-
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const dateString = `${year}-${month}-${day} ${hours}:${minutes}`;
-
-  req.body.status = "Order Placed";
-  req.body.date = dateString;
+ 
 
   try {
      
