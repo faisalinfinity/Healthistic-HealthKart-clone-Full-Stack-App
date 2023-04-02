@@ -12,7 +12,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import PayCard from "../components/PayCard";
 import { useDispatch, useSelector } from "react-redux";
 import { addToOrder } from "../redux/CheckoutReducer/action";
@@ -20,14 +20,15 @@ import { getCartData } from "../redux/CartReducer/action";
 import { BASE_URL } from "../constants/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import emailjs from "@emailjs/browser";
 const Payment = () => {
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const { items } = useSelector((store) => store.cartReducer);
   const [payment, setPayment] = useState("UPI");
   const toast = useToast();
-  const {token} = useSelector((state)=>state.authReducer)
+  const { token, email ,name} = useSelector((state) => state.authReducer);
+  const form = useRef();
   let cartTotal = 0;
   for (let i = 0; i < items.length; i++) {
     cartTotal += items[i].price * items[i].quantity;
@@ -56,14 +57,32 @@ const Payment = () => {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then((res) =>{
-          dispatch(getCartData)
-
-          setTimeout(()=>{
-           navigate("/profile")
-          },2000)
+        .then((res) => {
+          dispatch(getCartData);
+          sendEmail();
+          setTimeout(() => {
+            navigate("/profile");
+          }, 2000);
         });
     });
+  };
+
+  const sendEmail = (e) => {
+    emailjs
+      .sendForm(
+        "service_njs4kp9",
+        "template_sl7otrx",
+        form.current,
+        "Nq3b6kBd881QBgo2R"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
   };
 
   if (items) {
@@ -183,6 +202,15 @@ const Payment = () => {
             </Flex>
           </Box>
         </Box>
+        <form style={{ display: "none" }} ref={form} onSubmit={sendEmail}>
+          <label>Name</label>
+          <input value={name} type="text" name="user_name" />
+          <label>Email</label>
+          <input value={email} type="email" name="user_email" />
+          <label>Message</label>
+          <textarea value={`Your Order has been confirmed , it will be deliver in 5-7 days `} name="message" />
+          <input type="submit" value="Send" />
+        </form>
       </Box>
     );
   }

@@ -73,7 +73,7 @@ const AccountInfo = () => {
     });
 
     setTotalOrder(res.data.total);
-    setOrder(res.data.data);
+    setOrder(res.data.data)
     setPage(res.data.page);
     setTotalPage(res.data.totalPages);
   };
@@ -264,7 +264,7 @@ const AccountInfo = () => {
                   </Button>
                 </Grid>
               ) : (
-                order.map((el) => (
+                order.sort((a,b)=>b.date-a.date).map((el) => (
                   <Stack
                     key={el._id}
                     divider={<StackDivider />}
@@ -301,7 +301,7 @@ const AccountInfo = () => {
                             onClick={() => handleCancel(el._id)}
                             colorScheme="red"
                           >
-                            Cancel Order
+                          {el.status==="delivered"?"Return Order":"Cancel Order"}
                           </Button>{" "}
                         </Flex>
                       )}

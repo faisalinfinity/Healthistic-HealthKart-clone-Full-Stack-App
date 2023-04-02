@@ -19,27 +19,31 @@ export const loginFailAction = () => {
 
 export const login = (data) => (dispatch) => {
   dispatch(loginReqAction());
-  axios
+ return axios
     .post(BASE_URL + `/users/login`, data)
     .then((res) => {
+      
       console.log(res.data.user);
       dispatch(loginSuccessAction(res.data.user));
       localStorage.setItem(
         "UserDetails",
         JSON.stringify({ isLoggedIn: true, ...res.data.user })
       );
+      return res.data.user
     })
     .catch((err) => {
-      if (err.response.data == "Incorrect password ") {
-        alert("Incorrect Password. Try again.");
-      } else if (err.response.data == "User not register") {
-        alert("Email is not registerd.");
-      }
       dispatch(loginFailAction());
+      return err.response.data
+      // if (err.response.data == "Incorrect password ") {
+      //   alert("Incorrect Password. Try again.");
+      // } else if (err.response.data == "User not register") {
+      //   alert("Email is not registerd.");
+      // }
+    
     });
 };
 
 export const logout = (dispatch) => {
-  localStorage.removeItem("UserDetails");
+  localStorage.setItem("UserDetails",null);
   dispatch({ type: LOGOUT_SUCCESS });
 };

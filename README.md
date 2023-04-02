@@ -1,3 +1,107 @@
+# About
+ Healthistic- a great place for people serious about health and fitness.
+We're a young start-up of around 400 people that work for your needs in fitness and well-being. We deliver everything from genuine protein supplements to vitamins smoothly at honest prices.
+
+# Homepage
+<table>
+  <tr>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457612/home_mobile_bsxq8h.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457612/mobile_xgjbgy.png"/></td>
+  </tr>
+</table>
+
+
+
+
+# Product Page
+
+<img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457612/product-pc_wajkje.png"/>
+
+
+
+
+<p align="center" width="100%">
+<table>
+  <tr>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457611/mobile_5_oujei3.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457612/product-mobile_kzr3gi.png"/></td>
+  </tr>
+</table>
+</p>
+
+
+
+# SingleProduct Page
+<table>
+  <tr>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457612/single-prod-mobile-7_ffne5p.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457612/single-prod-pc-6_rjlhny.png"/></td>
+  </tr>
+</table>
+
+
+# Cart Page
+<table>
+  <tr>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457611/cart-9-pc_isnrkz.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457611/cart-mobile-10_nhkcrn.png"/></td>
+  </tr>
+</table>
+
+# Checkout Page
+<table>
+  <tr>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457611/12-checkout-mobile_wspw91.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457611/11-checkout-pc_lrtbuy.png"/></td>
+  </tr>
+</table>
+
+
+# Profile page
+
+<table>
+  <tr>
+    <td valign="top"><img src="https://res.cloudinary.com/ducgyycpy/image/upload/v1677483292/samples/mobile_15_nghpq1.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/ducgyycpy/image/upload/v1677483296/samples/mobile_14_m1rbpb.png"/></td>
+  </tr>
+</table>
+
+
+
+# Admin Panel : Dashboard
+<table>
+  <tr>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457611/13-profile-checkout_h11pta.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457610/14-profile-mobile_ojqopu.png"/></td>
+  </tr>
+</table>
+
+# Admin Panel : Add Product Page
+<table>
+  <tr>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457610/17-admin-add-mobile_npz9ki.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457610/18-admin-add-pc_uwpsgz.png"/></td>
+  </tr>
+</table>
+
+# Admin Panel : Edit Product Page
+<table>
+  <tr>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457611/15-admin-dash-pc_dp9xr8.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457610/16-admin-dash-mobile_fzfnk8.png"/></td>
+  </tr>
+</table>
+
+# Admin Panel : Manage Orders Page
+<table>
+  <tr>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457610/22-admin-manage-mob_fof6mv.png"/></td>
+    <td valign="top"><img src="https://res.cloudinary.com/dq674z2lp/image/upload/v1680457610/21-admin-manage-pc_f2yxxh.png"/></td>
+  </tr>
+</table>
+
+
+
 # Tech Stack
  # Front-End
 - HTML

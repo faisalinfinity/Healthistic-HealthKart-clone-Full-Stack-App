@@ -6,7 +6,7 @@ const { connection } = require("./connection/connection");
 const { cartRoute } = require("./routes/cartRoute");
 const { orderRoute } = require("./routes/orderRoute");
 const { adminOrderRoute } = require("./routes/admin.orderRoute");
-const { adminProductRoute } = require("./routes/admin.productRoute");
+const { adminProductRoute } = require("./routes/admin.productRoute"); 
 
 const app = express();
 app.use(express.json());

@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
  
 import { addToCart } from "../../redux/CartReducer/action";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const CarouselFour = ({ ayurveda }) => {
@@ -40,7 +40,7 @@ const CarouselFour = ({ ayurveda }) => {
       items: 1,
     },
   };
-
+const {isLoggedIn}=useSelector((s)=>s.authReducer)
   const dispatch = useDispatch()
   const handleAddtoCart = ({
     image,
@@ -61,48 +61,59 @@ const CarouselFour = ({ ayurveda }) => {
     userId,
     quantity,
   }) => {
-    dispatch(
-      addToCart({
-        image,
-        title,
-        description,
-        price,
-        originalPrice,
-        sizes,
-        category,
-        rating,
-        review,
-        flavour,
-        brand,
-        tags,
-        stock,
-        adminId,
-        pid: _id,
-        userId,
-        quantity: 1,
-      })
-    )
-    .then((res)=>{
-     
-      if(res==="Item Already exist in the Cart"){
-        toast({
-          title: "Item Already exist in the Cart",
-          description: "",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        })
-      }else{
-        toast({
-          title: "item added.",
-          description: "Item added to your cart",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
 
-      }
-    })
+    if(isLoggedIn){
+      dispatch(
+        addToCart({
+          image,
+          title,
+          description,
+          price,
+          originalPrice,
+          sizes,
+          category,
+          rating,
+          review,
+          flavour,
+          brand,
+          tags,
+          stock,
+          adminId,
+          pid: _id,
+          userId,
+          quantity: 1,
+        })
+      )
+      .then((res)=>{
+       
+        if(res==="Item Already exist in the Cart"){
+          toast({
+            title: "Item Already exist in the Cart",
+            description: "",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          })
+        }else{
+          toast({
+            title: "item added.",
+            description: "Item added to your cart",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+  
+        }
+      })
+    }else{
+      toast({
+        title: "Please Login First.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
+   
   };
 
   return (

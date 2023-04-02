@@ -61,7 +61,7 @@ const AddOrder = async (req, res) => {
  
 
   try {
-    await orderModel.insertMany(req.body)
+    await orderModel.insert(req.body)
     res.send("Order added");
   } catch (error) {
     res.status(400).send(error.message);

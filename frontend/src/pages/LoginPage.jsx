@@ -12,6 +12,7 @@ import {
   Button,
   Heading,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/AuthReducer/action";
@@ -28,10 +29,33 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const toast = useToast();
   const handleLogin = () => {
     const details = { email, password };
-    dispatch(login(details));
+    dispatch(login(details)).then((res) => {
+      if (res === "Incorrect password ") {
+        toast({
+          title: "Incorrect Password.",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
+      } else if (res === "User not register") {
+        toast({
+          title: "You are not Registered.",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Login Success",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    });
   };
   if (isLoggedIn) {
     if (role === "admin" || role === "Admin" || role === "ADMIN") {
