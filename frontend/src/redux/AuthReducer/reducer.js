@@ -34,7 +34,11 @@ const reducer = (state = initState, { type, payload }) => {
         profile: payload.profile,
       };
     case LOGIN_FAILED:
-      return { ...state, isLoading: false, isError: true };
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
     case LOGOUT_SUCCESS: {
       return initState;
     }

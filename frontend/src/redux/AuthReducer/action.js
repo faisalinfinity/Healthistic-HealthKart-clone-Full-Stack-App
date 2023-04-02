@@ -1,5 +1,10 @@
 import axios from "axios";
-import { LOGIN_FAILED, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_SUCCESS } from "./actionTypes";
+import {
+  LOGIN_FAILED,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
+} from "./actionTypes";
 import { BASE_URL } from "../../constants/constants";
 
 export const loginReqAction = () => {
@@ -24,10 +29,17 @@ export const login = (data) => (dispatch) => {
         JSON.stringify({ isLoggedIn: true, ...res.data.user })
       );
     })
-    .catch((err) => dispatch(loginFailAction()));
+    .catch((err) => {
+      if (err.response.data == "Incorrect password ") {
+        alert("Incorrect Password. Try again.");
+      } else if (err.response.data == "User not register") {
+        alert("Email is not registerd.");
+      }
+      dispatch(loginFailAction());
+    });
 };
 
-export const logout = (dispatch) =>{
+export const logout = (dispatch) => {
   localStorage.removeItem("UserDetails");
-  dispatch({type:LOGOUT_SUCCESS})
+  dispatch({ type: LOGOUT_SUCCESS });
 };
