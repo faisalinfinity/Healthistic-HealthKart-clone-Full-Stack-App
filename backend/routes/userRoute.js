@@ -2,15 +2,16 @@ const express = require("express");
 const { Register, Login } = require("../Controller/AuthController");
 const RegValidator = require("../middlewares/RegValidator");
 const { userModel } = require("../models/userModel");
+const AuthorizationMiddleware = require("../middlewares/Authorization.middleware");
 const userRoute = express.Router();
 
 userRoute.post("/register",RegValidator, Register);
 userRoute.post("/login",Login)
-userRoute.patch("/:id",async(req,res)=>{
-  const {id}=req.params
+userRoute.patch("/",AuthorizationMiddleware, async(req,res)=>{
+  const {userId}=req.body
   try {
-     await userModel.findByIdAndUpdate({_id:id},req.body)
-     res.send(await userModel.findOne({_id:id}))
+     await userModel.findByIdAndUpdate({_id:userId},req.body)
+     res.send(await userModel.findOne({_id:userId}))
   } catch (error) {
     res.status(400).send(error.messsage)
   }
