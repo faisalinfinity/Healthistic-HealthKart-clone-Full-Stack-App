@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useDispatch,useSelector } from "react-redux";
 import { addToCart } from "../redux/CartReducer/action";
+import { BASE_URL } from "../constants/constants";
 
 const SingleProductPage = () => {
   const [item, setItem] = useState({});
@@ -26,7 +27,7 @@ const SingleProductPage = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:8080/product/${id}`, {
+        .get(`${BASE_URL}/product/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

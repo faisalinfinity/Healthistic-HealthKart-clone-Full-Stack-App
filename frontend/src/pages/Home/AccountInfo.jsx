@@ -33,6 +33,7 @@ import Paginantion from "../../admin/components/Pagination";
 import MobileSideNav from "./HameBurger";
 import { logout } from "../../redux/AuthReducer/action";
 import { Link } from "react-router-dom";
+import { BASE_URL } from "../../constants/constants";
 
 const AccountInfo = () => {
   const infoArr = [
@@ -64,14 +65,14 @@ const AccountInfo = () => {
   // const [address , setAddress] = useState([])  // address
   const OrderArr = async () => {
     let res = await axios({
-      url: `http://localhost:8080/users/order?page=${page}&limit=${1}`,
+      url: `${BASE_URL}/users/order?page=${page}&limit=${1}`,
       method: "get",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-   
-    setTotalOrder(res.data.total)
+
+    setTotalOrder(res.data.total);
     setOrder(res.data.data);
     setPage(res.data.page);
     setTotalPage(res.data.totalPages);
@@ -87,7 +88,7 @@ const AccountInfo = () => {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [tab, setTab] = useState(1);
-  const [totalOrder,setTotalOrder]=useState(0)
+  const [totalOrder, setTotalOrder] = useState(0);
 
   const toast = useToast();
 
@@ -98,20 +99,26 @@ const AccountInfo = () => {
   // };
 
   const handleCancel = (id) => {
-    axios.patch(`http://localhost:8080/users/order/${id}`,{status:"Cancelled"},{
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    }).then((res) => {
-      OrderArr();
-      toast({
-        title: "Order Cancelled",
-        position: "top",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
+    axios
+      .patch(
+        `${BASE_URL}/users/order/${id}`,
+        { status: "Cancelled" },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        OrderArr();
+        toast({
+          title: "Order Cancelled",
+          position: "top",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
       });
-    });
   };
 
   useEffect(() => {
@@ -200,7 +207,6 @@ const AccountInfo = () => {
                 <Text pt="4" pb="4" textAlign={"center"}>
                   {el}
                 </Text>
-              
               </Box>
             ))}
             <Flex justify={"center"}>
@@ -214,7 +220,14 @@ const AccountInfo = () => {
             </Flex>
           </GridItem>
           <GridItem>
-            <Heading size="md">{infoArr[tab - 1] } <br /> <br />{infoArr[tab - 1]=="My Orders" && <Text fontSize={"15px"} color="teal">Total {totalOrder}</Text>}</Heading>
+            <Heading size="md">
+              {infoArr[tab - 1]} <br /> <br />
+              {infoArr[tab - 1] == "My Orders" && (
+                <Text fontSize={"15px"} color="teal">
+                  Total {totalOrder}
+                </Text>
+              )}
+            </Heading>
 
             {tab === 1 ? (
               order.length === 0 ? (
@@ -323,17 +336,19 @@ const AccountInfo = () => {
             ) : tab === 3 ? (
               <Stack divider={<StackDivider />} spacing="4" mt="3">
                 <InitialFocus />
-                {address && <Box boxShadow="2xl" p="6" rounded="md" bg="white">
-                  <Heading size="xs" textTransform="uppercase">
-                   {address}
-                  </Heading>
-                  <Text pt="2" fontSize="sm">
-                    Landmark : near school
-                  </Text>
-                  <Text pt="2" fontSize="sm">
-                    Pin :480001 State MadhyaPradesh
-                  </Text>
-                </Box>}
+                {address && (
+                  <Box boxShadow="2xl" p="6" rounded="md" bg="white">
+                    <Heading size="xs" textTransform="uppercase">
+                      {address}
+                    </Heading>
+                    <Text pt="2" fontSize="sm">
+                      Landmark : near school
+                    </Text>
+                    <Text pt="2" fontSize="sm">
+                      Pin :480001 State MadhyaPradesh
+                    </Text>
+                  </Box>
+                )}
               </Stack>
             ) : tab === 4 ? (
               <Stack divider={<StackDivider />} spacing="4" mt="3">

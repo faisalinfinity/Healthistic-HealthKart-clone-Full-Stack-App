@@ -12,6 +12,7 @@ import { Link, useParams } from "react-router-dom";
 import Paginantion from "../admin/components/Pagination";
 import { useDispatch ,useSelector} from "react-redux";
 import { addToCart } from "../redux/CartReducer/action";
+import { BASE_URL } from "../constants/constants";
 
 const MultiProductPage = () => {
   const [item, setItem] = useState([]);
@@ -25,7 +26,7 @@ const MultiProductPage = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8080/product?category=${category}&page=${page}&limit=${8}`,
+        `${BASE_URL}/product?category=${category}&page=${page}&limit=${8}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
