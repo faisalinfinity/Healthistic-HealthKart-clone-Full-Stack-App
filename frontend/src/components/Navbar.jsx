@@ -27,8 +27,8 @@ import { BiLogOut, BiLogIn } from "react-icons/bi";
 import { Search2Icon } from "@chakra-ui/icons";
 import SideDrawer from "./SideDrawer";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector,useNavigate } from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
+import {Link,useNavigate} from "react-router-dom"
 import { logout } from "../redux/AuthReducer/action";
 
 const Navbar = () => {
