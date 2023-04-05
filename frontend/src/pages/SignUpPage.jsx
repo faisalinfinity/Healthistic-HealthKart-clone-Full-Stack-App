@@ -136,7 +136,7 @@ export default function Signup() {
                   />
                 </FormControl>
               </Box>
-              <Box>
+              <Box visibility="none">
                 <FormControl id="profilePic">
                   <FormLabel>Profile Picture</FormLabel>
                   <Input

@@ -27,15 +27,15 @@ import { BiLogOut, BiLogIn } from "react-icons/bi";
 import { Search2Icon } from "@chakra-ui/icons";
 import SideDrawer from "./SideDrawer";
 import axios from "axios";
-import { useDispatch, useSelector} from "react-redux";
-import {Link,useNavigate} from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../redux/AuthReducer/action";
 
 const Navbar = () => {
   const [query, setQuery] = useState("");
   const { isLoggedIn, name } = useSelector((store) => store.authReducer);
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const searchResults = () => {
     axios
@@ -90,12 +90,13 @@ const Navbar = () => {
                 <MenuList>
                   <MenuItem>Hi, {name}</MenuItem>
                   <MenuItem>
-                  <Link to={"/profile"}>My Orders</Link></MenuItem>
+                    <Link to={"/profile"}>My Orders</Link>
+                  </MenuItem>
                   <MenuItem>
                     <Button
                       onClick={() => {
-                        dispatch(logout)
-                        navigate("/login")
+                        dispatch(logout());
+                        navigate("/login");
                       }}
                       variant={"ghost"}
                     >
