@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Box,
   Button,
@@ -12,6 +12,7 @@ import {
   InputLeftElement,
   MenuButton,
   Flex,
+  Badge,
 } from "@chakra-ui/react";
 import Logo from "../assets/healthifyLogo.png";
 import {
@@ -30,6 +31,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../redux/AuthReducer/action";
+import { getCartData } from "../redux/CartReducer/action";
 
 const Navbar = () => {
   const [query, setQuery] = useState("");
@@ -44,6 +46,12 @@ const Navbar = () => {
       .catch((err) => console.log(err));
   };
 
+  const { items } = useSelector((store) => store.cartReducer);
+  useEffect(() => {
+    dispatch(getCartData);
+  }, []);
+
+  
   return (
     <Box>
       <Box
@@ -115,7 +123,13 @@ const Navbar = () => {
           </Box>
           <Box cursor={"pointer"}>
             <Link to="/cart">
+              <Flex>
               <AiOutlineShoppingCart size={"2rem"} />
+              <Badge h="20%" w="40%" borderRadius="50%" colorScheme="green">
+                {items?.length}
+              </Badge>
+              </Flex>
+             
             </Link>
           </Box>
         </Box>

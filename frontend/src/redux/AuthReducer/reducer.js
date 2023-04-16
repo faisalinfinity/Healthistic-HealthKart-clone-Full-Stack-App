@@ -40,7 +40,17 @@ const reducer = (state = initState, { type, payload }) => {
         isError: true,
       };
     case LOGOUT_SUCCESS: {
-      return initState;
+      return {
+        isLoggedIn: false,
+        name: "",
+        role: "",
+        email: "",
+        token: "",
+        gender: "",
+        profile: "",
+        isLoading: false,
+        isError: false,
+      };
     }
 
     default:

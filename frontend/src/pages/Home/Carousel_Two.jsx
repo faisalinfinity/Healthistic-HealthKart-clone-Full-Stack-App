@@ -14,7 +14,7 @@ import {
   useToast
 } from "@chakra-ui/react";
  
-import { addToCart } from "../../redux/CartReducer/action";
+import { addToCart,getCartData } from "../../redux/CartReducer/action";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -104,6 +104,7 @@ const handleAddtoCart = ({
             duration: 9000,
             isClosable: true,
           });
+          dispatch(getCartData);
   
         }
       })

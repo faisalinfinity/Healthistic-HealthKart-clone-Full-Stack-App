@@ -212,7 +212,7 @@ const AccountInfo = () => {
             <Flex justify={"center"}>
               <Button
                 bg="transparent"
-                onClick={() => dispatch(logout)}
+                onClick={() => dispatch(logout())}
                 display={"block"}
               >
                 Logout
