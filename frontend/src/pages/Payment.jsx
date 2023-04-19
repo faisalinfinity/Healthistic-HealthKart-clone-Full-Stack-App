@@ -15,21 +15,23 @@ import {
 import React, { useRef, useState } from "react";
 import PayCard from "../components/PayCard";
 import { useDispatch, useSelector } from "react-redux";
-import { addToOrder } from "../redux/CheckoutReducer/action";
+import { addToOrder, payforOrder } from "../redux/CheckoutReducer/action";
 import { getCartData } from "../redux/CartReducer/action";
 import { BASE_URL } from "../constants/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
+
 const Payment = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { items } = useSelector((store) => store.cartReducer);
   const [payment, setPayment] = useState("UPI");
   const toast = useToast();
-  const { token, email ,name} = useSelector((state) => state.authReducer);
+  const { token, email, name } = useSelector((state) => state.authReducer);
   const form = useRef();
   let cartTotal = 0;
+
   for (let i = 0; i < items.length; i++) {
     cartTotal += items[i].price * items[i].quantity;
   }
@@ -43,28 +45,29 @@ const Payment = () => {
     const item = JSON.parse(localStorage.getItem("newItem"))?.map((ele) => {
       return { ...ele, payment: payment };
     });
-    dispatch(addToOrder(item)).then((res) => {
-      toast({
-        title: "Order Placed.",
-        description: "Order will be delivered to your address within 5 days",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-      });
-      axios
-        .delete(`${BASE_URL}/users/cart/delete/all`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          dispatch(getCartData);
-          sendEmail();
-          setTimeout(() => {
-            navigate("/profile");
-          }, 2000);
-        });
-    });
+    // dispatch(addToOrder(item)).then((res) => {
+    //   toast({
+    //     title: "Order Placed.",
+    //     description: "Order will be delivered to your address within 5 days",
+    //     status: "success",
+    //     duration: 9000,
+    //     isClosable: true,
+    //   });
+    //   axios
+    //     .delete(`${BASE_URL}/users/cart/delete/all`, {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       dispatch(getCartData);
+    //       sendEmail();
+    //       setTimeout(() => {
+    //         navigate("/profile");
+    //       }, 2000);
+    //     });
+    // });
+    dispatch(payforOrder());
   };
 
   const sendEmail = (e) => {
@@ -128,7 +131,7 @@ const Payment = () => {
                       </Text>
                       You need to have a registered UPI ID
                       <Flex gap={"1rem"}>
-                        <Input placeholder="Enter UPI ID" required={true} />
+                        <Input placeholder="Enter UPI ID" isRequired />
                         <Button
                           p={"1em 1em"}
                           color={"white"}
@@ -208,7 +211,10 @@ const Payment = () => {
           <label>Email</label>
           <input value={email} type="email" name="user_email" />
           <label>Message</label>
-          <textarea value={`Your Order has been confirmed , it will be deliver in 5-7 days `} name="message" />
+          <textarea
+            value={`Your Order has been confirmed , it will be deliver in 5-7 days `}
+            name="message"
+          />
           <input type="submit" value="Send" />
         </form>
       </Box>

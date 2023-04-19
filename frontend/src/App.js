@@ -2,10 +2,11 @@ import "./App.css";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import MainRoute from "./routes/MainRoute";
-import SingleProductPage from "./pages/SingleProductPage";
+import Payment from "./pages/Payment";
 
-import HomePage from  "./pages/Home/HomePage";
+import HomePage from "./pages/Home/HomePage";
 import AccountInfo from "./pages/Home/AccountInfo";
+import MultiProductPage from "./pages/MultiProductPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Navbar />
       <MainRoute />
       <Footer />
+      {/* <MultiProductPage /> */}
     </>
   );
 }

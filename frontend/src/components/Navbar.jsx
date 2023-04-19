@@ -33,15 +33,18 @@ import { logout } from "../redux/AuthReducer/action";
 
 const Navbar = () => {
   const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
   const { isLoggedIn, name } = useSelector((store) => store.authReducer);
   const dispatch = useDispatch();
   const navigate=useNavigate()
 
   const searchResults = () => {
-    axios
-      .get(`http://localhost:8080/product/`)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
+    setTimeout(() => {
+      axios
+        .get(`http://localhost:8080/product?q=${query}`)
+        .then((res) => setResults(res.data.data))
+        .catch((err) => console.log(err));
+    }, 2000);
   };
 
   return (
@@ -71,9 +74,37 @@ const Navbar = () => {
               w={{ base: "13rem", sm: "29rem", md: "39rem" }}
               placeholder="Search for Products and Brands"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                searchResults();
+              }}
             />
           </InputGroup>
+          {query && (
+            <Box
+              position={"fixed"}
+              top={"5rem"}
+              bg={"white"}
+              zIndex={"3"}
+              w={"39rem"}
+              border={"1px solid black"}
+            >
+              {results &&
+                results.map((ele) => {
+                  return (
+                    <Link
+                      mb={"1rem"}
+                      onClick={() => setQuery("")}
+                      p={"2rem"}
+                      to={`/product/${ele._id}`}
+                    >
+                      {ele.title}
+                      <br />
+                    </Link>
+                  );
+                })}
+            </Box>
+          )}
         </Box>
         <Box
           display={{ base: "none", md: "flex" }}
@@ -90,8 +121,11 @@ const Navbar = () => {
                 <MenuList>
                   <MenuItem>Hi, {name}</MenuItem>
                   <MenuItem>
-                  <Link to={"/profile"}>My Orders</Link></MenuItem>
+                    <Link to={"/profile"}>My Orders</Link>
+                  </MenuItem>
                   <MenuItem>
+
+
                     <Button
                       onClick={() => {
                         dispatch(logout)
@@ -99,6 +133,7 @@ const Navbar = () => {
                       }}
                       variant={"ghost"}
                     >
+
                       <BiLogOut size={"1.5rem"} />
                       Logout
                     </Button>
