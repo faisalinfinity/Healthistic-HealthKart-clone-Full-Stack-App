@@ -9,13 +9,14 @@ const PrivateRoute = ({ children }) => {
       isLoggedIn: store.authReducer.isLoggedIn,
     };
   });
-
-  if(isLoggedIn && role==="admin" ){
-    return <AdminPage/>
-  }
+  console.log("IS LoggedIn",isLoggedIn)
   if (!isLoggedIn) {
     return <LoginPage/>;
   }
+  if(isLoggedIn && role==="admin" ){
+    return <AdminPage/>
+  }
+  
   return children;
 };
 

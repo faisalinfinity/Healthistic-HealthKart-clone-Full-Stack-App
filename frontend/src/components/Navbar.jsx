@@ -34,14 +34,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../redux/AuthReducer/action";
 import { getCartData } from "../redux/CartReducer/action";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/AuthReducer/action";
 import { BASE_URL } from "../constants/constants";
 const Navbar = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const { isLoggedIn, name } = useSelector((store) => store.authReducer);
+  const { isLoggedIn, name ,token} = useSelector((store) => store.authReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -67,7 +64,10 @@ const Navbar = () => {
 
   const { items } = useSelector((store) => store.cartReducer);
   useEffect(() => {
-    dispatch(getCartData);
+    if(token.length>0){
+      dispatch(getCartData);
+    }
+   
   }, []);
 
   
@@ -160,8 +160,8 @@ const Navbar = () => {
                   <MenuItem>
                     <Button
                       onClick={() => {
-                        dispatch(logout);
-                        navigate("/login");
+                        dispatch(logout());
+                        
                       }}
                       variant={"ghost"}
                     >
