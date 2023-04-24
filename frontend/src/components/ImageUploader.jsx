@@ -164,7 +164,7 @@ import {
                   <br />
                 </VStack>
                 <main className="App">
-                  <h1 className="text-center"></h1>
+    
                   <Dropzone onDrop={onDrop} accept={"image/*"} />
                   <ImageList images={images} />
                 </main>

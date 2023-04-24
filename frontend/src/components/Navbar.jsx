@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState,useEffect } from "react";
 import {
   Box,
   Button,
@@ -12,6 +13,7 @@ import {
   InputLeftElement,
   MenuButton,
   Flex,
+  Badge,
   Text,
 } from "@chakra-ui/react";
 import Logo from "../assets/healthifyLogo.png";
@@ -28,11 +30,14 @@ import { BiLogOut, BiLogIn } from "react-icons/bi";
 import { Search2Icon } from "@chakra-ui/icons";
 import SideDrawer from "./SideDrawer";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../redux/AuthReducer/action";
+import { getCartData } from "../redux/CartReducer/action";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/AuthReducer/action";
 import { BASE_URL } from "../constants/constants";
-
 const Navbar = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -60,6 +65,12 @@ const Navbar = () => {
     setQuery("");
   };
 
+  const { items } = useSelector((store) => store.cartReducer);
+  useEffect(() => {
+    dispatch(getCartData);
+  }, []);
+
+  
   return (
     <Box>
       <Box
@@ -169,7 +180,13 @@ const Navbar = () => {
           </Box>
           <Box cursor={"pointer"}>
             <Link to="/cart">
+              <Flex>
               <AiOutlineShoppingCart size={"2rem"} />
+              <Badge h="20%" w="40%" borderRadius="50%" colorScheme="green">
+                {items?.length}
+              </Badge>
+              </Flex>
+             
             </Link>
           </Box>
         </Box>

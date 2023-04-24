@@ -43,7 +43,7 @@ export const login = (data) => (dispatch) => {
     });
 };
 
-export const logout = (dispatch) => {
+export const logout = ()=>{
   localStorage.setItem("UserDetails",null);
-  dispatch({ type: LOGOUT_SUCCESS });
+ return { type: LOGOUT_SUCCESS };
 };
