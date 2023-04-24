@@ -1,3 +1,4 @@
+
 import React, { useState,useEffect } from "react";
 import {
   Box,
@@ -13,6 +14,7 @@ import {
   MenuButton,
   Flex,
   Badge,
+  Text,
 } from "@chakra-ui/react";
 import Logo from "../assets/healthifyLogo.png";
 import {
@@ -32,18 +34,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../redux/AuthReducer/action";
 import { getCartData } from "../redux/CartReducer/action";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/AuthReducer/action";
+import { BASE_URL } from "../constants/constants";
 const Navbar = () => {
   const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
   const { isLoggedIn, name } = useSelector((store) => store.authReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const searchResults = () => {
-    axios
-      .get(`http://localhost:8080/product/`)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
+    setTimeout(() => {
+      axios
+        .get(`${BASE_URL}/product?q=${query}`)
+        .then((res) => setResults(res.data.data))
+        .catch((err) => console.log(err));
+    }, 2000);
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  });
+
+  const handleClick = () => {
+    setQuery("");
   };
 
   const { items } = useSelector((store) => store.cartReducer);
@@ -79,9 +98,47 @@ const Navbar = () => {
               w={{ base: "13rem", sm: "29rem", md: "39rem" }}
               placeholder="Search for Products and Brands"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                searchResults();
+              }}
             />
           </InputGroup>
+          {query && (
+            <Box
+              position={"absolute"}
+              top={"5rem"}
+              bg={"white"}
+              zIndex={"3"}
+              w={"39rem"}
+              maxH="13rem"
+              border={"1px solid black"}
+              overflowY="scroll"
+              borderRadius="10px"
+            >
+              {results &&
+                results.map((ele) => {
+                  return (
+                    <Link
+                      mb={"1rem"}
+                      onClick={() => setQuery("")}
+                      p={"2rem"}
+                      to={`/product/${ele._id}`}
+                    >
+                      <Flex
+                        alignItems="center"
+                        p="10px"
+                        gap="10px"
+                        _hover={{ bgColor: "teal", color: "white" }}
+                      >
+                        <Image w="3%" h="15%" src={ele.image[0]}></Image>
+                        <Text> {ele.title}</Text>
+                      </Flex>
+                    </Link>
+                  );
+                })}
+            </Box>
+          )}
         </Box>
         <Box
           display={{ base: "none", md: "flex" }}
@@ -103,7 +160,7 @@ const Navbar = () => {
                   <MenuItem>
                     <Button
                       onClick={() => {
-                        dispatch(logout());
+                        dispatch(logout);
                         navigate("/login");
                       }}
                       variant={"ghost"}

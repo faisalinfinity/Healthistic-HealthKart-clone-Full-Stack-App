@@ -1,32 +1,48 @@
 import React, { useEffect, useState } from "react";
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
+  Checkbox,
+  CheckboxGroup,
+  Flex,
+  Heading,
   Image,
   SimpleGrid,
   Text,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams ,useNavigate} from "react-router-dom";
 import Paginantion from "../admin/components/Pagination";
-import { useDispatch ,useSelector} from "react-redux";
+import { useDispatch, useSelector, } from "react-redux";
 import { addToCart } from "../redux/CartReducer/action";
 import { BASE_URL } from "../constants/constants";
 
 const MultiProductPage = () => {
   const [item, setItem] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(1);
+  const [totalPage, setTotalPage] = useState("");
+  const [sort, setSort] = useState("1");
+  const [filter, setFilter] = useState("");
   const dispatch = useDispatch();
   const params = useParams();
   const toast = useToast();
   const { category } = params;
-   const {token}=useSelector((s)=>s.authReducer)
+  const { token } = useSelector((s) => s.authReducer);
+  const [filterValues, setfilterValues] = useState([]);
+  const [brands,setBrand]=useState([])
+  const navigate=useNavigate()
+
   useEffect(() => {
+    
     axios
       .get(
-        `${BASE_URL}/product?category=${category}&page=${page}&limit=${8}`,
+        `${BASE_URL}/product?category=${category}&page=${page}&limit=${8}&sort=price:${sort}${filter}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -39,7 +55,7 @@ const MultiProductPage = () => {
         setTotalPage(res.data.totalPages);
       })
       .catch((err) => console.log(err));
-  }, [page, category]);
+  }, [page, category, token, sort, filter]);
 
   const handleAddtoCart = ({
     image,
@@ -60,8 +76,6 @@ const MultiProductPage = () => {
     userId,
     quantity,
   }) => {
-    console.log(_id);
-
     dispatch(
       addToCart({
         image,
@@ -91,19 +105,113 @@ const MultiProductPage = () => {
       isClosable: true,
     });
   };
+  useEffect(() => {
+    handleFilterStr();
+  }, [filterValues]);
 
-  console.log(item);
+  const handleFilterStr = () => {
+    let str = "";
+    if (filterValues.length > 0) {
+      filterValues.forEach((el) => {
+        str += `&filter=brand:${el}`;
+      });
+      setFilter(str);
+    }else{
+      setFilter(str);
+    }
+  };
+
+
+  useEffect(()=>{
+    
+
+    axios
+      .get(
+        `${BASE_URL}/product?category=${category}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        let obj={}
+        let arr=[]
+       res.data.data.forEach((el)=>{
+        if(obj[el.brand]==undefined){
+          obj[el.brand]=1
+          arr.push(el.brand)
+        }
+       })
+       setBrand([...arr])
+      })
+  },[category])
 
   return (
     <Box>
       <Box
+        display={{ sm: "flex", md: "flex" }}
+        gap={"2rem"}
         w={{ base: "70%", sm: "80%", md: "90%" }}
         m={"auto"}
         mt={"2rem"}
         mb={"2rem"}
       >
+        <Box
+         
+          borderRadius={"1rem"}
+          w={{ base: "15rem", sm: "25", md: "25rem", lg: "20rem" }}
+
+          boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+        >
+          <Accordion defaultIndex={[0]} mt={"1rem"} allowMultiple>
+            <AccordionItem>
+              <AccordionButton>
+                <Box as="span" flex="1" textAlign="left">
+                  <Text fontSize={"xl"} fontWeight={"medium"}>
+                    Sort By Price
+                  </Text>
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel pb={4}>
+                <Flex gap={"2rem"}>
+                  <Button onClick={() => setSort("1")}>Low to High</Button>
+                  <Button onClick={() => setSort("-1")}>High to Low</Button>
+                </Flex>
+              </AccordionPanel>
+            </AccordionItem>
+
+            <AccordionItem>
+              <AccordionButton>
+                <Box as="span" flex="1" textAlign="left">
+                  <Text fontSize={"xl"} fontWeight={"medium"}>
+                    Filter options
+                  </Text>
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel pb={4}>
+                <Flex direction="column" gap={"2rem"}>
+                  <CheckboxGroup
+                    value={filterValues}
+                    onChange={(e) => setfilterValues(e)}
+                  >
+                    {brands?.map((ele)=>{
+                      return    <Checkbox value={ele}>{ele}</Checkbox>
+                    })}
+                    {/* <Checkbox value="muscleblaze">MuscleBlaze</Checkbox>
+                    <Checkbox value="musclexp">MuscleXP</Checkbox>
+                    <Checkbox value="healthkart">Healthkart</Checkbox>
+                    <Checkbox value="healthaid">Healthaid</Checkbox> */}
+                  </CheckboxGroup>
+                </Flex>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </Box>
         <SimpleGrid
-          columns={{ base: "1", sm: "2", md: "3", lg: "4" }}
+          columns={{ base: "1", sm: "1", md: "2", lg: "3" }}
           spacing={10}
         >
           {item &&
@@ -117,12 +225,15 @@ const MultiProductPage = () => {
                   p={"1rem"}
                   w={"15rem"}
                   alignItems={"center"}
+                  justifyContent="center"
                   borderRadius={".5rem"}
                   textAlign={"center"}
+                  maxH="400px"
+                  onClick={()=>navigate(`/product/${ele._id}`)}
                 >
-                  <Link to={`/product/${ele._id}`}>
+                 
                     <Image w={"50%"} src={ele.image[0]} />
-                  </Link>
+              
                   <Box>{ele.title}</Box>
                   <Text fontWeight={"semibold"}>₹{ele.price}</Text>
                   <Box>

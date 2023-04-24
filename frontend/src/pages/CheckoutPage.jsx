@@ -3,13 +3,14 @@ import {
   Button,
   Divider,
   Flex,
+  useToast,
   Input,
   Text,
   Textarea,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import {  useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CheckoutPage = () => {
   const { items } = useSelector((store) => store.cartReducer);
@@ -18,6 +19,8 @@ const CheckoutPage = () => {
   const [address, setAddress] = useState("");
   const [landmark, setLandmark] = useState("");
   const [pincode, setPincode] = useState("");
+  const navigate = useNavigate();
+  const toast = useToast();
 
   let cartTotal = 0;
   for (let i = 0; i < items.length; i++) {
@@ -38,36 +41,45 @@ const CheckoutPage = () => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const dateString = `${year}-${month}-${day} ${hours}:${minutes}`;
-
-    let newItem = items.map((ele) => {
-      return {
-        image: ele.image,
-        title: ele.title,
-        description: ele.description,
-        price: ele.price,
-        originalPrice: ele.originalPrice,
-        sizes: ele.sizes,
-        status: "Order Placed",
-        date: dateString,
-        category: ele.category,
-        rating: ele.rating,
-        review: ele.review,
-        flavour: ele.flavour,
-        tags: ele.tags,
-        brand: ele.brand,
-        stock: ele.stock,
-        adminId: ele.adminId,
-        quantity: ele.quantity,
-        pid: ele.pid,
-        userId: ele.userId,
-        address:
-          name + " " + phone + " " + address + " " + landmark + " " + pincode,
-        delivery: "5",
-        payment: "dummy",
-      };
-    });
-    console.log(newItem);
-    localStorage.setItem("newItem",JSON.stringify(newItem))
+    
+    if (name && phone && pincode && landmark && address) {
+      let newItem = items.map((ele) => {
+        return {
+          image: ele.image,
+          title: ele.title,
+          description: ele.description,
+          price: ele.price,
+          originalPrice: ele.originalPrice,
+          sizes: ele.sizes,
+          status: "Order Placed",
+          date: dateString,
+          category: ele.category,
+          rating: ele.rating,
+          review: ele.review,
+          flavour: ele.flavour,
+          tags: ele.tags,
+          brand: ele.brand,
+          stock: ele.stock,
+          adminId: ele.adminId,
+          quantity: ele.quantity,
+          pid: ele.pid,
+          userId: ele.userId,
+          address:
+            name + " " + phone + " " + address + " " + landmark + " " + pincode,
+          delivery: "5",
+          payment: "dummy",
+        };
+      });
+      localStorage.setItem("newItem", JSON.stringify(newItem));
+      navigate("/payment");
+    } else {
+      toast({
+        title: "please fill all fields.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
   };
 
   if (items) {
@@ -114,7 +126,6 @@ const CheckoutPage = () => {
                 placeholder="Enter Landmark"
                 value={landmark}
                 onChange={(e) => setLandmark(e.target.value)}
-                required={true}
               />
               <Input
                 placeholder="Enter Pincode"
@@ -123,11 +134,7 @@ const CheckoutPage = () => {
                 required={true}
               />
             </Flex>
-            <Button
-              as={Link}
-              onClick={() => handleAddtoOrder(items)}
-              to="/payment"
-            >
+            <Button onClick={() => handleAddtoOrder(items)}>
               Proceed to Pay
             </Button>
           </Box>
