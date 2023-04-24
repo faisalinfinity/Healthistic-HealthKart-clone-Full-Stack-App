@@ -2,7 +2,10 @@ const { productModel } = require("../models/productModel");
 
 const AddProduct = async (req, res) => {
   try {
-    let newProduct = new productModel({adminId:req.body.userId,...req.body});
+    let newProduct = new productModel({
+      adminId: req.body.userId,
+      ...req.body,
+    });
     await newProduct.save();
     res.json(req.body);
   } catch (error) {
@@ -15,22 +18,21 @@ const GetProduct = async (req, res) => {
   const searchQuery = req.query?.q;
   const sortCriteria = req.query?.sort;
   const filterCriteria = req.query?.filter;
-  const aboveRating=+req.query?.ratingabove
+  const aboveRating = +req.query?.ratingabove;
   const page = +req.query.page || 1;
   const limit = +req.query.limit || 10;
   const skip = (page - 1) * limit;
-     
-  try {
-    let data
 
-    if(category){
+  try {
+    let data;
+
+    if (category) {
       data = productModel.find({
         category: { $regex: category, $options: "i" },
       });
-    }else{
-      data=productModel.find()
+    } else {
+      data = productModel.find();
     }
-   
 
     if (sortCriteria) {
       let arr = sortCriteria.split(":"); //splitting the sortCriteria String by : and set object in the rqd format
@@ -48,7 +50,7 @@ const GetProduct = async (req, res) => {
 
         return obj;
       });
-      data = data.and(filterArray);
+      data = data.or(filterArray);
     } else if (filterCriteria) {
       let obj = {};
       let arr = filterCriteria.split(":");
@@ -56,9 +58,9 @@ const GetProduct = async (req, res) => {
 
       data = data.or([obj]);
     }
-     
-    if(aboveRating){
-      data=data.find({rating:{$gte:aboveRating}})
+
+    if (aboveRating) {
+      data = data.find({ rating: { $gte: aboveRating } });
     }
     if (searchQuery) {
       data = data.or([{ title: { $regex: searchQuery, $options: "i" } }]);
