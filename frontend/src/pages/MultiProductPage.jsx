@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CheckboxGroup,
   Flex,
   Heading,
   Image,
@@ -16,9 +17,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams ,useNavigate} from "react-router-dom";
 import Paginantion from "../admin/components/Pagination";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, } from "react-redux";
 import { addToCart } from "../redux/CartReducer/action";
 import { BASE_URL } from "../constants/constants";
 
@@ -26,18 +27,22 @@ const MultiProductPage = () => {
   const [item, setItem] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState("");
-  const [sort, setSort] = useState("");
+  const [sort, setSort] = useState("1");
   const [filter, setFilter] = useState("");
   const dispatch = useDispatch();
   const params = useParams();
   const toast = useToast();
   const { category } = params;
   const { token } = useSelector((s) => s.authReducer);
+  const [filterValues, setfilterValues] = useState([]);
+  const [brands,setBrand]=useState([])
+  const navigate=useNavigate()
 
   useEffect(() => {
+    
     axios
       .get(
-        `${BASE_URL}/product?category=${category}&page=${page}&limit=${8}&sort=price:${sort}&filter=brand:${filter}`,
+        `${BASE_URL}/product?category=${category}&page=${page}&limit=${8}&sort=price:${sort}${filter}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -100,6 +105,47 @@ const MultiProductPage = () => {
       isClosable: true,
     });
   };
+  useEffect(() => {
+    handleFilterStr();
+  }, [filterValues]);
+
+  const handleFilterStr = () => {
+    let str = "";
+    if (filterValues.length > 0) {
+      filterValues.forEach((el) => {
+        str += `&filter=brand:${el}`;
+      });
+      setFilter(str);
+    }else{
+      setFilter(str);
+    }
+  };
+
+
+  useEffect(()=>{
+    
+
+    axios
+      .get(
+        `${BASE_URL}/product?category=${category}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        let obj={}
+        let arr=[]
+       res.data.data.forEach((el)=>{
+        if(obj[el.brand]==undefined){
+          obj[el.brand]=1
+          arr.push(el.brand)
+        }
+       })
+       setBrand([...arr])
+      })
+  },[category])
 
   return (
     <Box>
@@ -112,9 +158,10 @@ const MultiProductPage = () => {
         mb={"2rem"}
       >
         <Box
-          h={"15rem"}
+         
           borderRadius={"1rem"}
           w={{ base: "15rem", sm: "25", md: "25rem", lg: "20rem" }}
+
           boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
         >
           <Accordion defaultIndex={[0]} mt={"1rem"} allowMultiple>
@@ -145,33 +192,19 @@ const MultiProductPage = () => {
                 <AccordionIcon />
               </AccordionButton>
               <AccordionPanel pb={4}>
-                <Flex gap={"2rem"}>
-                  <Checkbox
-                    value="muscleblaze"
-                    onChange={(e) => setFilter(e.target.value)}
+                <Flex direction="column" gap={"2rem"}>
+                  <CheckboxGroup
+                    value={filterValues}
+                    onChange={(e) => setfilterValues(e)}
                   >
-                    MuscleBlaze
-                  </Checkbox>
-                  <Checkbox
-                    value="muscleblaze"
-                    onChange={(e) => setFilter(e.target.value)}
-                  >
-                    MuscleXP
-                  </Checkbox>
-                </Flex>
-                <Flex gap={"2rem"}>
-                  <Checkbox
-                    value="healthkart"
-                    onChange={(e) => setFilter(e.target.value)}
-                  >
-                    Healthkart
-                  </Checkbox>
-                  <Checkbox
-                    value="healthaid"
-                    onChange={(e) => setFilter(e.target.value)}
-                  >
-                    Healthaid
-                  </Checkbox>
+                    {brands?.map((ele)=>{
+                      return    <Checkbox value={ele}>{ele}</Checkbox>
+                    })}
+                    {/* <Checkbox value="muscleblaze">MuscleBlaze</Checkbox>
+                    <Checkbox value="musclexp">MuscleXP</Checkbox>
+                    <Checkbox value="healthkart">Healthkart</Checkbox>
+                    <Checkbox value="healthaid">Healthaid</Checkbox> */}
+                  </CheckboxGroup>
                 </Flex>
               </AccordionPanel>
             </AccordionItem>
@@ -192,12 +225,15 @@ const MultiProductPage = () => {
                   p={"1rem"}
                   w={"15rem"}
                   alignItems={"center"}
+                  justifyContent="center"
                   borderRadius={".5rem"}
                   textAlign={"center"}
+                  maxH="400px"
+                  onClick={()=>navigate(`/product/${ele._id}`)}
                 >
-                  <Link to={`/product/${ele._id}`}>
+                 
                     <Image w={"50%"} src={ele.image[0]} />
-                  </Link>
+              
                   <Box>{ele.title}</Box>
                   <Text fontWeight={"semibold"}>₹{ele.price}</Text>
                   <Box>

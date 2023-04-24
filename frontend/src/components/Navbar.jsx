@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -12,6 +12,7 @@ import {
   InputLeftElement,
   MenuButton,
   Flex,
+  Text,
 } from "@chakra-ui/react";
 import Logo from "../assets/healthifyLogo.png";
 import {
@@ -27,24 +28,36 @@ import { BiLogOut, BiLogIn } from "react-icons/bi";
 import { Search2Icon } from "@chakra-ui/icons";
 import SideDrawer from "./SideDrawer";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector,useNavigate } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/AuthReducer/action";
+import { BASE_URL } from "../constants/constants";
 
 const Navbar = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const { isLoggedIn, name } = useSelector((store) => store.authReducer);
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const searchResults = () => {
     setTimeout(() => {
       axios
-        .get(`http://localhost:8080/product?q=${query}`)
+        .get(`${BASE_URL}/product?q=${query}`)
         .then((res) => setResults(res.data.data))
         .catch((err) => console.log(err));
     }, 2000);
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  });
+
+  const handleClick = () => {
+    setQuery("");
   };
 
   return (
@@ -82,12 +95,15 @@ const Navbar = () => {
           </InputGroup>
           {query && (
             <Box
-              position={"fixed"}
+              position={"absolute"}
               top={"5rem"}
               bg={"white"}
               zIndex={"3"}
               w={"39rem"}
+              maxH="13rem"
               border={"1px solid black"}
+              overflowY="scroll"
+              borderRadius="10px"
             >
               {results &&
                 results.map((ele) => {
@@ -98,8 +114,15 @@ const Navbar = () => {
                       p={"2rem"}
                       to={`/product/${ele._id}`}
                     >
-                      {ele.title}
-                      <br />
+                      <Flex
+                        alignItems="center"
+                        p="10px"
+                        gap="10px"
+                        _hover={{ bgColor: "teal", color: "white" }}
+                      >
+                        <Image w="3%" h="15%" src={ele.image[0]}></Image>
+                        <Text> {ele.title}</Text>
+                      </Flex>
                     </Link>
                   );
                 })}
@@ -124,16 +147,13 @@ const Navbar = () => {
                     <Link to={"/profile"}>My Orders</Link>
                   </MenuItem>
                   <MenuItem>
-
-
                     <Button
                       onClick={() => {
-                        dispatch(logout)
-                        navigate("/login")
+                        dispatch(logout);
+                        navigate("/login");
                       }}
                       variant={"ghost"}
                     >
-
                       <BiLogOut size={"1.5rem"} />
                       Logout
                     </Button>

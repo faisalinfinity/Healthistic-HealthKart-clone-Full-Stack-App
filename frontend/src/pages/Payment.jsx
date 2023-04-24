@@ -45,29 +45,29 @@ const Payment = () => {
     const item = JSON.parse(localStorage.getItem("newItem"))?.map((ele) => {
       return { ...ele, payment: payment };
     });
-    // dispatch(addToOrder(item)).then((res) => {
-    //   toast({
-    //     title: "Order Placed.",
-    //     description: "Order will be delivered to your address within 5 days",
-    //     status: "success",
-    //     duration: 9000,
-    //     isClosable: true,
-    //   });
-    //   axios
-    //     .delete(`${BASE_URL}/users/cart/delete/all`, {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       dispatch(getCartData);
-    //       sendEmail();
-    //       setTimeout(() => {
-    //         navigate("/profile");
-    //       }, 2000);
-    //     });
-    // });
-    dispatch(payforOrder());
+    dispatch(addToOrder(item)).then((res) => {
+      toast({
+        title: "Order Placed.",
+        description: "Order will be delivered to your address within 5 days",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+      axios
+        .delete(`${BASE_URL}/users/cart/delete/all`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          dispatch(getCartData);
+          sendEmail();
+          setTimeout(() => {
+            navigate("/profile");
+          }, 2000);
+        });
+    });
+    // dispatch(payforOrder());
   };
 
   const sendEmail = (e) => {
