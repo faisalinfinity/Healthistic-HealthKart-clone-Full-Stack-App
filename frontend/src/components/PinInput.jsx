@@ -91,6 +91,7 @@ const PinInput = ({ length = 5, inputBoxLength = 4, onChange, Type }) => {
             fontSize:"25px",
             textAlign:"center",
             boxShadow: bs,
+        
           }}
           key={index}
           type={Type}
