@@ -12,6 +12,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from "react";
+import PinInput from "./PinInput";
 
 export default function OtpModal({
   onOpen,
@@ -64,6 +65,11 @@ export default function OtpModal({
     return <Text> Resend in {timerString}</Text>;
   }
 
+  const onChange=(inputData)=>{
+   setenteredotp(inputData.join(""))
+  }
+  console.log(enteredotp)
+
   return (
     <>
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -82,12 +88,13 @@ export default function OtpModal({
               .
             </Text>
             <br />
-            <Input
+            {/* <Input
               onChange={(e) => setenteredotp(e.target.value)}
               type="password"
               maxLength="4"
               placeholder={"XXXX"}
-            ></Input>
+            ></Input> */}
+            <PinInput Type="number" length={4} inputBoxLength={1} onChange={onChange}/>
             <br />
             <Box mt="10px" display="flex" gap="20px">
               <Button
