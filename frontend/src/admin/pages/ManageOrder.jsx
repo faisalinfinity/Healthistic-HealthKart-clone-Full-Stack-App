@@ -78,7 +78,7 @@ export default function ManageOrders() {
             </Tr>
           </Thead>
           <Tbody>
-            {product?.map((el) => (
+            {product?.reverse().map((el) => (
               <OrderItem key={el._id} setRefresh={setRefresh} {...el} />
             ))}
           </Tbody>

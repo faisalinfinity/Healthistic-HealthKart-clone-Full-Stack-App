@@ -13,15 +13,15 @@ const orderSchema = mongoose.Schema({
   brand: { type: String, required: true },
   tags: { type: String },
   stock: { type: Number, required: true },
-  date:{ type: String, required: true },//automatic
+  date: { type: String, required: true }, //automatic
   adminId: { type: String, required: true },
   userId: { type: String, required: true },
   pid: { type: String, required: true },
   quantity: { type: Number, required: true },
-  delivery:{ type: String, required: true },
-  status:{ type: String, required: true },//automatic
-  address:{ type: String, required: true },
-  payment:{ type: String, required: true }
+  delivery: { type: String, required: true },
+  status: { type: String, required: true }, //automatic
+  address: { type: String, required: true },
+  payment: { type: String, required: true },
 });
 
 const orderModel = mongoose.model("order", orderSchema);

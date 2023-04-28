@@ -18,6 +18,9 @@ const GetOrder = async (req, res) => {
       obj[arr[0]] = arr[1];
       data = data.sort(obj);
     }
+
+    data = data.sort({ _id: -1 });
+    
     if (filterCriteria && Array.isArray(filterCriteria)) {
       //Checking filtetCriteria is an array or not because if single filter is passed it received as one obj instead of array
       const filterArray = filterCriteria.map((el) => {
@@ -58,10 +61,8 @@ const GetOrder = async (req, res) => {
 };
 
 const AddOrder = async (req, res) => {
- 
-
   try {
-    await orderModel.insertMany(req.body)
+    await orderModel.insertMany(req.body);
     res.send("Order added");
   } catch (error) {
     res.status(400).send(error.message);
@@ -79,22 +80,20 @@ const CancelOrder = async (req, res) => {
   }
 };
 
+const GetSingleOrder = async (req, res) => {
+  const { id } = req.params;
 
-const GetSingleOrder=async(req,res)=>{
-    const { id } = req.params;
+  try {
+    let data = await orderModel.findOne({ _id: id });
+    res.json(data);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
 
-    try {
-        let data=await orderModel.findOne({_id:id})
-        res.json(data)
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
-}
-
-
-module.exports={
-    GetSingleOrder,
-    GetOrder,
-    CancelOrder,
-    AddOrder
-}
+module.exports = {
+  GetSingleOrder,
+  GetOrder,
+  CancelOrder,
+  AddOrder,
+};
