@@ -130,9 +130,9 @@ const {isLoggedIn}=useSelector((s)=>s.authReducer)
               <Flex alignItems={"center"} justifyContent={"center"}>
               <Link to={`product/${item._id}`} ><Image
                   
-                  
+                  mt="10px"
                   w={"100px"}
-                  h={"150px"}
+                  // h={"150px"}
                   display={"block"}
                   src={item.image[0]}
                   borderRadius="lg"

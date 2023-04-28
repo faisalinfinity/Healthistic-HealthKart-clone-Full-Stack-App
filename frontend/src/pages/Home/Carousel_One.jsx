@@ -15,7 +15,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-import { addToCart,getCartData } from "../../redux/CartReducer/action";
+import { addToCart, getCartData } from "../../redux/CartReducer/action";
 import { useDispatch, useSelector } from "react-redux";
 
 const CarouselOne = ({ nutrients }) => {
@@ -41,7 +41,7 @@ const CarouselOne = ({ nutrients }) => {
   };
   const dispatch = useDispatch();
   const toast = useToast();
-  const {isLoggedIn}=useSelector((s)=>s.authReducer)
+  const { isLoggedIn } = useSelector((s) => s.authReducer);
   const handleAddtoCart = ({
     image,
     title,
@@ -61,7 +61,7 @@ const CarouselOne = ({ nutrients }) => {
     userId,
     quantity,
   }) => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       dispatch(
         addToCart({
           image,
@@ -82,18 +82,16 @@ const CarouselOne = ({ nutrients }) => {
           userId,
           quantity: 1,
         })
-      )
-      .then((res)=>{
-       
-        if(res==="Item Already exist in the Cart"){
+      ).then((res) => {
+        if (res === "Item Already exist in the Cart") {
           toast({
             title: "Item Already exist in the Cart",
             description: "",
             status: "error",
             duration: 9000,
             isClosable: true,
-          })
-        }else{
+          });
+        } else {
           toast({
             title: "item added.",
             description: "Item added to your cart",
@@ -102,10 +100,9 @@ const CarouselOne = ({ nutrients }) => {
             isClosable: true,
           });
           dispatch(getCartData);
-  
         }
-      })
-    }else{
+      });
+    } else {
       toast({
         title: "Please Login First.",
         status: "error",
@@ -113,7 +110,6 @@ const CarouselOne = ({ nutrients }) => {
         isClosable: true,
       });
     }
-   
   };
 
   return (
@@ -127,16 +123,16 @@ const CarouselOne = ({ nutrients }) => {
           {nutrients.map((item) => (
             <Card maxW="sm" key={item._id} mr={1} ml={1}>
               <Flex alignItems={"center"} justifyContent={"center"}>
-                <Link to={`product/${item._id}`} ><Image
-                  
-                  
-                  w={"100px"}
-                  h={"150px"}
-                  display={"block"}
-                  src={item.image[0]}
-                  borderRadius="lg"
-                /></Link>
-                
+                <Link to={`product/${item._id}`}>
+                  <Image
+                    w={"100px"}
+                    mt="10px"
+                    // h={"150px"}
+                    display={"block"}
+                    src={item.image[0]}
+                    borderRadius="lg"
+                  />
+                </Link>
               </Flex>
               <Stack p="6" bg="white" h={"210"}>
                 <Flex gap={4} textAlign={"center"}>

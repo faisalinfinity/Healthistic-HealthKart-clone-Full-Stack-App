@@ -1,18 +1,17 @@
 /* 
   filename: Dropzone.js 
 */
-import {IoMdImages} from "react-icons/io"
+import { IoMdImages } from "react-icons/io";
 import { border, IconButton } from "@chakra-ui/react";
 import React from "react";
 // Import the useDropzone hooks from react-dropzone
 import { useDropzone } from "react-dropzone";
 
-
 const Dropzone = ({ onDrop, accept }) => {
   // Initializing useDropzone hooks with options
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept
+    accept,
   });
 
   /* 
@@ -21,10 +20,13 @@ const Dropzone = ({ onDrop, accept }) => {
   */
 
   return (
-    <div style={{border:"3px dashed black",height:"100px"}} className="dropzone-div" {...getRootProps()}>
-      
+    <div
+      style={{ border: "3px dashed black", height: "100px" }}
+      className="dropzone-div"
+      {...getRootProps()}
+    >
       <input className="dropzone-input" {...getInputProps()} />
-      <IconButton icon={<IoMdImages/>}></IconButton>
+      <IconButton icon={<IoMdImages />}></IconButton>
       <div className="text-center">
         {isDragActive ? (
           <p className="dropzone-content">Release to drop the files here</p>

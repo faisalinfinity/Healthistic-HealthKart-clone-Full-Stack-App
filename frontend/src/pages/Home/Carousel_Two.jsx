@@ -11,17 +11,15 @@ import {
   Text,
   Button,
   Box,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
- 
-import { addToCart,getCartData } from "../../redux/CartReducer/action";
+
+import { addToCart, getCartData } from "../../redux/CartReducer/action";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-const CarouselTwo = ({vitamin}) => {
-
-
-   const toast = useToast()
+const CarouselTwo = ({ vitamin }) => {
+  const toast = useToast();
 
   const responsive = {
     superLargeDesktop: {
@@ -43,9 +41,9 @@ const CarouselTwo = ({vitamin}) => {
       items: 1,
     },
   };
-  const {isLoggedIn}=useSelector((s)=>s.authReducer)
-  const dispatch = useDispatch()
-const handleAddtoCart = ({
+  const { isLoggedIn } = useSelector((s) => s.authReducer);
+  const dispatch = useDispatch();
+  const handleAddtoCart = ({
     image,
     title,
     description,
@@ -64,7 +62,7 @@ const handleAddtoCart = ({
     userId,
     quantity,
   }) => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       dispatch(
         addToCart({
           image,
@@ -85,18 +83,16 @@ const handleAddtoCart = ({
           userId,
           quantity: 1,
         })
-      )
-      .then((res)=>{
-       
-        if(res==="Item Already exist in the Cart"){
+      ).then((res) => {
+        if (res === "Item Already exist in the Cart") {
           toast({
             title: "Item Already exist in the Cart",
             description: "",
             status: "error",
             duration: 9000,
             isClosable: true,
-          })
-        }else{
+          });
+        } else {
           toast({
             title: "item added.",
             description: "Item added to your cart",
@@ -105,10 +101,9 @@ const handleAddtoCart = ({
             isClosable: true,
           });
           dispatch(getCartData);
-  
         }
-      })
-    }else{
+      });
+    } else {
       toast({
         title: "Please Login First.",
         status: "error",
@@ -116,7 +111,6 @@ const handleAddtoCart = ({
         isClosable: true,
       });
     }
-   
   };
 
   return (
@@ -129,18 +123,19 @@ const handleAddtoCart = ({
         <Carousel responsive={responsive}>
           {vitamin.map((item, index) => (
             <Card maxW="sm" key={index} mr={1} ml={1}>
-              <Flex alignItems={"center"} justifyContent={"center"} >
-              <Link to={`product/${item._id}`} ><Image
-                  
-                  
-                  w={"100px"}
-                  h={"150px"}
-                  display={"block"}
-                  src={item.image[0]}
-                  borderRadius="lg"
-                /></Link>
-             </Flex>
-              <Stack   p="6"  h={"210"} bg="white">
+              <Flex alignItems={"center"} justifyContent={"center"}>
+                <Link to={`product/${item._id}`}>
+                  <Image
+                   mt="10px"
+                    w={"100px"}
+                    // h={"150px"}
+                    display={"block"}
+                    src={item.image[0]}
+                    borderRadius="lg"
+                  />
+                </Link>
+              </Flex>
+              <Stack p="6" h={"210"} bg="white">
                 <Flex gap={4} textAlign={"center"}>
                   <Box bg={"#00B5B7"} color={"white"} pl={3} pr={3}>
                     {item.rating} <span style={{ fontSize: "20px" }}>*</span>
@@ -165,17 +160,19 @@ const handleAddtoCart = ({
                 </Flex>
               </Stack>
               <Button
-              onClick={()=>handleAddtoCart(item)}
+                onClick={() => handleAddtoCart(item)}
                 w={"95%"}
                 margin="auto"
                 mb="3"
-                 boxShadow='lg' p='6' bg='white'
-                  _hover={{ bg: "orange", color: "white" }}
-                  colorScheme="orange"
-                  variant="outline"
-                >
-                  Add to cart
-                </Button>
+                boxShadow="lg"
+                p="6"
+                bg="white"
+                _hover={{ bg: "orange", color: "white" }}
+                colorScheme="orange"
+                variant="outline"
+              >
+                Add to cart
+              </Button>
             </Card>
           ))}
         </Carousel>
