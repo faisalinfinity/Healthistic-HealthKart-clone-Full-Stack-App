@@ -11,7 +11,7 @@ import {
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/CartReducer/action";
 import { BASE_URL } from "../constants/constants";
 
@@ -23,7 +23,7 @@ const SingleProductPage = () => {
   const params = useParams();
   const toast = useToast();
   const { id } = params;
-  const {token}=useSelector((state)=>state.authReducer)
+  const { token } = useSelector((state) => state.authReducer);
   useEffect(() => {
     if (id) {
       axios
@@ -79,17 +79,16 @@ const SingleProductPage = () => {
         userId,
         quantity: 1,
       })
-    ).then((res)=>{
-     
-      if(res==="Item Already exist in the Cart"){
+    ).then((res) => {
+      if (res === "Item Already exist in the Cart") {
         toast({
           title: "Item Already exist in the Cart",
           description: "",
           status: "error",
           duration: 9000,
           isClosable: true,
-        })
-      }else{
+        });
+      } else {
         toast({
           title: "item added.",
           description: "Item added to your cart",
@@ -97,10 +96,8 @@ const SingleProductPage = () => {
           duration: 9000,
           isClosable: true,
         });
-
       }
-    })
-   
+    });
   };
 
   if (item.title)
@@ -162,7 +159,6 @@ const SingleProductPage = () => {
             </Flex>
             <Box>Price: ₹{item.price}</Box>
             <Box display={{ md: "flex" }} gap={"1rem"}>
-             
               <Box
                 mt={{ base: "2rem", md: "0" }}
                 display={{ base: "flex" }}
@@ -172,7 +168,19 @@ const SingleProductPage = () => {
                   bg={"orange.50"}
                   color={"#ff8913"}
                   border={"1px solid orange"}
-                  onClick={() => handleAddtoCart(item)}
+                  onClick={() => {
+                    if(token){
+                      handleAddtoCart(item)
+                    }else{
+                      toast({
+                        title: "Please Login First",
+                        description: "",
+                        status: "error",
+                        duration: 6000,
+                        isClosable: true,
+                      });
+                    }
+                  }}
                 >
                   Add to Cart
                 </Button>
