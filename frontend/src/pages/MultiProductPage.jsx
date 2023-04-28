@@ -17,14 +17,16 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Link, useParams ,useNavigate} from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Paginantion from "../admin/components/Pagination";
-import { useDispatch, useSelector, } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/CartReducer/action";
 import { BASE_URL } from "../constants/constants";
+import Loading from "../admin/components/Loading";
 
 const MultiProductPage = () => {
   const [item, setItem] = useState([]);
+  const [loader, setLoader] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState("");
   const [sort, setSort] = useState("1");
@@ -35,11 +37,11 @@ const MultiProductPage = () => {
   const { category } = params;
   const { token } = useSelector((s) => s.authReducer);
   const [filterValues, setfilterValues] = useState([]);
-  const [brands,setBrand]=useState([])
-  const navigate=useNavigate()
+  const [brands, setBrand] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    
+    setLoader(true);
     axios
       .get(
         `${BASE_URL}/product?category=${category}&page=${page}&limit=${8}&sort=price:${sort}${filter}`,
@@ -53,6 +55,7 @@ const MultiProductPage = () => {
         setItem(res.data.data);
         setPage(res.data.page);
         setTotalPage(res.data.totalPages);
+        setLoader(false);
       })
       .catch((err) => console.log(err));
   }, [page, category, token, sort, filter]);
@@ -116,36 +119,36 @@ const MultiProductPage = () => {
         str += `&filter=brand:${el}`;
       });
       setFilter(str);
-    }else{
+    } else {
       setFilter(str);
     }
   };
 
-
-  useEffect(()=>{
-    
-
+  useEffect(() => {
+    setLoader(true);
     axios
-      .get(
-        `${BASE_URL}/product?category=${category}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        let obj={}
-        let arr=[]
-       res.data.data.forEach((el)=>{
-        if(obj[el.brand]==undefined){
-          obj[el.brand]=1
-          arr.push(el.brand)
-        }
-       })
-       setBrand([...arr])
+      .get(`${BASE_URL}/product?category=${category}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-  },[category])
+      .then((res) => {
+        let obj = {};
+        let arr = [];
+        res.data.data.forEach((el) => {
+          if (obj[el.brand] == undefined) {
+            obj[el.brand] = 1;
+            arr.push(el.brand);
+          }
+        });
+        setBrand([...arr]);
+        setLoader(false);
+      });
+  }, [category]);
+
+  if (loader) {
+    return <Loading />;
+  }
 
   return (
     <Box>
@@ -158,10 +161,8 @@ const MultiProductPage = () => {
         mb={"2rem"}
       >
         <Box
-         
           borderRadius={"1rem"}
           w={{ base: "15rem", sm: "25", md: "25rem", lg: "20rem" }}
-
           boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
         >
           <Accordion defaultIndex={[0]} mt={"1rem"} allowMultiple>
@@ -186,7 +187,7 @@ const MultiProductPage = () => {
               <AccordionButton>
                 <Box as="span" flex="1" textAlign="left">
                   <Text fontSize={"xl"} fontWeight={"medium"}>
-                    Filter options
+                    Brand Filter
                   </Text>
                 </Box>
                 <AccordionIcon />
@@ -197,13 +198,9 @@ const MultiProductPage = () => {
                     value={filterValues}
                     onChange={(e) => setfilterValues(e)}
                   >
-                    {brands?.map((ele)=>{
-                      return    <Checkbox value={ele}>{ele}</Checkbox>
+                    {brands?.map((ele) => {
+                      return <Checkbox value={ele}>{ele}</Checkbox>;
                     })}
-                    {/* <Checkbox value="muscleblaze">MuscleBlaze</Checkbox>
-                    <Checkbox value="musclexp">MuscleXP</Checkbox>
-                    <Checkbox value="healthkart">Healthkart</Checkbox>
-                    <Checkbox value="healthaid">Healthaid</Checkbox> */}
                   </CheckboxGroup>
                 </Flex>
               </AccordionPanel>
@@ -229,11 +226,10 @@ const MultiProductPage = () => {
                   borderRadius={".5rem"}
                   textAlign={"center"}
                   maxH="400px"
-                  onClick={()=>navigate(`/product/${ele._id}`)}
+                  onClick={() => navigate(`/product/${ele._id}`)}
                 >
-                 
-                    <Image w={"50%"} src={ele.image[0]} />
-              
+                  <Image w={"50%"} src={ele.image[0]} />
+
                   <Box>{ele.title}</Box>
                   <Text fontWeight={"semibold"}>₹{ele.price}</Text>
                   <Box>
