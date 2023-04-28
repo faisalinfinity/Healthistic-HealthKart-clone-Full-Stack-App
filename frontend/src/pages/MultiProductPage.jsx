@@ -165,7 +165,7 @@ const MultiProductPage = () => {
           w={{ base: "15rem", sm: "25", md: "25rem", lg: "20rem" }}
           boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
         >
-          <Accordion defaultIndex={[0]} mt={"1rem"} allowMultiple>
+          <Accordion defaultIndex={[0, 1]} mt={"1rem"} allowMultiple>
             <AccordionItem>
               <AccordionButton>
                 <Box as="span" flex="1" textAlign="left">
@@ -208,7 +208,7 @@ const MultiProductPage = () => {
           </Accordion>
         </Box>
         <SimpleGrid
-          columns={{ base: "1", sm: "1", md: "2", lg: "3" }}
+          columns={{ base: "1", sm: "1", md: "2", lg: "4" }}
           spacing={10}
         >
           {item &&

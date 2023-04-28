@@ -169,9 +169,9 @@ const SingleProductPage = () => {
                   color={"#ff8913"}
                   border={"1px solid orange"}
                   onClick={() => {
-                    if(token){
-                      handleAddtoCart(item)
-                    }else{
+                    if (token) {
+                      handleAddtoCart(item);
+                    } else {
                       toast({
                         title: "Please Login First",
                         description: "",
@@ -228,8 +228,8 @@ const SingleProductPage = () => {
         </Box>
         <Box
           display={"flex"}
-          w={{ base: "80%", md: "50%" }}
-          ml={{ base: "2rem", md: "35rem" }}
+          w={{ base: "80%", lg: "50%" }}
+          ml={{ base: "2rem", lg: "35rem" }}
           mt={"2rem"}
           gap={"2rem"}
           alignItems={"center"}

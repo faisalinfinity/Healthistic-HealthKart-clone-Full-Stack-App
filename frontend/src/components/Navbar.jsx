@@ -1,5 +1,4 @@
-
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -38,7 +37,7 @@ import { BASE_URL } from "../constants/constants";
 const Navbar = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const { isLoggedIn, name ,token} = useSelector((store) => store.authReducer);
+  const { isLoggedIn, name, token } = useSelector((store) => store.authReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -64,13 +63,11 @@ const Navbar = () => {
 
   const { items } = useSelector((store) => store.cartReducer);
   useEffect(() => {
-    if(token.length>0){
+    if (token.length > 0) {
       dispatch(getCartData);
     }
-   
   }, []);
 
-  
   return (
     <Box>
       <Box
@@ -110,7 +107,7 @@ const Navbar = () => {
               top={"5rem"}
               bg={"white"}
               zIndex={"3"}
-              w={"39rem"}
+              w={{base:"13rem",md:"39rem",lg:"39rem"}}
               maxH="13rem"
               border={"1px solid black"}
               overflowY="scroll"
@@ -161,7 +158,6 @@ const Navbar = () => {
                     <Button
                       onClick={() => {
                         dispatch(logout());
-                        
                       }}
                       variant={"ghost"}
                     >
@@ -181,12 +177,11 @@ const Navbar = () => {
           <Box cursor={"pointer"}>
             <Link to="/cart">
               <Flex>
-              <AiOutlineShoppingCart size={"2rem"} />
-              <Badge h="20%" w="40%" borderRadius="50%" colorScheme="green">
-                {items?.length}
-              </Badge>
+                <AiOutlineShoppingCart size={"2rem"} />
+                <Badge h="20%" w="40%" borderRadius="50%" colorScheme="green">
+                  {items?.length}
+                </Badge>
               </Flex>
-             
             </Link>
           </Box>
         </Box>
