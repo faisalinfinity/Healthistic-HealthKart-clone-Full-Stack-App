@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   Card,
@@ -11,6 +12,7 @@ import {
   useDisclosure,
   VStack,
   Wrap,
+  Icon,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 
@@ -35,6 +37,7 @@ import MobileSideNav from "../components/MobileSideNav";
 import AddProduct from "../components/AddProducts";
 import EditProduct from "./EditProducts";
 import ManageOrders from "./ManageOrder";
+import { FaInfo } from "react-icons/fa";
 
 export default function AdminPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -87,6 +90,15 @@ export default function AdminPage() {
 
   return (
     <Box mt={"20px"} mb={"2rem"}>
+      <Badge
+        textAlign={"center"}
+        colorScheme={"red"}
+        fontSize={"8px"}
+        mb="10px"
+      >
+        <Icon as={FaInfo}></Icon>Seller/Admin can only Delete/Modify and See
+        orders <wbr /> for products which are added by them.
+      </Badge>
       <Flex gap={4} position={"relative"} w={"100%"}>
         <Wrap
           zIndex={999}
@@ -140,7 +152,7 @@ export default function AdminPage() {
           className="fifty"
           overflowY={"scroll"}
           padding={"2px 16px"}
-          border={"2px dotted pink"}
+          border={"2px dashed red"}
           borderRadius={20}
           w={{ base: "100%", sm: "100%", md: "100%", lg: "75%" }}
         >

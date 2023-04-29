@@ -155,7 +155,7 @@ export default function Signup() {
               placeholder="Select role"
             >
               <option value="user">User</option>
-              <option value="admin">Admin</option>
+              <option value="admin">Register as a seller</option>
             </Select>
             <Select
               onChange={(e) =>
