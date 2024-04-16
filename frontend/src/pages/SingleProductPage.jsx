@@ -14,6 +14,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/CartReducer/action";
 import { BASE_URL } from "../constants/constants";
+import { Link } from "react-router-dom";
 
 const SingleProductPage = () => {
   const [item, setItem] = useState({});
@@ -184,14 +185,18 @@ const SingleProductPage = () => {
                 >
                   Add to Cart
                 </Button>
-                <Button
-                  p={"1em 1em"}
-                  color={"white"}
-                  _hover={{ bg: "orange" }}
-                  bg={"#ff8913"}
-                >
-                  Quick Buy
-                </Button>
+
+                <Link to="/cart">
+                  {" "}
+                  <Button
+                    p={"1em 1em"}
+                    color={"white"}
+                    _hover={{ bg: "orange" }}
+                    bg={"#ff8913"}
+                  >
+                  Go to Cart
+                  </Button>
+                </Link>
               </Box>
             </Box>
             <Box>

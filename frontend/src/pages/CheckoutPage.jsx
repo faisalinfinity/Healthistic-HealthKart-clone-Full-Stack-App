@@ -41,7 +41,7 @@ const CheckoutPage = () => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const dateString = `${year}-${month}-${day} ${hours}:${minutes}`;
-    
+
     if (name && phone && pincode && landmark && address) {
       let newItem = items.map((ele) => {
         return {

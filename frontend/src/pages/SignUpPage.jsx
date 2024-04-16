@@ -108,7 +108,7 @@ export default function Signup() {
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack spacing={8} mx={"auto"} w="50%" maxW={"xl"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
             Sign up
@@ -131,17 +131,6 @@ export default function Signup() {
                   <Input
                     onChange={(e) =>
                       setUserData({ ...userData, name: e.target.value })
-                    }
-                    type="text"
-                  />
-                </FormControl>
-              </Box>
-              <Box visibility="none">
-                <FormControl id="profilePic">
-                  <FormLabel>Profile Picture</FormLabel>
-                  <Input
-                    onChange={(e) =>
-                      setUserData({ ...userData, profile: e.target.value })
                     }
                     type="text"
                   />
@@ -203,10 +192,10 @@ export default function Signup() {
                 _hover={{ bgColor: "rgb(5,161,163)" }}
                 bgColor={"rgb(15,181,183)"}
                 color={"white"}
-                onClick={()=>{
-                  if(validate(userData.email)){
-                    onOpen()
-                  }else{
+                onClick={() => {
+                  if (validate(userData.email)) {
+                    onOpen();
+                  } else {
                     toast({
                       title: "Please Enter Valid Email",
                       status: "error",

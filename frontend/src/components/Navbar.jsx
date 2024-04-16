@@ -107,7 +107,7 @@ const Navbar = () => {
               top={"5rem"}
               bg={"white"}
               zIndex={"3"}
-              w={{base:"13rem",md:"39rem",lg:"39rem"}}
+              w={{ base: "13rem", md: "39rem", lg: "39rem" }}
               maxH="13rem"
               border={"1px solid black"}
               overflowY="scroll"
@@ -214,39 +214,39 @@ const Navbar = () => {
               <MenuItem>
                 <Link to={"/product/multi/food"}>Health Food & Drinks</Link>
               </MenuItem>
-              <MenuItem>Fitness</MenuItem>
-              <MenuItem>Wellness</MenuItem>
+              {/* <MenuItem>Fitness</MenuItem>
+              <MenuItem>Wellness</MenuItem> */}
             </MenuList>
           </Menu>
         </Box>
         <Box display={"flex"} alignItems={"center"} gap={".3em"}>
-          <MdSell />
-          BestSellers
+          {/* <MdSell /> */}
+          <Link to={"/product/multi/nutrients"}>Sports Nutrition</Link>
         </Box>
         <Box display={"flex"} alignItems={"center"} gap={".3em"}>
-          <TbBrandAdonisJs />
-          Brands
+          {/* <TbBrandAdonisJs /> */}
+          <Link to={"/product/multi/vitamins"}>Vitamins & Supplements</Link>
         </Box>
         <Box display={"flex"} alignItems={"center"} gap={".3em"}>
-          <FaIdeal />
-          Deals
+          {/* <FaIdeal /> */}
+          <Link to={"/product/multi/ayurveda"}>Ayurveda & Herbs</Link>
         </Box>
         <Box display={"flex"} alignItems={"center"} gap={".3em"}>
-          <FaNewspaper />
-          Blogs
+          {/* <FaNewspaper /> */}
+          <Link to={"/product/multi/food"}>Health Food & Drinks</Link>
         </Box>
-        <Box display={"flex"} alignItems={"center"} gap={".3em"}>
+        {/* <Box display={"flex"} alignItems={"center"} gap={".3em"}>
           <AiTwotoneGift />
           Gift Card
-        </Box>
-        <Box display={"flex"} alignItems={"center"} gap={".3em"}>
+        </Box> */}
+        {/* <Box display={"flex"} alignItems={"center"} gap={".3em"}>
           <BsFillChatDotsFill />
           Customer Support
-        </Box>
-        <Box display={"flex"} alignItems={"center"} gap={".3em"}>
+        </Box> */}
+        {/* <Box display={"flex"} alignItems={"center"} gap={".3em"}>
           <MdLocationOn size={"1.3rem"} />
           Store Locator
-        </Box>
+        </Box> */}
       </Box>
       <Divider></Divider>
     </Box>

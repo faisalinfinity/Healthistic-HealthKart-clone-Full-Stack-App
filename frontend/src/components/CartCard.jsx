@@ -65,6 +65,7 @@ const CartCard = ({
       overflow="hidden"
       variant="outline"
       justifyContent={"space-between"}
+      marginBottom="2"
     >
       <Flex direction={{ base: "column", md: "row" }}>
         <Image

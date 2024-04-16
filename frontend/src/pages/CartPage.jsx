@@ -79,9 +79,9 @@ const CartPage = () => {
       >
         <Box p="20px" w={{ base: "90%", md: "70%" }}>
           <Heading>Shopping Cart</Heading>
-          <Box p="50px">
+          <Box >
             {items.map((item) => (
-              <CartCard handleChange={handleChange} key={item.pid} {...item} />
+              <CartCard     handleChange={handleChange} key={item.pid} {...item} />
             ))}
           </Box>
         </Box>

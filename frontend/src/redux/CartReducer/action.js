@@ -30,7 +30,7 @@ export const addToCart = (data) => (dispatch) => {
 
 export const getCartData = (dispatch) => {
   dispatch(cartReqAction());
-  axios
+   return axios
     .get(BASE_URL + `/users/cart`, {
       headers: {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("UserDetails")).token

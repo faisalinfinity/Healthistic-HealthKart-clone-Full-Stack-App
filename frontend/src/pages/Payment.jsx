@@ -99,7 +99,7 @@ const Payment = () => {
           gap={"10rem"}
           mb={"2rem"}
         >
-          <Box
+          {/* <Box
             display={"flex"}
             flexDirection={"column"}
             gap={"1rem"}
@@ -155,7 +155,7 @@ const Payment = () => {
                 </TabPanels>
               </Tabs>
             </Box>
-          </Box>
+          </Box> */}
           <Box
             boxShadow="rgba(149, 157, 165, 0.2) 0px 8px 24px"
             p={"1rem"}
@@ -193,6 +193,15 @@ const Payment = () => {
                 <Box color={"green.300"}>FREE</Box>
               </Flex>
             </Box>
+
+            <Box>
+              <Flex justifyContent={"space-between"} gap={"5rem"}>
+                <Box>
+                  <Text>Payment Mode</Text>
+                </Box>
+                <Box color={"gray.600"}>COD</Box>
+              </Flex>
+            </Box>
             <Divider></Divider>
             <Flex
               justifyContent={"space-between"}
@@ -203,6 +212,10 @@ const Payment = () => {
               <Box>Payable Amount</Box>
               <Box>₹{totalMRP - (totalMRP - cartTotal)}</Box>
             </Flex>
+
+            <Button  w={"19rem"} onClick={() => handleClick()}>
+              Confirm Order
+            </Button>
           </Box>
         </Box>
         <form style={{ display: "none" }} ref={form} onSubmit={sendEmail}>
