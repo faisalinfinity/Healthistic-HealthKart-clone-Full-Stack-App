@@ -12,6 +12,7 @@ import AdminPage from "../admin/pages/AdminPage";
 import CheckoutPage from "../pages/CheckoutPage";
 import Payment from "../pages/Payment";
 import PaymentSuccess from "../pages/PaymentSuccess";
+import NotFound from "../pages/NotFound";
 
 const MainRoute = () => {
   return (
@@ -53,7 +54,7 @@ const MainRoute = () => {
           </PrivateRoute>
         }
       />
-      <Route path="*" element={<h1>Nothing Found</h1>} />
+      <Route path="*" element={<NotFound />} />
       <Route
         path="/admin"
         element={

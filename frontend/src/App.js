@@ -1,22 +1,18 @@
 import "./App.css";
+import { Box, Flex } from "@chakra-ui/react";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import MainRoute from "./routes/MainRoute";
-import Payment from "./pages/Payment";
-
-import HomePage from "./pages/Home/HomePage";
-import AccountInfo from "./pages/Home/AccountInfo";
-import MultiProductPage from "./pages/MultiProductPage";
 
 function App() {
   return (
-    <>
-
+    <Flex direction="column" minH="100vh" bg="paper">
       <Navbar />
-      <MainRoute />
+      <Box as="main" flex="1">
+        <MainRoute />
+      </Box>
       <Footer />
-      {/* <MultiProductPage /> */}
-    </>
+    </Flex>
   );
 }
 

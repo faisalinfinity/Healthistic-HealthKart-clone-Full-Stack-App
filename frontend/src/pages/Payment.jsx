@@ -1,76 +1,51 @@
 import {
   Box,
   Button,
-  Divider,
+  Container,
   Flex,
-  Input,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
+  Grid,
+  GridItem,
+  Heading,
+  Image,
   Text,
+  HStack,
+  VStack,
+  Radio,
+  RadioGroup,
+  Stack,
+  Badge,
   useToast,
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
-import PayCard from "../components/PayCard";
 import { useDispatch, useSelector } from "react-redux";
-import { addToOrder, payforOrder } from "../redux/CheckoutReducer/action";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import emailjs from "@emailjs/browser";
+import OrderSummary from "../components/OrderSummary";
+import { addToOrder } from "../redux/CheckoutReducer/action";
 import { getCartData } from "../redux/CartReducer/action";
 import { BASE_URL } from "../constants/constants";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import emailjs from "@emailjs/browser";
 
 const Payment = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { items } = useSelector((store) => store.cartReducer);
-  const [payment, setPayment] = useState("UPI");
-  const toast = useToast();
   const { token, email, name } = useSelector((state) => state.authReducer);
+  const [payment, setPayment] = useState("COD");
+  const [placing, setPlacing] = useState(false);
+  const toast = useToast();
   const form = useRef();
-  let cartTotal = 0;
 
-  for (let i = 0; i < items.length; i++) {
-    cartTotal += items[i].price * items[i].quantity;
-  }
+  const cartTotal = items.reduce(
+    (sum, i) => sum + (Number(i.price) || 0) * (Number(i.quantity) || 1),
+    0
+  );
+  const totalMRP = items.reduce(
+    (sum, i) => sum + (Number(i.originalPrice) || 0) * (Number(i.quantity) || 1),
+    0
+  );
 
-  let totalMRP = 0;
-  for (let i = 0; i < items.length; i++) {
-    totalMRP += items[i].originalPrice * items[i].quantity;
-  }
-
-  const handleClick = () => {
-    const item = JSON.parse(localStorage.getItem("newItem"))?.map((ele) => {
-      return { ...ele, payment: payment };
-    });
-    dispatch(addToOrder(item)).then((res) => {
-      toast({
-        title: "Order Placed.",
-        description: "Order will be delivered to your address within 5 days",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-      });
-      axios
-        .delete(`${BASE_URL}/users/cart/delete/all`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          dispatch(getCartData);
-          sendEmail();
-          setTimeout(() => {
-            navigate("/profile");
-          }, 2000);
-        });
-    });
-    // dispatch(payforOrder());
-  };
-
-  const sendEmail = (e) => {
+  const sendEmail = () => {
     emailjs
       .sendForm(
         "service_njs4kp9",
@@ -79,160 +54,189 @@ const Payment = () => {
         "Nq3b6kBd881QBgo2R"
       )
       .then(
-        (result) => {
-          console.log(result.text);
-        },
-        (error) => {
-          console.log(error.text);
-        }
+        (result) => console.log(result.text),
+        (error) => console.log(error.text)
       );
   };
 
-  if (items) {
-    return (
-      <Box>
-        <Box
-          display={{ md: "flex" }}
-          mt={"2rem"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          gap={"10rem"}
-          mb={"2rem"}
-        >
-          {/* <Box
-            display={"flex"}
-            flexDirection={"column"}
-            gap={"1rem"}
-            boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
-            p={"1rem"}
-            borderRadius={".5rem"}
-          >
-            <Box fontSize={"lg"} fontWeight={"semibold"}>
-              Payment Method
-            </Box>
-            <Box>
-              <Tabs>
-                <TabList>
-                  <Tab onClick={() => setPayment("UPI")}>Pay using UPI</Tab>
-                  <Tab onClick={() => setPayment("Debit")}>Debit Card</Tab>
-                  <Tab onClick={() => setPayment("Credit")}>Credit Card</Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel>
-                    <Box
-                      display={"flex"}
-                      flexDirection={"column"}
-                      gap={"1rem"}
-                      p={"1rem"}
-                      borderRadius={".5rem"}
-                    >
-                      <Text fontSize={"md"} fontWeight={"normal"}>
-                        Add a new UPI
-                      </Text>
-                      You need to have a registered UPI ID
-                      <Flex gap={"1rem"}>
-                        <Input placeholder="Enter UPI ID" isRequired />
-                        <Button
-                          p={"1em 1em"}
-                          color={"white"}
-                          _hover={{ bg: "orange" }}
-                          bg={"#ff8913"}
-                        >
-                          Verify
-                        </Button>
-                      </Flex>
-                      <Button w={"19rem"} onClick={() => handleClick()}>
-                        Securely Pay
-                      </Button>
-                    </Box>
-                  </TabPanel>
-                  <TabPanel>
-                    <PayCard handleClick={handleClick} />
-                  </TabPanel>
-                  <TabPanel>
-                    <PayCard handleClick={handleClick} />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Box>
-          </Box> */}
+  const handleClick = () => {
+    const item = JSON.parse(localStorage.getItem("newItem"))?.map((ele) => ({
+      ...ele,
+      payment,
+    }));
+    if (!item) {
+      toast({
+        title: "No items to order",
+        description: "Please add delivery details first.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      navigate("/cart");
+      return;
+    }
+    setPlacing(true);
+    dispatch(addToOrder(item)).then(() => {
+      toast({
+        title: "Order placed!",
+        description: "Your order will be delivered within 5 days.",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
+      axios
+        .delete(`${BASE_URL}/users/cart/delete/all`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(() => {
+          dispatch(getCartData);
+          sendEmail();
+          setTimeout(() => navigate("/profile"), 1800);
+        })
+        .finally(() => setPlacing(false));
+    });
+  };
+
+  return (
+    <Container maxW="7xl" py={{ base: 6, md: 10 }}>
+      <Heading size="lg" mb={6}>
+        Payment
+      </Heading>
+
+      <Grid templateColumns={{ base: "1fr", lg: "1fr 360px" }} gap={8} alignItems="start">
+        <GridItem display="flex" flexDirection="column" gap={6}>
           <Box
-            boxShadow="rgba(149, 157, 165, 0.2) 0px 8px 24px"
-            p={"1rem"}
-            borderRadius={".5rem"}
-            display={"flex"}
-            flexDirection={"column"}
-            gap={"1rem"}
+            bg="white"
+            borderRadius="2xl"
+            borderWidth="1px"
+            borderColor="blackAlpha.100"
+            boxShadow="sm"
+            p={{ base: 5, md: 7 }}
           >
-            <Box>
-              <Text fontSize={"xl"} fontWeight={"semibold"}>
-                Order Summary
-              </Text>
-            </Box>
-            <Box>
-              <Flex justifyContent={"space-between"} gap={"5rem"}>
-                <Box>
-                  <Text>Total MRP</Text>
-                </Box>
-                <Box>₹{totalMRP}</Box>
-              </Flex>
-            </Box>
-            <Box>
-              <Flex justifyContent={"space-between"} gap={"5rem"}>
-                <Box>
-                  <Text>Total Discounts</Text>
-                </Box>
-                <Box color={"green.300"}>₹{totalMRP - cartTotal}</Box>
-              </Flex>
-            </Box>
-            <Box>
-              <Flex justifyContent={"space-between"} gap={"5rem"}>
-                <Box>
-                  <Text>Shipping Charges</Text>
-                </Box>
-                <Box color={"green.300"}>FREE</Box>
-              </Flex>
-            </Box>
+            <Heading size="md" mb={4}>
+              Payment Method
+            </Heading>
+            <RadioGroup value={payment} onChange={setPayment}>
+              <Stack spacing={3}>
+                <Flex
+                  as="label"
+                  align="center"
+                  justify="space-between"
+                  borderWidth="1.5px"
+                  borderColor={payment === "COD" ? "brand.500" : "blackAlpha.200"}
+                  bg={payment === "COD" ? "brand.50" : "white"}
+                  borderRadius="lg"
+                  p={4}
+                  cursor="pointer"
+                  transition="all 0.2s"
+                >
+                  <Radio value="COD" colorScheme="brand">
+                    <Text fontWeight="600" ml={1}>
+                      Cash on Delivery
+                    </Text>
+                  </Radio>
+                  <Badge colorScheme="green">Available</Badge>
+                </Flex>
 
-            <Box>
-              <Flex justifyContent={"space-between"} gap={"5rem"}>
-                <Box>
-                  <Text>Payment Mode</Text>
-                </Box>
-                <Box color={"gray.600"}>COD</Box>
-              </Flex>
-            </Box>
-            <Divider></Divider>
-            <Flex
-              justifyContent={"space-between"}
-              fontSize={"lg"}
-              fontWeight={"semibold"}
-              gap={"5rem"}
+                {["UPI", "Card"].map((mode) => (
+                  <Flex
+                    key={mode}
+                    align="center"
+                    justify="space-between"
+                    borderWidth="1.5px"
+                    borderColor="blackAlpha.100"
+                    borderRadius="lg"
+                    p={4}
+                    opacity={0.55}
+                  >
+                    <Radio value={mode} isDisabled colorScheme="brand">
+                      <Text fontWeight="600" ml={1}>
+                        {mode === "UPI" ? "UPI" : "Credit / Debit Card"}
+                      </Text>
+                    </Radio>
+                    <Badge>Coming soon</Badge>
+                  </Flex>
+                ))}
+              </Stack>
+            </RadioGroup>
+          </Box>
+
+          {items.length > 0 && (
+            <Box
+              bg="white"
+              borderRadius="2xl"
+              borderWidth="1px"
+              borderColor="blackAlpha.100"
+              boxShadow="sm"
+              p={{ base: 5, md: 7 }}
             >
-              <Box>Payable Amount</Box>
-              <Box>₹{totalMRP - (totalMRP - cartTotal)}</Box>
-            </Flex>
+              <Heading size="md" mb={4}>
+                Items in your order ({items.length})
+              </Heading>
+              <VStack align="stretch" spacing={4} divider={<Box borderBottomWidth="1px" borderColor="blackAlpha.100" />}>
+                {items.map((it) => (
+                  <HStack key={it._id || it.pid} spacing={4}>
+                    <Flex
+                      boxSize="56px"
+                      bg="paper"
+                      borderRadius="lg"
+                      align="center"
+                      justify="center"
+                      p={1}
+                      flexShrink={0}
+                    >
+                      <Image
+                        src={Array.isArray(it.image) ? it.image[0] : it.image}
+                        alt={it.title}
+                        maxH="100%"
+                        objectFit="contain"
+                      />
+                    </Flex>
+                    <Box flex="1" minW={0}>
+                      <Text fontWeight="600" noOfLines={1} color="ink.700">
+                        {it.title}
+                      </Text>
+                      <Text fontSize="sm" color="ink.400">
+                        Qty: {it.quantity}
+                      </Text>
+                    </Box>
+                    <Text fontWeight="700" color="ink.700">
+                      ₹{(Number(it.price) || 0) * (Number(it.quantity) || 1)}
+                    </Text>
+                  </HStack>
+                ))}
+              </VStack>
+            </Box>
+          )}
+        </GridItem>
 
-            <Button  w={"19rem"} onClick={() => handleClick()}>
+        <GridItem position={{ lg: "sticky" }} top="120px">
+          <OrderSummary totalMRP={totalMRP} cartTotal={cartTotal} paymentMode={payment}>
+            <Button
+              w="full"
+              size="lg"
+              isLoading={placing}
+              loadingText="Placing order…"
+              onClick={handleClick}
+            >
               Confirm Order
             </Button>
-          </Box>
-        </Box>
-        <form style={{ display: "none" }} ref={form} onSubmit={sendEmail}>
-          <label>Name</label>
-          <input value={name} type="text" name="user_name" />
-          <label>Email</label>
-          <input value={email} type="email" name="user_email" />
-          <label>Message</label>
-          <textarea
-            value={`Your Order has been confirmed , it will be deliver in 5-7 days `}
-            name="message"
-          />
-          <input type="submit" value="Send" />
-        </form>
-      </Box>
-    );
-  }
+          </OrderSummary>
+        </GridItem>
+      </Grid>
+
+      <form style={{ display: "none" }} ref={form} onSubmit={sendEmail}>
+        <input readOnly value={name} type="text" name="user_name" />
+        <input readOnly value={email} type="email" name="user_email" />
+        <textarea
+          readOnly
+          value={`Your Order has been confirmed , it will be deliver in 5-7 days `}
+          name="message"
+        />
+        <input type="submit" value="Send" />
+      </form>
+    </Container>
+  );
 };
 
 export default Payment;

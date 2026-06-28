@@ -1,8 +1,8 @@
 import {
-  Box,
   Button,
-  Divider,
-  Flex,
+  Container,
+  Grid,
+  GridItem,
   Heading,
   Image,
   Text,
@@ -11,128 +11,92 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import CartCard from "../components/CartCard";
+import OrderSummary from "../components/OrderSummary";
 import { getCartData } from "../redux/CartReducer/action";
 import Loading from "../admin/components/Loading";
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const [change, setChange] = useState(false);
-  const { isLoading, isError, items } = useSelector((store) => {
-    return {
-      isLoading: store.cartReducer.isLoading,
-      isError: store.cartReducer.isError,
-      items: store.cartReducer.items,
-    };
-  });
+  const { isLoading, isError, items } = useSelector((store) => ({
+    isLoading: store.cartReducer.isLoading,
+    isError: store.cartReducer.isError,
+    items: store.cartReducer.items,
+  }));
 
-  let cartTotal = 0;
-  for (let i = 0; i < items.length; i++) {
-    cartTotal += items[i].price * items[i].quantity;
-  }
-  let totalMRP = 0;
-  for (let i = 0; i < items.length; i++) {
-    totalMRP += items[i].originalPrice * items[i].quantity;
-  }
-  const handleChange = () => {
-    setChange(!change);
-  };
+  const cartTotal = items.reduce(
+    (sum, i) => sum + (Number(i.price) || 0) * (Number(i.quantity) || 1),
+    0
+  );
+  const totalMRP = items.reduce(
+    (sum, i) => sum + (Number(i.originalPrice) || 0) * (Number(i.quantity) || 1),
+    0
+  );
+
+  const handleChange = () => setChange((c) => !c);
 
   useEffect(() => {
     dispatch(getCartData);
-  }, [change]);
+  }, [change, dispatch]);
 
-  return isLoading ? (
-    <Loading />
-  ) : isError ? (
-    <Heading>Something went wrong..</Heading>
-  ) : items.length === 0 ? (
-    <Box
-      m="auto"
-      mt="50px"
-      mb="100px"
-      textAlign={"center"}
-      alignItems={"center"}
-      justifyContent={"center"}
-    >
-      <Image
-        m="auto"
-        src="https://static1.hkrtcdn.com/hknext/static/media/cart/empty-cart-new.svg"
-      />
-      <Text fontWeight={"bold"}>Hey, it feels so light!</Text>
-      <Text mb="30px">There is nothing in you bag. Let’s add some items.</Text>
-      <Link to="/">
-        <Button
-          color={"white"}
-          _hover={{ bgColor: "rgb(5,161,163)" }}
-          bgColor={"rgb(15,181,183)"}
-        >
+  if (isLoading) return <Loading />;
+
+  if (isError)
+    return (
+      <Container maxW="3xl" py={20} textAlign="center">
+        <Heading size="md">Something went wrong</Heading>
+        <Text color="ink.400" mt={2}>
+          We couldn't load your cart. Please try again.
+        </Text>
+      </Container>
+    );
+
+  if (items.length === 0)
+    return (
+      <Container maxW="lg" py={{ base: 12, md: 20 }} textAlign="center">
+        <Image
+          m="auto"
+          maxW="280px"
+          src="https://static1.hkrtcdn.com/hknext/static/media/cart/empty-cart-new.svg"
+          alt="Empty cart"
+        />
+        <Heading size="lg" mt={6}>
+          Your cart feels light!
+        </Heading>
+        <Text color="ink.400" mt={2} mb={8}>
+          There's nothing here yet. Let's find something good for you.
+        </Text>
+        <Button as={Link} to="/" size="lg">
           Continue Shopping
         </Button>
-      </Link>
-    </Box>
-  ) : (
-    <div>
-      <Flex
-        direction={{ base: "column", md: "row" }}
-        w={{ base: "95%", md: "85%", lg: "70%" }}
-        m="auto"
-      >
-        <Box p="20px" w={{ base: "90%", md: "70%" }}>
-          <Heading>Shopping Cart</Heading>
-          <Box >
-            {items.map((item) => (
-              <CartCard     handleChange={handleChange} key={item.pid} {...item} />
-            ))}
-          </Box>
-        </Box>
-        <Box
-          mt="5%"
-          p="1%"
-          w={{ base: "90%", md: "27%" }}
-          variant="outline"
-          borderRadius={"10px"}
-          //   border={"1px solid gray"}
-          h="moz-min-content"
-        >
-          <Heading as="h3" size="md" marginBottom="4">
-            Order Summary
-          </Heading>
+      </Container>
+    );
 
-          <Flex marginBottom="2" justifyContent={"space-between"}>
-            <Text>Total MRP:</Text>
-            <Text>Rs.{totalMRP}</Text>
-          </Flex>
+  return (
+    <Container maxW="7xl" py={{ base: 6, md: 10 }}>
+      <Heading size="lg" mb={6}>
+        Shopping Cart{" "}
+        <Text as="span" fontSize="md" color="ink.400" fontWeight="500">
+          ({items.length} {items.length === 1 ? "item" : "items"})
+        </Text>
+      </Heading>
 
-          <Flex marginBottom="2" justifyContent={"space-between"}>
-            <Text>Total Discount:</Text>
-            <Text>Rs.{totalMRP - cartTotal}</Text>
-          </Flex>
+      <Grid templateColumns={{ base: "1fr", lg: "1fr 360px" }} gap={8} alignItems="start">
+        <GridItem minW={0}>
+          {items.map((item) => (
+            <CartCard handleChange={handleChange} key={item._id || item.pid} {...item} />
+          ))}
+        </GridItem>
 
-          <Flex marginBottom="2" justifyContent={"space-between"}>
-            <Text>Shipping Charges:</Text>
-            <Text color={"rgb(5,161,163)"}>FREE</Text>
-          </Flex>
-
-          <Divider />
-
-          <Flex marginBottom="3" justifyContent={"space-between"}>
-            <Text fontWeight={"bold"}>Payable Amount:</Text>
-            <Text fontWeight={"bold"}>Rs.{cartTotal}</Text>
-          </Flex>
-
-          <Button
-            as={Link}
-            to={"/checkout"}
-            color={"white"}
-            _hover={{ bgColor: "rgb(5,161,163)" }}
-            bgColor={"rgb(15,181,183)"}
-            ml={"20%"}
-          >
-            Proceed to Pay
-          </Button>
-        </Box>
-      </Flex>
-    </div>
+        <GridItem position={{ lg: "sticky" }} top="120px">
+          <OrderSummary totalMRP={totalMRP} cartTotal={cartTotal}>
+            <Button as={Link} to="/checkout" w="full" size="lg">
+              Proceed to Checkout
+            </Button>
+          </OrderSummary>
+        </GridItem>
+      </Grid>
+    </Container>
   );
 };
 

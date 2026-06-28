@@ -1,195 +1,227 @@
 import {
-  Box,
   Button,
-  Divider,
+  Container,
   Flex,
-  useToast,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Grid,
+  GridItem,
+  Heading,
   Input,
-  Text,
+  SimpleGrid,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import OrderSummary from "../components/OrderSummary";
+import { isNonEmpty, isPhone, isPincode } from "../utils/validators";
 
 const CheckoutPage = () => {
   const { items } = useSelector((store) => store.cartReducer);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [landmark, setLandmark] = useState("");
-  const [pincode, setPincode] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    landmark: "",
+    pincode: "",
+  });
+  const [touched, setTouched] = useState({});
   const navigate = useNavigate();
   const toast = useToast();
 
-  let cartTotal = 0;
-  for (let i = 0; i < items.length; i++) {
-    cartTotal += items[i].price * items[i].quantity;
-  }
+  const cartTotal = items.reduce(
+    (sum, i) => sum + (Number(i.price) || 0) * (Number(i.quantity) || 1),
+    0
+  );
+  const totalMRP = items.reduce(
+    (sum, i) => sum + (Number(i.originalPrice) || 0) * (Number(i.quantity) || 1),
+    0
+  );
 
-  let totalMRP = 0;
-  for (let i = 0; i < items.length; i++) {
-    totalMRP += items[i].originalPrice * items[i].quantity;
-  }
+  const errors = useMemo(
+    () => ({
+      name: !isNonEmpty(form.name) ? "Name is required" : "",
+      phone: !isNonEmpty(form.phone)
+        ? "Mobile number is required"
+        : !isPhone(form.phone)
+        ? "Enter a valid 10-digit mobile number"
+        : "",
+      address: !isNonEmpty(form.address) ? "Address is required" : "",
+      landmark: !isNonEmpty(form.landmark) ? "Landmark is required" : "",
+      pincode: !isNonEmpty(form.pincode)
+        ? "Pincode is required"
+        : !isPincode(form.pincode)
+        ? "Enter a valid 6-digit pincode"
+        : "",
+    }),
+    [form]
+  );
+  const isValid = Object.values(errors).every((e) => !e);
 
-  const handleAddtoOrder = (items) => {
-    const date = new Date();
+  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  const blur = (key) => () => setTouched((t) => ({ ...t, [key]: true }));
 
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const dateString = `${year}-${month}-${day} ${hours}:${minutes}`;
-
-    if (name && phone && pincode && landmark && address) {
-      let newItem = items.map((ele) => {
-        return {
-          image: ele.image,
-          title: ele.title,
-          description: ele.description,
-          price: ele.price,
-          originalPrice: ele.originalPrice,
-          sizes: ele.sizes,
-          status: "Order Placed",
-          date: dateString,
-          category: ele.category,
-          rating: ele.rating,
-          review: ele.review,
-          flavour: ele.flavour,
-          tags: ele.tags,
-          brand: ele.brand,
-          stock: ele.stock,
-          adminId: ele.adminId,
-          quantity: ele.quantity,
-          pid: ele.pid,
-          userId: ele.userId,
-          address:
-            name + " " + phone + " " + address + " " + landmark + " " + pincode,
-          delivery: "5",
-          payment: "dummy",
-        };
-      });
-      localStorage.setItem("newItem", JSON.stringify(newItem));
-      navigate("/payment");
-    } else {
+  const handleProceed = () => {
+    setTouched({
+      name: true,
+      phone: true,
+      address: true,
+      landmark: true,
+      pincode: true,
+    });
+    if (!isValid) {
       toast({
-        title: "please fill all fields.",
+        title: "Please complete all fields",
         status: "error",
         duration: 4000,
         isClosable: true,
       });
+      return;
     }
+
+    const date = new Date();
+    const dateString = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+    const { name, phone, address, landmark, pincode } = form;
+
+    const newItem = items.map((ele) => ({
+      image: ele.image,
+      title: ele.title,
+      description: ele.description,
+      price: ele.price,
+      originalPrice: ele.originalPrice,
+      sizes: ele.sizes,
+      status: "Order Placed",
+      date: dateString,
+      category: ele.category,
+      rating: ele.rating,
+      review: ele.review,
+      flavour: ele.flavour,
+      tags: ele.tags,
+      brand: ele.brand,
+      stock: ele.stock,
+      adminId: ele.adminId,
+      quantity: ele.quantity,
+      pid: ele.pid,
+      userId: ele.userId,
+      address: `${name} ${phone} ${address} ${landmark} ${pincode}`,
+      delivery: "5",
+      payment: "dummy",
+    }));
+
+    localStorage.setItem("newItem", JSON.stringify(newItem));
+    navigate("/payment");
   };
 
-  if (items) {
-    return (
-      <Box>
-        <Box
-          display={{ md: "flex" }}
-          mt={"2rem"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          gap={"10rem"}
-          mb={"2rem"}
+  return (
+    <Container maxW="7xl" py={{ base: 6, md: 10 }}>
+      <Heading size="lg" mb={6}>
+        Delivery Details
+      </Heading>
+
+      <Grid templateColumns={{ base: "1fr", lg: "1fr 360px" }} gap={8} alignItems="start">
+        <GridItem
+          bg="white"
+          borderRadius="2xl"
+          borderWidth="1px"
+          borderColor="blackAlpha.100"
+          boxShadow="sm"
+          p={{ base: 5, md: 8 }}
         >
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            gap={"2rem"}
-            boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
-            p={"1rem"}
-            borderRadius={".5rem"}
+          <Flex
+            as="form"
+            direction="column"
+            gap={5}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleProceed();
+            }}
           >
-            <Flex gap={"1rem"}>
-              <Input
-                placeholder="Type Your Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required={true}
+            <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={5}>
+              <FormControl isRequired isInvalid={touched.name && !!errors.name}>
+                <FormLabel>Full name</FormLabel>
+                <Input
+                  placeholder="Your name"
+                  value={form.name}
+                  onChange={set("name")}
+                  onBlur={blur("name")}
+                />
+                <FormErrorMessage>{errors.name}</FormErrorMessage>
+              </FormControl>
+
+              <FormControl isRequired isInvalid={touched.phone && !!errors.phone}>
+                <FormLabel>Mobile number</FormLabel>
+                <Input
+                  type="tel"
+                  inputMode="numeric"
+                  maxLength={10}
+                  placeholder="10-digit mobile number"
+                  value={form.phone}
+                  onChange={set("phone")}
+                  onBlur={blur("phone")}
+                />
+                <FormErrorMessage>{errors.phone}</FormErrorMessage>
+              </FormControl>
+            </SimpleGrid>
+
+            <FormControl isRequired isInvalid={touched.address && !!errors.address}>
+              <FormLabel>Address</FormLabel>
+              <Textarea
+                placeholder="House no., street, area"
+                value={form.address}
+                onChange={set("address")}
+                onBlur={blur("address")}
+                rows={3}
               />
-              <Input
-                placeholder="Type Mobile No."
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required={true}
-              />
-            </Flex>
-            <Textarea
-              placeholder="Type Your Address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              required={true}
-            />
-            <Flex gap={"1rem"}>
-              <Input
-                placeholder="Enter Landmark"
-                value={landmark}
-                onChange={(e) => setLandmark(e.target.value)}
-              />
-              <Input
-                placeholder="Enter Pincode"
-                value={pincode}
-                onChange={(e) => setPincode(e.target.value)}
-                required={true}
-              />
-            </Flex>
-            <Button onClick={() => handleAddtoOrder(items)}>
-              Proceed to Pay
+              <FormErrorMessage>{errors.address}</FormErrorMessage>
+            </FormControl>
+
+            <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={5}>
+              <FormControl isRequired isInvalid={touched.landmark && !!errors.landmark}>
+                <FormLabel>Landmark</FormLabel>
+                <Input
+                  placeholder="Nearby landmark"
+                  value={form.landmark}
+                  onChange={set("landmark")}
+                  onBlur={blur("landmark")}
+                />
+                <FormErrorMessage>{errors.landmark}</FormErrorMessage>
+              </FormControl>
+
+              <FormControl isRequired isInvalid={touched.pincode && !!errors.pincode}>
+                <FormLabel>Pincode</FormLabel>
+                <Input
+                  inputMode="numeric"
+                  maxLength={6}
+                  placeholder="6-digit pincode"
+                  value={form.pincode}
+                  onChange={set("pincode")}
+                  onBlur={blur("pincode")}
+                />
+                <FormErrorMessage>{errors.pincode}</FormErrorMessage>
+              </FormControl>
+            </SimpleGrid>
+
+            <Button type="submit" size="lg" mt={1} display={{ base: "flex", lg: "none" }}>
+              Continue to Payment
             </Button>
-          </Box>
-          <Box
-            boxShadow="rgba(149, 157, 165, 0.2) 0px 8px 24px"
-            p={"1rem"}
-            borderRadius={".5rem"}
-            display={"flex"}
-            flexDirection={"column"}
-            gap={"1rem"}
-          >
-            <Box>
-              <Text fontSize={"xl"} fontWeight={"semibold"}>
-                Order Summary
-              </Text>
-            </Box>
-            <Box>
-              <Flex justifyContent={"space-between"} gap={"5rem"}>
-                <Box>
-                  <Text>Total MRP</Text>
-                </Box>
-                <Box>₹{totalMRP}</Box>
-              </Flex>
-            </Box>
-            <Box>
-              <Flex justifyContent={"space-between"} gap={"5rem"}>
-                <Box>
-                  <Text>Total Discounts</Text>
-                </Box>
-                <Box color={"green.300"}>₹{totalMRP - cartTotal}</Box>
-              </Flex>
-            </Box>
-            <Box>
-              <Flex justifyContent={"space-between"} gap={"5rem"}>
-                <Box>
-                  <Text>Shipping Charges</Text>
-                </Box>
-                <Box color={"green.300"}>FREE</Box>
-              </Flex>
-            </Box>
-            <Divider></Divider>
-            <Flex
-              justifyContent={"space-between"}
-              fontSize={"lg"}
-              fontWeight={"semibold"}
-              gap={"5rem"}
-            >
-              <Box>Payable Amount</Box>
-              <Box>₹{totalMRP - (totalMRP - cartTotal)}</Box>
-            </Flex>
-          </Box>
-        </Box>
-      </Box>
-    );
-  }
+          </Flex>
+        </GridItem>
+
+        <GridItem position={{ lg: "sticky" }} top="120px">
+          <OrderSummary totalMRP={totalMRP} cartTotal={cartTotal}>
+            <Button w="full" size="lg" onClick={handleProceed}>
+              Continue to Payment
+            </Button>
+          </OrderSummary>
+        </GridItem>
+      </Grid>
+    </Container>
+  );
 };
 
 export default CheckoutPage;

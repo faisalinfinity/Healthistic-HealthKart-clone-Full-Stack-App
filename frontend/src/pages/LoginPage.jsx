@@ -1,129 +1,179 @@
 import React, { useState } from "react";
-
 import {
   Flex,
   Box,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Input,
-  Checkbox,
+  InputGroup,
+  InputRightElement,
   Stack,
-  Link,
+  Link as CLink,
   Button,
   Heading,
   Text,
   useToast,
+  Icon,
+  HStack,
 } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/AuthReducer/action";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
+import { isEmail, isNonEmpty } from "../utils/validators";
+import AuthBrandPanel from "../components/AuthBrandPanel";
 
 export default function LoginPage() {
-  const { isLoggedIn, role } = useSelector((store) => {
-    return {
-      isLoggedIn: store.authReducer.isLoggedIn,
-      role: store.authReducer.role,
-    };
-  });
+  const { isLoggedIn, role } = useSelector((store) => ({
+    isLoggedIn: store.authReducer.isLoggedIn,
+    role: store.authReducer.role,
+  }));
 
   const dispatch = useDispatch();
+  const toast = useToast();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const toast = useToast();
-  const handleLogin = () => {
-    const details = { email, password };
-    dispatch(login(details)).then((res) => {
-      if (res === "Incorrect password ") {
-        toast({
-          title: "Incorrect Password.",
-          status: "error",
-          duration: 4000,
-          isClosable: true,
-        });
-      } else if (res === "User not register") {
-        toast({
-          title: "You are not Registered.",
-          status: "error",
-          duration: 4000,
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: "Login Success",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    });
+  const [showPassword, setShowPassword] = useState(false);
+  const [touched, setTouched] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const errors = {
+    email: !isNonEmpty(email)
+      ? "Email is required"
+      : !isEmail(email)
+      ? "Enter a valid email address"
+      : "",
+    password: !isNonEmpty(password) ? "Password is required" : "",
   };
+  const isValid = !errors.email && !errors.password;
+
+  const handleLogin = () => {
+    setTouched({ email: true, password: true });
+    if (!isValid) return;
+    setSubmitting(true);
+    dispatch(login({ email: email.trim(), password }))
+      .then((res) => {
+        if (res === "Incorrect password ") {
+          toast({
+            title: "Incorrect password",
+            description: "Please check your password and try again.",
+            status: "error",
+            duration: 4000,
+            isClosable: true,
+            position: "top",
+          });
+        } else if (res === "User not register") {
+          toast({
+            title: "Account not found",
+            description: "No account is registered with this email.",
+            status: "error",
+            duration: 4000,
+            isClosable: true,
+            position: "top",
+          });
+        } else {
+          toast({
+            title: "Welcome back!",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+            position: "top",
+          });
+        }
+      })
+      .finally(() => setSubmitting(false));
+  };
+
   if (isLoggedIn) {
-    if (role === "admin" || role === "Admin" || role === "ADMIN") {
-      return <Navigate to="/admin" />;
-    } else {
-      return <Navigate to="/" />;
-    }
+    return <Navigate to={role === "admin" ? "/admin" : "/"} />;
   }
+
   return (
-    <Flex
-      minH={"50vh"}
-      align={"center"}
-      justify={"center"}
-      // bg={useColorModeValue("gray.50", "gray.800")}
-      bg="gray.50"
-    >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Sign in to your account</Heading>
-        </Stack>
-        <Box
-          rounded={"lg"}
-          // bg={useColorModeValue("white", "gray.700")}
-          bg="gray.50"
-          boxShadow={"lg"}
-          p={8}
-        >
-          <Stack spacing={4}>
-            <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input onChange={(e) => setEmail(e.target.value)} type="email" />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Password</FormLabel>
-              <Input
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-              />
-            </FormControl>
-            <Stack spacing={10}>
-              <Stack
-                direction={{ base: "column", sm: "row" }}
-                align={"start"}
-                justify={"space-between"}
-              >
-                <Checkbox>Remember me</Checkbox>
-                <Link color={"blue.400"}>Forgot password?</Link>
-              </Stack>
-              <Stack pt={6}>
-                <Text align={"center"}>
-                  New User?{" "}
-                  <Link href="/register" color={"blue.400"}>
-                    Register Here
-                  </Link>
-                </Text>
-              </Stack>
-              <Button
-                onClick={handleLogin}
-                color={"white"}
-                _hover={{ bgColor: "rgb(5,161,163)" }}
-                bgColor={"rgb(15,181,183)"}
-              >
-                Sign in
-              </Button>
-            </Stack>
+    <Flex minH={{ base: "auto", lg: "calc(100vh - 80px)" }}>
+      <AuthBrandPanel />
+
+      <Flex flex="1" align="center" justify="center" p={{ base: 6, md: 12 }}>
+        <Box w="full" maxW="420px">
+          <Stack spacing={2} mb={8}>
+            <Heading fontSize="3xl">Welcome back</Heading>
+            <Text color="ink.400">
+              Sign in to continue to your Healthistic account.
+            </Text>
           </Stack>
+
+          <Stack
+            as="form"
+            spacing={5}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleLogin();
+            }}
+          >
+            <FormControl isInvalid={touched.email && !!errors.email}>
+              <FormLabel>Email address</FormLabel>
+              <Input
+                type="email"
+                size="lg"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => setTouched((t) => ({ ...t, email: true }))}
+                autoComplete="email"
+              />
+              <FormErrorMessage>{errors.email}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={touched.password && !!errors.password}>
+              <FormLabel>Password</FormLabel>
+              <InputGroup size="lg">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onBlur={() => setTouched((t) => ({ ...t, password: true }))}
+                  autoComplete="current-password"
+                />
+                <InputRightElement h="full">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowPassword((s) => !s)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    <Icon as={showPassword ? ViewOffIcon : ViewIcon} />
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              <FormErrorMessage>{errors.password}</FormErrorMessage>
+            </FormControl>
+
+            <HStack justify="space-between">
+              <CLink fontSize="sm" color="brand.600">
+                Forgot password?
+              </CLink>
+            </HStack>
+
+            <Button
+              type="submit"
+              size="lg"
+              isLoading={submitting}
+              loadingText="Signing in…"
+            >
+              Sign in
+            </Button>
+          </Stack>
+
+          <Text textAlign="center" mt={8} color="ink.400">
+            New to Healthistic?{" "}
+            <CLink as={Link} to="/register" color="brand.600" fontWeight="700">
+              Create an account
+            </CLink>
+          </Text>
         </Box>
-      </Stack>
+      </Flex>
     </Flex>
   );
 }

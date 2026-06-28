@@ -1,40 +1,55 @@
-import { Badge, Button, Center, Flex, Heading, VStack } from "@chakra-ui/react"
+import { Badge, Box, Button, Flex, Heading, VStack, Icon } from "@chakra-ui/react";
+import { MdDashboard, MdAddBox, MdEdit, MdListAlt } from "react-icons/md";
 
-export default function SideNav({setTab ,tab,name,role}){
-    
+const NAV = [
+  { label: "Dashboard", icon: MdDashboard },
+  { label: "Add Products", icon: MdAddBox },
+  { label: "Edit Products", icon: MdEdit },
+  { label: "Manage Orders", icon: MdListAlt },
+];
 
+export default function SideNav({ setTab, tab, name, role }) {
+  return (
+    <Box
+      bg="white"
+      borderRadius="2xl"
+      borderWidth="1px"
+      borderColor="blackAlpha.100"
+      boxShadow="sm"
+      overflow="hidden"
+    >
+      <Flex
+        direction="column"
+        align="center"
+        gap={1}
+        p={5}
+        bgGradient="linear(to-br, brand.600, brand.500)"
+        color="white"
+      >
+        <Heading fontSize="md">{name}</Heading>
+        <Badge bg="whiteAlpha.300" color="white">
+          {role}
+        </Badge>
+      </Flex>
 
-    return <VStack  display={{base:"none",sm:"none",md:"none",lg:"block"}} borderTopRightRadius={20} padding={"8px 0px"} h={"100vh"} className="sidebar" w={"25%"}>
-
-    <Flex justifyContent={"center"} maxH={150} padding={2} border={"1px solid orange"} borderRadius={6} alignItems={"center"} margin={"auto"} w={"90%"}>
-        <VStack>
-            <Center> <Heading fontSize={"md"}  color={"orange"}>{name}</Heading>
-        <Badge colorScheme={"green"} >{role}</Badge></Center>
-       
-        </VStack>
-        {/* <CardAvatar name={name} role ={role}></CardAvatar> */}
-    </Flex>
-
-    <VStack gap={4} w={"100%"}>
-        
-    <Button variant={"outline"} borderColor={"teal"}  bg={tab==1&&"teal"} color={tab==1?"white":"teal"} w={"90%"} onClick={()=>{
-        setTab(1)
-    }}>Dashboard</Button>
-    <Button variant={"outline"}  borderColor={"teal"} bg={tab==2&&"teal"} color={tab==2?"white":"teal"} w={"90%"} onClick={()=>{
-        setTab(2)
-    }}>Add Products</Button>
-    <Button variant={"outline"} borderColor={"teal"} bg={tab==3&&"teal"}  color={tab==3?"white":"teal"}w={"90%"} onClick={()=>{
-        setTab(3)
-    }}>Edit Products</Button>
-    <Button variant={"outline"} borderColor={"teal"} bg={tab==4&&"teal"}  color={tab==4?"white":"teal"} w={"90%"} onClick={()=>{
-        setTab(4)
-    }}>Manage Orders</Button>
-   
-    
-   
-    </VStack>
-
-
-
-</VStack>
+      <VStack align="stretch" spacing={1} p={3}>
+        {NAV.map((item, i) => {
+          const active = tab === i + 1;
+          return (
+            <Button
+              key={item.label}
+              variant={active ? "solid" : "ghost"}
+              justifyContent="flex-start"
+              leftIcon={<Icon as={item.icon} boxSize="18px" />}
+              color={active ? "white" : "ink.600"}
+              fontWeight={active ? "700" : "500"}
+              onClick={() => setTab(i + 1)}
+            >
+              {item.label}
+            </Button>
+          );
+        })}
+      </VStack>
+    </Box>
+  );
 }

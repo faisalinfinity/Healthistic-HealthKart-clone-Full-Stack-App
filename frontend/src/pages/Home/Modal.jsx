@@ -41,14 +41,13 @@ export default function InitialFocus() {
       
     } else {
       let add = addressLineOne + " " + addressLineTwo + " " + addressLineThree;
-      console.log(add);
       await axios({
         url: `${BASE_URL}/users`,
         method: "patch",
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body : {address : add}
+        data: { address: add },
       });
       toast({
         title: "Address Added",
@@ -57,6 +56,7 @@ export default function InitialFocus() {
         duration: 9000,
         isClosable: true,
       });
+      onClose();
     }
   };
 
@@ -72,7 +72,7 @@ export default function InitialFocus() {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
+          <ModalHeader>Add a new address</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>

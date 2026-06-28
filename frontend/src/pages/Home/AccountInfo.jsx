@@ -1,88 +1,59 @@
 import {
   Box,
-  Stack,
-  StackDivider,
+  Container,
   Flex,
   Grid,
   GridItem,
   Text,
   Heading,
-  Wrap,
-} from "@chakra-ui/layout";
-import { HamburgerIcon } from "@chakra-ui/icons";
-import { Avatar, Image, useToast } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
-import { FaAngleRight } from "react-icons/fa";
-import { ImHome2 } from "react-icons/im";
+  Button,
+  Avatar,
+  Image,
+  Input,
+  HStack,
+  VStack,
+  Badge,
+  Icon,
+  SimpleGrid,
+  useToast,
+} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  IconButton,
-  Input,
-  useDisclosure,
-} from "@chakra-ui/react";
+  MdShoppingBag,
+  MdPerson,
+  MdLocationOn,
+  MdCardGiftcard,
+} from "react-icons/md";
+import { BiLogOut } from "react-icons/bi";
 import InitialFocus from "./Modal";
 import Paginantion from "../../admin/components/Pagination";
-import MobileSideNav from "./HameBurger";
 import { logout } from "../../redux/AuthReducer/action";
-import { Link } from "react-router-dom";
 import { BASE_URL } from "../../constants/constants";
 
+const TABS = [
+  { label: "My Orders", icon: MdShoppingBag },
+  { label: "Personal Information", icon: MdPerson },
+  { label: "Addresses", icon: MdLocationOn },
+  { label: "Refer & Earn", icon: MdCardGiftcard },
+];
+
+const statusColor = (status) => {
+  const s = String(status).toLowerCase();
+  if (s === "delivered") return "green";
+  if (s === "cancelled") return "red";
+  if (s.includes("placed")) return "orange";
+  return "gray";
+};
+
 const AccountInfo = () => {
-  const infoArr = [
-    "My Orders",
-    "Personal Information",
-    "Addresses",
-    "Refer and Earn",
-  ];
   const dispatch = useDispatch();
-  const btnRef = useRef();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  // Function Used in COmponent -------------------------------
-  const boxStyle = (index) => {
-    return {
-      // borderLeftWidth: index === tab ? "4px" : "0px",
-      // borderLeftColor: index === tab ? "blue" : "while",
-      backgroundColor: index === tab ? "teal" : "",
-      color: index === tab ? "white" : "gray",
-
-      boxShadow: index === tab ? "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" : "",
-      paddingLeft: "1rem",
-    };
-  };
-
+  const toast = useToast();
   const { name, email, token, gender, profile, address } = useSelector(
     (state) => state.authReducer
   );
-  // const [address , setAddress] = useState([])  // address
-  const OrderArr = async () => {
-    let res = await axios({
-      url: `${BASE_URL}/users/order?page=${page}&limit=${1}`,
-      method: "get",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    setTotalOrder(res.data.total);
-    setOrder(res.data.data)
-    setPage(res.data.page);
-    setTotalPage(res.data.totalPages);
-  };
-
-  const Icon = {
-    color: "#00B5B7",
-    fontSize: "1.5em",
-    marginLeft: "10px",
-  };
 
   const [order, setOrder] = useState([]);
   const [page, setPage] = useState(1);
@@ -90,306 +61,309 @@ const AccountInfo = () => {
   const [tab, setTab] = useState(1);
   const [totalOrder, setTotalOrder] = useState(0);
 
-  const toast = useToast();
-
-  // let obj = {
-  //   name: "Ajay Sahu",
-  //   email: "ajaysahu@gmail.com",
-  //   gender: "Male",
-  // };
+  const OrderArr = async () => {
+    let res = await axios({
+      url: `${BASE_URL}/users/order?page=${page}&limit=${1}`,
+      method: "get",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setTotalOrder(res.data.total);
+    setOrder(res.data.data);
+    setPage(res.data.page);
+    setTotalPage(res.data.totalPages);
+  };
 
   const handleCancel = (id) => {
     axios
       .patch(
         `${BASE_URL}/users/order/${id}`,
         { status: "Cancelled" },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       )
-      .then((res) => {
+      .then(() => {
         OrderArr();
         toast({
           title: "Order Cancelled",
           position: "top",
           status: "success",
-          duration: 9000,
+          duration: 6000,
           isClosable: true,
         });
       });
   };
 
   useEffect(() => {
-    OrderArr(setOrder);
+    OrderArr();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
-  console.log(order);
-  console.log(page, totalPage);
+
   return (
-    <Box bg={"#F4F4F4"}>
-      <Box
-        w="80%"
-        pl="5"
-        pr="5"
-        boxShadow="xs"
-        p="6"
-        rounded="md"
-        bg="white"
-        h={"500px"}
-        margin={"auto"}
-        mb="10"
-        mt="10"
-      >
-        <Flex align={"Center"} pt="4" pb="4">
-          {" "}
-          {<ImHome2 style={Icon} />} {<FaAngleRight style={Icon} />}{" "}
-          {infoArr[tab - 1]}
-        </Flex>
+    <Container maxW="7xl" py={{ base: 6, md: 10 }}>
+      <Heading size="lg" mb={6}>
+        My Account
+      </Heading>
 
-        <Wrap
-          zIndex={999}
-          display={{ base: "block", sm: "block", md: "none" }}
-          h={"100vh"}
-          position={"fixed"}
-          top={"90px"}
-          right={"20"}
-        >
-          {" "}
-          <IconButton
-            icon={<HamburgerIcon />}
-            colorScheme={"teal"}
-            ref={btnRef}
-            onClick={onOpen}
-          >
-            Open
-          </IconButton>
-          <Drawer
-            isOpen={isOpen}
-            placement={"right"}
-            onClose={onClose}
-            finalFocusRef={btnRef}
-          >
-            <DrawerOverlay />
-            <DrawerContent>
-              <DrawerCloseButton />
-              <DrawerHeader>Profile</DrawerHeader>
-
-              <DrawerBody>
-                <MobileSideNav
-                  onClose={onClose}
-                  name={`HELLO  ${name}`} // user name
-                  setTab={setTab}
-                  tab={tab}
-                />
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>{" "}
-        </Wrap>
-        <Grid
-          gridTemplateColumns={{ base: "100%", sm: "100%", md: " 24% 75%" }}
-          h="80%"
-          justifyContent={"space-between"}
-        >
-          <GridItem
-            display={{ base: "none", md: "block", sm: "none" }}
-            border={"1px solid blue"}
-            boxShadow="2xl"
-            rounded="md"
+      <Grid templateColumns={{ base: "1fr", lg: "260px 1fr" }} gap={8} alignItems="start">
+        {/* Sidebar */}
+        <GridItem position={{ lg: "sticky" }} top="120px">
+          <Box
             bg="white"
+            borderRadius="2xl"
+            borderWidth="1px"
+            borderColor="blackAlpha.100"
+            boxShadow="sm"
+            overflow="hidden"
           >
-            {infoArr.map((el, index) => (
-              <Box
-                key={index}
-                onClick={() => setTab(index + 1)}
-                style={boxStyle(index + 1)}
-              >
-                <Text pt="4" pb="4" textAlign={"center"}>
-                  {el}
+            <Flex
+              align="center"
+              gap={3}
+              p={5}
+              bgGradient="linear(to-br, brand.600, brand.500)"
+              color="white"
+            >
+              <Avatar size="md" name={name} src={profile} bg="whiteAlpha.300" />
+              <Box minW={0}>
+                <Text fontWeight="700" noOfLines={1}>
+                  {name}
+                </Text>
+                <Text fontSize="xs" color="whiteAlpha.800" noOfLines={1}>
+                  {email}
                 </Text>
               </Box>
-            ))}
-            <Flex justify={"center"}>
+            </Flex>
+
+            <Flex
+              direction={{ base: "row", lg: "column" }}
+              gap={1}
+              p={3}
+              overflowX={{ base: "auto", lg: "visible" }}
+            >
+              {TABS.map((t, i) => {
+                const active = tab === i + 1;
+                return (
+                  <Button
+                    key={t.label}
+                    onClick={() => setTab(i + 1)}
+                    variant={active ? "solid" : "ghost"}
+                    justifyContent="flex-start"
+                    leftIcon={<Icon as={t.icon} boxSize="18px" />}
+                    fontWeight={active ? "700" : "500"}
+                    color={active ? "white" : "ink.600"}
+                    flexShrink={0}
+                    size="sm"
+                  >
+                    {t.label}
+                  </Button>
+                );
+              })}
               <Button
-                bg="transparent"
+                variant="ghost"
+                color="red.500"
+                justifyContent="flex-start"
+                leftIcon={<BiLogOut size="18px" />}
+                size="sm"
+                flexShrink={0}
                 onClick={() => dispatch(logout())}
-                display={"block"}
               >
                 Logout
               </Button>
             </Flex>
-          </GridItem>
-          <GridItem>
-            <Heading size="md">
-              {infoArr[tab - 1]} <br /> <br />
-              {infoArr[tab - 1] == "My Orders" && (
-                <Text fontSize={"15px"} color="teal">
-                  Total {totalOrder}
-                </Text>
-              )}
-            </Heading>
+          </Box>
+        </GridItem>
 
-            {tab === 1 ? (
-              order.length === 0 ? (
-                <Grid
-                  justifyContent={"center"}
-                  boxShadow="2xl"
-                  p="6"
-                  rounded="md"
-                  bg="white"
-                  h="25rem"
-                >
-                  <Image
-                    display={"block"}
-                    w="15rem"
-                    src="https://i.postimg.cc/9QTzdDpp/cart-Image.png"
-                  ></Image>
-                  <Heading
-                    textAlign={"center"}
-                    size="xs"
-                    textTransform="uppercase"
-                  >
-                    There is no order yet !!
-                  </Heading>
-                  <Button
-                    as={Link}
-                    bg="#00B5B7"
-                    p="2"
-                    color="gray.200"
-                    border={"1px solid "}
-                    to="/"
-                    fontSize="md"
-                  >
-                    Start Shopping
-                  </Button>
-                </Grid>
-              ) : (
-                order.sort((a,b)=>b.date-a.date).map((el) => (
-                  <Stack
-                    key={el._id}
-                    divider={<StackDivider />}
-                    spacing="4"
-                    mt="3"
-                  >
-                    <Box boxShadow="2xl" p="6" rounded="md" bg="white">
-                      <Heading size="xs" textTransform="uppercase">
-                        {el.title}
-                      </Heading>
-                      <Text pt="2" fontSize="sm">
-                        Item Price :{el.price}
-                      </Text>
-                      <Text pt="2" fontSize="sm">
-                        Quantity : {el.quantity}
-                      </Text>
-                      <Text pt="2" fontSize="sm">
-                        Payment Mode : {el.payment}
-                      </Text>
-                      <Text pt="2" fontSize="sm">
-                        Order Date : {el.date}
-                      </Text>
-
-                      <Text pt="2" fontSize="sm">
-                        Order Status : {el.status}
-                      </Text>
-                      {el.status !== "Cancelled" && (
-                        <Flex justify={{ sm: "center", md: "right" }}>
-                          {" "}
-                          <Button
-                            mt="2"
-                            h={"30px"}
-                            dispaly="block"
-                            onClick={() => handleCancel(el._id)}
-                            colorScheme="red"
-                          >
-                          {el.status==="delivered"?"Return Order":"Cancel Order"}
-                          </Button>{" "}
-                        </Flex>
-                      )}
-                    </Box>
-                    <Paginantion
-                      key={page}
-                      page={page}
-                      setPage={setPage}
-                      divide={5}
-                      totalPage={totalPage}
-                    />
-                  </Stack>
-                ))
-              )
-            ) : tab === 2 ? (
-              <Stack divider={<StackDivider />} spacing="4" mt="3">
-                <Flex boxShadow="2xl" p="6" rounded="md" bg="white">
-                  <Avatar size="xl" name={name} src={profile} />
-                  <Box ml="3">
-                    <Heading size="xs" textTransform="uppercase">
-                      Name : {name}
-                    </Heading>
-                    <Text pt="2" fontSize="sm">
-                      Email : {email}
-                    </Text>
-                    <Text pt="2" fontSize="sm">
-                      Gender : {gender}
-                    </Text>
-                  </Box>
-                </Flex>
-              </Stack>
-            ) : tab === 3 ? (
-              <Stack divider={<StackDivider />} spacing="4" mt="3">
-                <InitialFocus />
-                {address && (
-                  <Box boxShadow="2xl" p="6" rounded="md" bg="white">
-                    <Heading size="xs" textTransform="uppercase">
-                      {address}
-                    </Heading>
-                    <Text pt="2" fontSize="sm">
-                      Landmark : near school
-                    </Text>
-                    <Text pt="2" fontSize="sm">
-                      Pin :480001 State MadhyaPradesh
-                    </Text>
-                  </Box>
-                )}
-              </Stack>
-            ) : tab === 4 ? (
-              <Stack divider={<StackDivider />} spacing="4" mt="3">
-                <Box boxShadow="2xl" p="6" rounded="md" bg="white">
-                  <Heading size="xs" textTransform="uppercase">
-                    Refer to your friends and get a Cash reward of Rs. 200
-                  </Heading>
-                  <Text pt="2" fontSize="sm">
-                    You can earn Rs. 200 by inviting your amzing friends. They
-                    also get Rs. 200 off on their first order
-                  </Text>
-                  <Text pt="2" fontSize="sm">
-                    <label>Friend Email ID</label>
-                    <br />
-                    <Input
-                      border={"1px solid teal"}
-                      m="3"
-                      w="250px"
-                      placeholder="Enter Friends Email Id"
-                    ></Input>
-                    <br />
-                    <Button
-                      colorScheme="teal"
-                      variant="outline"
-                      m="3"
-                      p="1"
-                      w="100px"
-                      type="submit"
-                    >
-                      Submit
-                    </Button>
-                  </Text>
-                </Box>
-              </Stack>
-            ) : (
-              ""
+        {/* Content */}
+        <GridItem minW={0}>
+          <Flex align="baseline" gap={3} mb={5}>
+            <Heading size="md">{TABS[tab - 1].label}</Heading>
+            {tab === 1 && (
+              <Badge colorScheme="brand" variant="subtle">
+                {totalOrder} total
+              </Badge>
             )}
-          </GridItem>
-        </Grid>
-      </Box>
-    </Box>
+          </Flex>
+
+          {tab === 1 &&
+            (order.length === 0 ? (
+              <Flex
+                direction="column"
+                align="center"
+                justify="center"
+                py={16}
+                bg="white"
+                borderRadius="2xl"
+                borderWidth="1px"
+                borderColor="blackAlpha.100"
+              >
+                <Image
+                  w="180px"
+                  src="https://i.postimg.cc/9QTzdDpp/cart-Image.png"
+                  alt="No orders"
+                />
+                <Heading size="sm" mt={4} color="ink.500">
+                  No orders yet
+                </Heading>
+                <Button as={Link} to="/" mt={5}>
+                  Start Shopping
+                </Button>
+              </Flex>
+            ) : (
+              <>
+                <VStack align="stretch" spacing={4}>
+                  {order
+                    .slice()
+                    .sort((a, b) => b.date - a.date)
+                    .map((el) => (
+                      <Flex
+                        key={el._id}
+                        bg="white"
+                        borderRadius="xl"
+                        borderWidth="1px"
+                        borderColor="blackAlpha.100"
+                        boxShadow="sm"
+                        p={5}
+                        direction={{ base: "column", sm: "row" }}
+                        justify="space-between"
+                        gap={4}
+                      >
+                        <Box>
+                          <HStack mb={2} flexWrap="wrap">
+                            <Heading size="sm" color="ink.700">
+                              {el.title}
+                            </Heading>
+                            <Badge colorScheme={statusColor(el.status)}>
+                              {el.status}
+                            </Badge>
+                          </HStack>
+                          <SimpleGrid columns={{ base: 1, md: 2 }} spacingX={8} spacingY={1}>
+                            <Text fontSize="sm" color="ink.500">
+                              Price: ₹{el.price}
+                            </Text>
+                            <Text fontSize="sm" color="ink.500">
+                              Quantity: {el.quantity}
+                            </Text>
+                            <Text fontSize="sm" color="ink.500">
+                              Payment: {el.payment}
+                            </Text>
+                            <Text fontSize="sm" color="ink.500">
+                              Date: {el.date}
+                            </Text>
+                          </SimpleGrid>
+                        </Box>
+                        {el.status !== "Cancelled" && (
+                          <Flex align="flex-start">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              colorScheme="red"
+                              onClick={() => handleCancel(el._id)}
+                            >
+                              {el.status === "delivered"
+                                ? "Return Order"
+                                : "Cancel Order"}
+                            </Button>
+                          </Flex>
+                        )}
+                      </Flex>
+                    ))}
+                </VStack>
+                <Paginantion
+                  key={page}
+                  page={page}
+                  setPage={setPage}
+                  divide={5}
+                  totalPage={totalPage}
+                />
+              </>
+            ))}
+
+          {tab === 2 && (
+            <Flex
+              bg="white"
+              borderRadius="2xl"
+              borderWidth="1px"
+              borderColor="blackAlpha.100"
+              boxShadow="sm"
+              p={6}
+              gap={5}
+              align="center"
+            >
+              <Avatar size="xl" name={name} src={profile} bg="brand.500" color="white" />
+              <Box>
+                <Heading size="md">{name}</Heading>
+                <Text color="ink.500" mt={1}>
+                  {email}
+                </Text>
+                {gender && (
+                  <Badge mt={2} colorScheme="brand" variant="subtle" textTransform="capitalize">
+                    {gender}
+                  </Badge>
+                )}
+              </Box>
+            </Flex>
+          )}
+
+          {tab === 3 && (
+            <VStack align="stretch" spacing={4}>
+              <Box>
+                <InitialFocus />
+              </Box>
+              {address ? (
+                <Box
+                  bg="white"
+                  borderRadius="xl"
+                  borderWidth="1px"
+                  borderColor="blackAlpha.100"
+                  boxShadow="sm"
+                  p={6}
+                >
+                  <Heading size="sm" color="ink.700">
+                    {address}
+                  </Heading>
+                </Box>
+              ) : (
+                <Box
+                  bg="white"
+                  borderRadius="xl"
+                  borderWidth="1px"
+                  borderColor="blackAlpha.100"
+                  p={8}
+                  textAlign="center"
+                  color="ink.400"
+                >
+                  No saved addresses yet.
+                </Box>
+              )}
+            </VStack>
+          )}
+
+          {tab === 4 && (
+            <Box
+              bg="white"
+              borderRadius="2xl"
+              borderWidth="1px"
+              borderColor="blackAlpha.100"
+              boxShadow="sm"
+              p={{ base: 6, md: 8 }}
+            >
+              <Heading size="md">Refer friends, earn ₹200</Heading>
+              <Text color="ink.500" mt={2} maxW="lg">
+                Invite your friends to Healthistic. They get ₹200 off their first
+                order, and you earn ₹200 in rewards.
+              </Text>
+              <Box mt={6} maxW="sm">
+                <Text fontWeight="600" mb={2} fontSize="sm" color="ink.600">
+                  Friend's Email
+                </Text>
+                <HStack>
+                  <Input placeholder="friend@example.com" />
+                  <Button px={6}>Send</Button>
+                </HStack>
+              </Box>
+            </Box>
+          )}
+        </GridItem>
+      </Grid>
+    </Container>
   );
 };
 

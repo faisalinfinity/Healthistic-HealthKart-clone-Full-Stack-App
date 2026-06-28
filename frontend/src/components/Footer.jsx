@@ -1,127 +1,156 @@
-import { Box, Divider, SimpleGrid } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Divider,
+  SimpleGrid,
+  Stack,
+  Text,
+  Heading,
+  HStack,
+  Flex,
+  Link as CLink,
+} from "@chakra-ui/react";
 import { HiMail } from "react-icons/hi";
 import { MdLocationOn } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
+import { FaInstagram, FaFacebookF, FaTwitter, FaYoutube } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import React from "react";
+import { CATEGORIES } from "../constants/categories";
+
+const FooterColumn = ({ title, children }) => (
+  <Stack spacing={3}>
+    <Heading
+      as="h4"
+      size="xs"
+      color="white"
+      textTransform="uppercase"
+      letterSpacing="0.08em"
+      fontWeight="700"
+    >
+      {title}
+    </Heading>
+    {children}
+  </Stack>
+);
+
+const FooterLink = ({ to, children }) => (
+  <CLink
+    as={to ? Link : undefined}
+    to={to}
+    color="whiteAlpha.700"
+    fontSize="sm"
+    fontWeight="400"
+    _hover={{ color: "brand.300" }}
+  >
+    {children}
+  </CLink>
+);
 
 const Footer = () => {
   return (
-    <Box bg={"#0d2122"} color={"whiteAlpha.700"}>
-      <Box p={"2rem"}>
-        <Box
-          display={{ base: "flex", sm: "flex", md: "flex" }}
-          flexDirection={{ base: "column", sm: "row", md: "row" }}
-          justifyContent={{ base: "center" }}
-          gap={"5rem"}
+    <Box as="footer" bg="ink.800" color="whiteAlpha.700" mt="auto">
+      <Container maxW="7xl" py={{ base: 10, md: 14 }}>
+        <SimpleGrid
+          columns={{ base: 2, md: 3, lg: 5 }}
+          spacing={{ base: 8, md: 10 }}
         >
-          <SimpleGrid columns={{ base: "2", sm: "3", md: "5" }} spacing={20}>
-            <Box
-              cursor={"pointer"}
-              display={"flex"}
-              flexDirection={"column"}
-              gap={".5rem"}
-            >
-              <Box color={"white"}>Healthistic</Box>
-              <Box>About Us</Box>
-              <Box>Contact Us</Box>
-              <Box>Refer & Earn</Box>
-              <Box>Loyalty Program</Box>
-            </Box>
-            <Box
-              cursor={"pointer"}
-              display={"flex"}
-              flexDirection={"column"}
-              gap={".5rem"}
-            >
-              <Box color={"white"}>Brands</Box>
-              <Box>MuscleBlaze</Box>
-              <Box>Fit Foods</Box>
-              <Box>HK Vitals</Box>
-              <Box>TrueBasics</Box>
-              <Box>Gritzo</Box>
-              <Box>bGREEN</Box>
-            </Box>
-            <Box
-              cursor={"pointer"}
-              display={"flex"}
-              flexDirection={"column"}
-              gap={".5rem"}
-            >
-              <Box color={"white"}>Health & Fitness</Box>
-              <Box>Hair & Skin Care</Box>
-              <Box>Sports Nutrition</Box>
-              <Box>Vitamins & Supplements</Box>
-              <Box>Ayurveda & Herbs</Box>
-              <Box>Health Food & Drinks</Box>
-            </Box>
-            <Box
-              cursor={"pointer"}
-              display={"flex"}
-              flexDirection={"column"}
-              gap={".5rem"}
-            >
-              <Box color={"white"}>Quick Links</Box>
-              <Box>My Account</Box>
-              <Box>Track Your Order</Box>
-              <Box>Store Locator</Box>
-              <Box>HI Cash</Box>
-              <Box>FAQs</Box>
-              <Box>Sell On HealthKart</Box>
-            </Box>
-            <Box
-              cursor={"pointer"}
-              display={"flex"}
-              flexDirection={"column"}
-              gap={".5rem"}
-            >
-              <Box color={"white"}>Contact Us</Box>
-              <Box display={"flex"} alignItems={"center"} gap={".2rem"}>
-                <HiMail />
-                care@healthistic.com
-              </Box>
-              <Box
-                display={"flex"}
-                cursor={"pointer"}
-                alignItems={"center"}
-                gap={".2rem"}
+          <FooterColumn title="Healthistic">
+            <FooterLink>About Us</FooterLink>
+            <FooterLink>Contact Us</FooterLink>
+            <FooterLink>Refer & Earn</FooterLink>
+            <FooterLink>Loyalty Program</FooterLink>
+          </FooterColumn>
+
+          <FooterColumn title="Brands">
+            <FooterLink>MuscleBlaze</FooterLink>
+            <FooterLink>Fit Foods</FooterLink>
+            <FooterLink>HK Vitals</FooterLink>
+            <FooterLink>TrueBasics</FooterLink>
+            <FooterLink>Gritzo</FooterLink>
+          </FooterColumn>
+
+          <FooterColumn title="Shop">
+            {CATEGORIES.map((c) => (
+              <FooterLink key={c.to} to={c.to}>
+                {c.label}
+              </FooterLink>
+            ))}
+          </FooterColumn>
+
+          <FooterColumn title="Quick Links">
+            <FooterLink to="/profile">My Account</FooterLink>
+            <FooterLink to="/profile">Track Your Order</FooterLink>
+            <FooterLink>Store Locator</FooterLink>
+            <FooterLink>HI Cash</FooterLink>
+            <FooterLink>FAQs</FooterLink>
+          </FooterColumn>
+
+          <FooterColumn title="Contact Us">
+            <HStack align="start" spacing={2} fontSize="sm">
+              <Box as={HiMail} mt={1} flexShrink={0} />
+              <Text>care@healthistic.com</Text>
+            </HStack>
+            <HStack align="start" spacing={2} fontSize="sm">
+              <Box as={BsFillTelephoneFill} mt={1} flexShrink={0} />
+              <Text>0124-4616444</Text>
+            </HStack>
+            <HStack align="start" spacing={2} fontSize="sm">
+              <Box as={MdLocationOn} mt={1} flexShrink={0} fontSize="lg" />
+              <Text>
+                The Presidency Tower-B, 2nd Floor, Sector 14, Gurugram, Haryana
+              </Text>
+            </HStack>
+          </FooterColumn>
+        </SimpleGrid>
+      </Container>
+
+      <Divider borderColor="whiteAlpha.200" />
+
+      <Container maxW="7xl" py={5}>
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          align="center"
+          justify="space-between"
+          gap={4}
+        >
+          <Text fontSize="sm" color="whiteAlpha.600">
+            © {new Date().getFullYear()} Healthistic.com — All rights reserved.
+          </Text>
+
+          <HStack
+            spacing={5}
+            fontSize="xs"
+            color="whiteAlpha.600"
+            display={{ base: "none", md: "flex" }}
+          >
+            <FooterLink>Terms</FooterLink>
+            <FooterLink>Privacy</FooterLink>
+            <FooterLink>Returns</FooterLink>
+            <FooterLink>Disclaimer</FooterLink>
+          </HStack>
+
+          <HStack spacing={2}>
+            {[FaInstagram, FaFacebookF, FaTwitter, FaYoutube].map((Ico, i) => (
+              <Flex
+                key={i}
+                as="a"
+                href="#"
+                boxSize={9}
+                align="center"
+                justify="center"
+                borderRadius="full"
+                bg="whiteAlpha.100"
+                color="whiteAlpha.800"
+                _hover={{ bg: "brand.500", color: "white" }}
+                transition="all 0.2s"
               >
-                <BsFillTelephoneFill />
-                0124-4616444
-              </Box>
-              <Box display={"flex"} gap={".2rem"}>
-                {" "}
-                <Box>
-                  <MdLocationOn size={"1.3rem"} />
-                </Box>
-                <Box>
-                  The Presidency
-                  <br /> Tower, Tower-B,
-                  <br /> 2nd Floor,
-                  <br /> 46/4, Mehrauli
-                  <br /> Rd opp.
-                  <br />
-                  government girls
-                  <br /> college,
-                  <br /> Anamika Enclave,
-                  <br /> Sector 14,
-                  <br /> Gurugram, Haryana
-                </Box>
-              </Box>
-            </Box>
-          </SimpleGrid>
-        </Box>
-      </Box>
-      <Divider></Divider>
-      <Box display={{ md: "flex" }} p={"2rem"} justifyContent={"space-between"}>
-        <Box>Copyright © 2023, HealthIstic.com, or its affiliates</Box>
-        <Box display={{ md: "flex" }} mt={{ base: "2rem" }} gap={"1rem"}>
-          <Box>Terms & Conditions</Box>
-          <Box>Delivery Policy</Box>
-          <Box>Privacy Policy</Box>
-          <Box>Disclaimer</Box>
-          <Box>Returns Policy</Box>
-        </Box>
-      </Box>
+                <Ico size="0.95rem" />
+              </Flex>
+            ))}
+          </HStack>
+        </Flex>
+      </Container>
     </Box>
   );
 };
